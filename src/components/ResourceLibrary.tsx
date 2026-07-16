@@ -12,7 +12,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { supabase } from '../utils/supabase/client';
-import { Search, BookOpen, FileText, CheckSquare, Scroll, Lock, Sparkles, Users, ChevronRight, X, Clock, ArrowLeft, ExternalLink } from 'lucide-react';
+import { Search, BookOpen, FileText, CheckSquare, Scroll, Lock, Sparkles, Users, ChevronRight, X, Clock, ArrowLeft, ExternalLink, Waves, Moon, School, RefreshCw, Utensils, MessageCircle, Target, Wrench, Heart, type LucideIcon } from 'lucide-react';
 import { ScreenHeader } from './ui/ScreenHeader';
 import {
   RESOURCES,
@@ -34,6 +34,23 @@ interface ResourceLibraryProps {
   childConditions?: string[];
   onNavigate?: (screen: string) => void;
 }
+
+// Lucide icons for the category chips (parent surfaces use Lucide, never
+// emoji). Keyed by RESOURCE_CATEGORIES id; Sparkles is the fallback.
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  all: Sparkles,
+  meltdowns: Waves,
+  sleep: Moon,
+  school: School,
+  transitions: RefreshCw,
+  feeding: Utensils,
+  sensory: Sparkles,
+  social: Users,
+  communication: MessageCircle,
+  behavior: Target,
+  tools: Wrench,
+  family: Heart,
+};
 
 const TYPE_ICONS: Record<Resource['type'], React.ReactNode> = {
   guide:     <BookOpen className="w-3.5 h-3.5" />,
@@ -124,10 +141,12 @@ export function ResourceLibrary({
         </div>
       </div>
 
-      {/* Category chips */}
+      {/* Category chips — Lucide icons (parent surface), not emoji */}
       {!searchQuery && (
         <div className="flex gap-2 overflow-x-auto px-4 pt-3 pb-1 scrollbar-none">
-          {RESOURCE_CATEGORIES.map(cat => (
+          {RESOURCE_CATEGORIES.map(cat => {
+            const CatIcon = CATEGORY_ICONS[cat.id] ?? Sparkles;
+            return (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
@@ -136,9 +155,10 @@ export function ResourceLibrary({
                 ? { background: '#2A7D9915', borderColor: '#2A7D99', color: '#2A7D99', fontWeight: 600 }
                 : { background: 'white', borderColor: '#e2e8f0', color: '#64748b' }}
             >
-              <span>{cat.emoji}</span>{cat.label}
+              <CatIcon className="w-3.5 h-3.5" aria-hidden="true" />{cat.label}
             </button>
-          ))}
+            );
+          })}
           {/* Trailing spacer: px-4 right padding collapses inside a scroll
               container, which clipped the last pill flush to the edge. */}
           <div className="shrink-0 w-2" aria-hidden="true" />
