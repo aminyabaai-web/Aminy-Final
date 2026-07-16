@@ -846,7 +846,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                   placeholder="Search titles, tags, or text inside docs…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-full bg-white dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-700 rounded-xl"
+                  className="vault-search-input pl-9 w-full bg-white dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-700 rounded-xl"
                 />
               </div>
               <Sheet open={showAddRecord} onOpenChange={setShowAddRecord}>

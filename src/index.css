@@ -18823,3 +18823,17 @@ button[data-slot="switch"]::after {
   .sm\:gap-1 { gap: 0.25rem; }
   .sm\:gap-1\.5 { gap: 0.375rem; }
 }
+
+/* Loop-back fix: RecordsVault search field. The global warm-input rule
+   (`input:not([type=checkbox])... { background-color: var(--input-background) }`,
+   specificity 0-3-1) silently beats the .bg-white utility, leaving the field
+   the same mist as the header behind it. Match+exceed that specificity so the
+   vault search reads as a real white input with a visible border. */
+input.vault-search-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  background-color: #ffffff;
+  border-color: #E8E4DF;
+}
+.dark input.vault-search-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  background-color: #1e293b;
+  border-color: #334155;
+}
