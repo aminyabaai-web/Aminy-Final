@@ -423,41 +423,45 @@ export default function EVVDashboard({
       {/* Header */}
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/88 backdrop-blur supports-[backdrop-filter]:bg-white/78">
         <div className="max-w-2xl mx-auto px-4 py-4">
-          <nav aria-label="EVV navigation" className="flex items-center gap-3">
-            {onBack && (
+          <nav aria-label="EVV navigation" className="flex flex-col gap-1">
+            {/* Row 1: back + icon + title on one line, live-clock action pinned right.
+                Title gets flex-1 min-w-0 + truncate so it never wraps into the button. */}
+            <div className="flex items-center gap-2">
+              {onBack && (
+                <button
+                  type="button"
+                  onClick={onBack}
+                  aria-label="Go back"
+                  className="shrink-0 min-h-11 min-w-11 rounded-xl p-2 text-[#5A6B7A] transition-colors hover:bg-[#6B9080]/10"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              )}
+              <h1 className="flex flex-1 min-w-0 items-center gap-2 text-lg font-semibold text-[#132F43]">
+                <Shield className="w-5 h-5 shrink-0 text-primary" />
+                <span className="truncate">Visit Verification</span>
+              </h1>
               <button
                 type="button"
-                onClick={onBack}
-                aria-label="Go back"
-                className="min-h-11 min-w-11 rounded-xl p-2 text-[#5A6B7A] transition-colors hover:bg-[#6B9080]/10"
+                onClick={() => setActiveTab('clock')}
+                className="action-button shrink-0 min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
               >
-                <ArrowLeft className="w-5 h-5" />
+                Live clock
               </button>
-            )}
-            <div className="flex-1">
-              <h1 className="flex items-center gap-2 text-lg font-semibold text-[#132F43]">
-                <Shield className="w-5 h-5 text-primary" />
-                Visit Verification
-              </h1>
-              <p className="text-sm text-[#5A6B7A]">
-                Arizona DDD Pilot &bull; Shadow EVV Export &bull; {childName}
-              </p>
+              {activeSession && (
+                <div className="flex shrink-0 items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5">
+                  <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
+                  <span className="text-sm font-mono font-medium text-rose-700">
+                    {formatElapsed(elapsedSeconds)}
+                  </span>
+                </div>
+              )}
             </div>
-            <button
-              type="button"
-              onClick={() => setActiveTab('clock')}
-              className="action-button min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
-            >
-              Open live clock
-            </button>
-            {activeSession && (
-              <div className="flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5">
-                <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
-                <span className="text-sm font-mono font-medium text-rose-700">
-                  {formatElapsed(elapsedSeconds)}
-                </span>
-              </div>
-            )}
+            <p className="text-sm text-[#5A6B7A] line-clamp-2">
+              Arizona DDD Pilot &bull; Visit records &amp; export
+              {/* Only show a child name when it's a real name, not the placeholder default */}
+              {childName && childName !== 'Your Child' ? <> &bull; {childName}</> : null}
+            </p>
           </nav>
         </div>
       </div>
@@ -467,7 +471,7 @@ export default function EVVDashboard({
         <div className="flex items-start gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg">
           <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
           <p className="text-sm text-amber-800 leading-relaxed">
-            Aminy captures Arizona pilot EVV records in shadow mode for reconciliation. Confirm payroll-critical submissions in SpokChoice today and treat DCI as the transition path until your agency changes systems.
+            Aminy records Arizona pilot visits alongside your current system so the two can be compared. Keep submitting payroll-critical entries in SpokChoice today; DCI is the planned replacement as your agency changes systems.
           </p>
         </div>
       </div>
@@ -476,12 +480,12 @@ export default function EVVDashboard({
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <p className="text-sm uppercase tracking-wide text-[#5A6B7A]">EVV Cutover Readiness</p>
+              <p className="text-sm uppercase tracking-wide text-[#5A6B7A]">Ready to switch to Aminy?</p>
               <h2 className="text-lg font-semibold text-[#132F43] mt-1">
-                {cutoverSummary.state === 'cutover_ready' ? 'Ready for primary EVV cutover' : 'Parallel run still required'}
+                {cutoverSummary.state === 'cutover_ready' ? 'Ready to make Aminy your primary system' : 'Still running side by side'}
               </h2>
               <p className="text-sm text-[#5A6B7A] mt-1">
-                Aminy should not become system of record until the three most recent payroll cycles are clean at 99.5% reconciliation accuracy, include the DCI transition lane, and have no critical exceptions.
+                Aminy stays alongside your current payroll system until the three most recent payroll cycles match it almost perfectly (99.5%), include the DCI transition path, and have no critical issues.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 min-w-[220px]">
@@ -495,7 +499,7 @@ export default function EVVDashboard({
               </div>
               <div>
                 <p className="text-sm text-[#5A6B7A]">Recent accuracy</p>
-                <p className="text-2xl font-semibold text-blue-600">{cutoverSummary.trailingWindowAccuracy}%</p>
+                <p className="text-2xl font-semibold text-[#2A7D99]">{cutoverSummary.trailingWindowAccuracy}%</p>
               </div>
               <div>
                 <p className="text-sm text-[#5A6B7A]">Critical exceptions</p>
@@ -504,7 +508,7 @@ export default function EVVDashboard({
             </div>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="text-sm uppercase tracking-[0.18em] text-slate-400">Transition systems validated</span>
+            <span className="text-sm uppercase tracking-[0.18em] text-slate-400">Systems checked so far</span>
             {cutoverSummary.systemsValidated.length > 0 ? (
               cutoverSummary.systemsValidated.map((system) => (
                 <span

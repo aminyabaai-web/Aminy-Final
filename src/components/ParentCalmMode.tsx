@@ -136,7 +136,7 @@ export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = ''
             <X className="w-5 h-5 text-[#5A6B7A]" />
           </button>
         </div>
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex items-start justify-center pt-8">
           <div className="max-w-md w-full px-4">
             {stepContent}
           </div>
@@ -208,7 +208,7 @@ function BreathStep({
   if (breathPhase === 'prompt') {
     return (
       <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
-        <Cloud className="w-16 h-16 text-blue-500 mx-auto mb-4" />
+        <Cloud className="w-16 h-16 text-[#2A7D99] mx-auto mb-4" />
         <h2 className="text-2xl text-[#132F43] mb-4">
           {safeName ? `Let's breathe, ${safeName}` : "Let's breathe"}
         </h2>
@@ -226,7 +226,7 @@ function BreathStep({
               <button
                 key={num}
                 onClick={() => startBreathing(num)}
-                className="h-12 rounded bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors flex items-center justify-center text-[#3A4A57] dark:text-blue-100 font-medium"
+                className="h-12 rounded bg-[#2A7D99]/10 border border-[#2A7D99]/25 hover:bg-[#2A7D99]/20 transition-colors flex items-center justify-center text-[#132F43] font-medium"
               >
                 {num}
               </button>
@@ -388,7 +388,7 @@ function IdentifyStep({
           <button
             key={challenge.id}
             onClick={() => onComplete(challenge.label)}
-            className="p-4 bg-white border-2 border-[#E8E4DF] rounded-lg hover:border-blue-500 hover:bg-[#EEF4F8] transition-all text-left"
+            className="p-4 bg-white border-2 border-[#E8E4DF] rounded-lg hover:border-[#2A7D99] hover:bg-[#EEF4F8] transition-all text-left"
           >
             <div className="text-2xl mb-2">{challenge.emoji}</div>
             <div className="text-sm text-[#132F43]">{challenge.label}</div>
@@ -442,7 +442,7 @@ function NextStepsStep({
               key={num}
               onClick={() => setOverwhelm(num)}
               className={`h-12 rounded transition-all flex items-center justify-center text-[#3A4A57] font-medium ${overwhelm === num
-                ? 'bg-green-500 text-white'
+                ? 'bg-[#2A7D99] text-white'
                 : 'bg-[#EDF4F7] hover:bg-[#E8E4DF]'
                 }`}
             >
@@ -459,7 +459,7 @@ function NextStepsStep({
               handleFinish();
               onTalkToAminy();
             }}
-            className="w-full bg-blue-600 text-white"
+            className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white"
           >
             <MessageCircle className="w-4 h-4 mr-2" />
             Talk to Aminy about "{hardestThing}"
@@ -512,7 +512,7 @@ export function CalmModeButton({
             HAPTICS.medium();
             setIsOpen(true);
           }}
-          className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-2"
+          className="text-sm text-[#2A7D99] hover:text-[#376E80] flex items-center gap-2"
         >
           <Cloud className="w-4 h-4" />
           Need calm?

@@ -46,6 +46,7 @@ import {
   Upload,
   Loader2,
   Link as LinkIcon,
+  Lock,
   LogOut
 } from 'lucide-react';
 import { Button } from './ui/button';
@@ -236,20 +237,22 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
         .eq('id', user.id)
         .single();
 
+      // Populate identity fields (email especially) even when the profiles row
+      // doesn't exist yet — otherwise the Email row renders blank.
       if (profileData) {
         logPHIView(user.id, 'parent', user.email || '', 'profile', user.id, 'profile').catch(() => {});
-        const loadedProfile = {
-          id: user.id,
-          name: profileData.name || user.user_metadata?.full_name || '',
-          email: user.email || '',
-          phone: profileData.phone || '',
-          location: profileData.location || '',
-          photoUrl: profileData.avatar_url || user.user_metadata?.avatar_url || '',
-          createdAt: user.created_at || ''
-        };
-        setProfile(loadedProfile);
-        setEditedProfile(loadedProfile);
       }
+      const loadedProfile = {
+        id: user.id,
+        name: profileData?.name || user.user_metadata?.full_name || '',
+        email: user.email || '',
+        phone: profileData?.phone || '',
+        location: profileData?.location || '',
+        photoUrl: profileData?.avatar_url || user.user_metadata?.avatar_url || '',
+        createdAt: user.created_at || ''
+      };
+      setProfile(loadedProfile);
+      setEditedProfile(loadedProfile);
 
       // Load children
       const { data: childrenData } = await supabase
@@ -595,7 +598,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
         <div className="max-w-2xl md:max-w-2xl md:mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             {onBack && (
-              <Button variant="ghost" size="sm" onClick={onBack}>
+              <Button variant="ghost" size="sm" onClick={onBack} aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </Button>
             )}
@@ -608,7 +611,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
               </p>
             </div>
             {userTier !== 'free' && (
-              <Badge className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] text-white border-0">
+              <Badge variant="outline" className="bg-white/80 border-[#2A7D99] text-[#2A7D99]">
                 <Crown className="w-3 h-3 mr-1" />
                 {getTierDisplayName(userTier)}
               </Badge>
@@ -620,7 +623,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
         <div className="max-w-2xl mx-auto px-4">
           <div className="flex gap-1 border-b border-[#E8E4DF] dark:border-slate-700">
             {[
-              { id: 'profile', label: 'My Profile', icon: User },
+              { id: 'profile', label: 'Profile', icon: User },
               { id: 'children', label: 'Children', icon: Baby },
               { id: 'security', label: 'Security', icon: Shield }
             ].map(tab => (
@@ -755,8 +758,11 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     <Mail className="w-4 h-4" />
                     Email
                   </Label>
-                  <p className="font-medium dark:text-white">{profile.email}</p>
-                  <p className="text-sm text-muted-foreground">Email cannot be changed here</p>
+                  <p className="font-medium dark:text-white">{profile.email || 'No email on file'}</p>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                    <Lock className="w-3 h-3" aria-hidden="true" />
+                    Can't be changed here
+                  </p>
                 </div>
 
                 <div>

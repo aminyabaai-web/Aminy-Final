@@ -763,6 +763,7 @@ export function ConversationalBooking({
         <div className="mx-auto flex max-w-5xl items-start gap-3">
           <button
             onClick={goBack}
+            aria-label="Go back"
             className="rounded-2xl border border-[#E8E4DF] bg-white p-2.5 transition-colors hover:bg-[#F6FBFB]"
           >
             <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />

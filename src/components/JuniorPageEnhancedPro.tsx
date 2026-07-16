@@ -1614,23 +1614,23 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       >
         {/* Kid-Safe Header */}
         <div className="flex items-center justify-between border-b border-white/70 bg-white/90 p-4 backdrop-blur junior-header dark:bg-slate-900/90 dark:border-slate-700/70">
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-1 min-w-0 items-center space-x-3">
             <motion.div
               animate={reducedSensory ? {} : { scale: [1, 1.02, 1] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              className={`w-12 h-12 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
+              className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
             >
               {buddyVoices.find(b => b.id === selectedBuddy)?.icon}
             </motion.div>
-            <div>
-              <p className="text-xl font-semibold text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Hi {childName}!</p>
-              <p className="text-sm text-[#5A6B7A] dark:text-slate-400" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>
+            <div className="min-w-0">
+              <p className="text-lg font-semibold text-slate-950 truncate dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Hi {childName}!</p>
+              <p className="text-sm text-[#5A6B7A] truncate dark:text-slate-400" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>
                 With {buddyVoices.find(b => b.id === selectedBuddy)?.name}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex shrink-0 items-center space-x-2">
             {/* Token Counter */}
             <motion.div
               animate={reducedSensory ? {} : { scale: todayTokens > 0 ? [1, 1.1, 1] : 1 }}
@@ -1760,11 +1760,11 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     transition={{ delay: 0.2 }}
                     className="mt-5 rounded-[24px] border border-amber-200/60 bg-gradient-to-r from-amber-50 to-orange-50 p-4 shadow-sm"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-xl">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-xl">
                         {weekStreak >= 5 ? '🔥' : weekStreak >= 3 ? '⭐' : '🌱'}
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-[220px]">
                         <div className="text-xs font-medium uppercase tracking-[0.12em] text-amber-600 dark:text-amber-400">
                           {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}, {childName}!
                         </div>
@@ -1779,7 +1779,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <button
                         type="button"
                         onClick={() => setActiveView('activity-select')}
-                        className="rounded-2xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-amber-600"
+                        className="shrink-0 whitespace-nowrap rounded-2xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-amber-600"
                       >
                         Let's go!
                       </button>

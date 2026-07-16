@@ -474,6 +474,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
         <div style={S.stickyFooter}>
           <button
             onClick={handleConcernsContinue}
+            className="active:scale-[0.98]"
             style={S.primaryBtn(true)}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = TEAL_HOVER; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = TEAL; }}
@@ -572,6 +573,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           )}
           <button
             onClick={handleChildInfoSubmit}
+            className="active:scale-[0.98]"
             style={S.primaryBtn(childInfo.ageMonths > 0)}
             onMouseEnter={(e) => { if (childInfo.ageMonths > 0) e.currentTarget.style.backgroundColor = TEAL_HOVER; }}
             onMouseLeave={(e) => { if (childInfo.ageMonths > 0) e.currentTarget.style.backgroundColor = TEAL; }}
@@ -602,6 +604,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
             </div>
             <button
               onClick={handleInsightDismiss}
+              className="active:scale-[0.98]"
               style={{ ...S.primaryBtn(true), width: 'auto', padding: '12px 32px' }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = TEAL_HOVER; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = TEAL; }}
@@ -633,8 +636,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
             {hText && <p style={{ fontSize: 14, color: '#7A8C9A', lineHeight: 1.6, marginTop: 12, marginBottom: 0 }}>{hText}</p>}
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
-            <button onClick={() => handleAnswer(currentQuestion.id, true)} style={S.yesNoBtn('yes')}>Yes</button>
-            <button onClick={() => handleAnswer(currentQuestion.id, false)} style={S.yesNoBtn('no')}>No</button>
+            <button onClick={() => handleAnswer(currentQuestion.id, true)} className="active:scale-[0.98]" style={S.yesNoBtn('yes')}>Yes</button>
+            <button onClick={() => handleAnswer(currentQuestion.id, false)} className="active:scale-[0.98]" style={S.yesNoBtn('no')}>No</button>
           </div>
         </div>
       </div>
@@ -782,6 +785,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           <div style={{ marginTop: 24 }}>
             <button
               onClick={onSignUp}
+              className="active:scale-[0.98]"
               style={S.primaryBtn(true)}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = TEAL_HOVER; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = TEAL; }}

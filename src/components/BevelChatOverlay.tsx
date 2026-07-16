@@ -2254,7 +2254,7 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                     <button
                       onClick={toggleRecording}
                       disabled={isTranscribing}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-50"
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-50"
                       style={{
                         background: isRecording ? '#E07A5F' : 'transparent',
                         color: isRecording ? 'white' : '#94a3b8',
@@ -2271,7 +2271,7 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                       onClick={() => { HAPTICS.medium(); sendMessage(input); }}
                       disabled={(!input.trim() && !attachedImage) || isLoading}
                       aria-label="Send message"
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
                       style={{
                         background: (input.trim() || attachedImage)
                           ? 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)'

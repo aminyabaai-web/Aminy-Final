@@ -208,7 +208,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#132F43]">{meta.label}</p>
-                    <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
+                    <p className="text-sm text-[#5A6B7A] line-clamp-2">{meta.description}</p>
                   </div>
                   <Plus className="w-4 h-4 text-slate-400 shrink-0" />
                 </button>

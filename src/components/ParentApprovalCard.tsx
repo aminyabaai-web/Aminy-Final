@@ -158,7 +158,23 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
                 )}
               </div>
               <p className="text-sm text-[#132F43]">
-                Suggested by <strong>{suggestion.providerName}</strong>
+                {/* Credential token (after the last comma, e.g. "BCBA-D") is
+                    non-breaking so it never wraps at its hyphen and orphans
+                    a trailing "D" on its own line. */}
+                Suggested by{' '}
+                <strong>
+                  {(() => {
+                    const name = suggestion.providerName || '';
+                    const i = name.lastIndexOf(', ');
+                    if (i === -1) return name;
+                    return (
+                      <>
+                        {name.slice(0, i + 2)}
+                        <span className="whitespace-nowrap">{name.slice(i + 2)}</span>
+                      </>
+                    );
+                  })()}
+                </strong>
                 {suggestion.providerRole &&
                   !suggestion.providerName?.toLowerCase().includes(suggestion.providerRole.toLowerCase()) && (
                     <span className="text-[#5A6B7A] ml-1">({suggestion.providerRole})</span>
@@ -201,7 +217,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
               <Button
                 onClick={handleAccept}
                 disabled={isAccepting}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                className="flex-1 bg-[#2A7D99] hover:bg-[#376E80] text-white"
               >
                 {isAccepting ? (
                   <>
@@ -415,7 +431,12 @@ function getSuggestionTitle(suggestion: ProviderSuggestion): string {
   switch (suggestion.type) {
     case 'routine_change': {
       const routinePayload = suggestion.payload as unknown as RoutineChangePayload;
-      return routinePayload?.routineName ? `Adjust "${routinePayload.routineName}" routine` : 'Routine adjustment';
+      const routineName = routinePayload?.routineName?.trim();
+      if (!routineName) return 'Routine adjustment';
+      // Avoid 'Adjust "Morning Routine" routine' when the name already ends with "routine"
+      return /routine$/i.test(routineName)
+        ? `Adjust "${routineName}"`
+        : `Adjust "${routineName}" routine`;
     }
     case 'goal_adjustment': {
       const goalPayload = suggestion.payload as unknown as GoalAdjustmentPayload;

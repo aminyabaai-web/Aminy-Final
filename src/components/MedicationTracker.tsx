@@ -437,8 +437,8 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
           <h2 className="text-xl font-semibold text-[#132F43] dark:text-white flex items-center gap-2">
             <Pill className="w-6 h-6 text-[#6B9080]" />
             Medication Tracker
@@ -447,7 +447,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
             Managing medications for {childName}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <Button variant="outline" size="sm" onClick={loadData}>
             <RefreshCw className="w-4 h-4 mr-1" />
             Refresh
@@ -464,8 +464,8 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div className="w-10 h-10 rounded-lg bg-[#2A7D99]/15 flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-[#2A7D99]" />
             </div>
             <div>
               <p className="text-2xl font-bold text-[#132F43] dark:text-white">
@@ -535,7 +535,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
       {/* Tabs */}
       <div className="flex gap-1 border-b border-neutral-200 dark:border-slate-700">
         {[
-          { id: 'today', label: "Today's Schedule", icon: Calendar },
+          { id: 'today', label: 'Today', icon: Calendar },
           { id: 'medications', label: 'Medications', icon: Pill },
           { id: 'history', label: 'History', icon: History },
         ].map(tab => (

@@ -30,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Logo } from './Logo';
 import { supabase } from '../utils/supabase/client';
 import {
+  ArrowLeft,
   Search,
   Filter,
   Star,
@@ -197,6 +198,7 @@ export function ProviderMarketplace({
   userTier = 'core',
   onBookSession,
   onViewProvider,
+  onBack,
   onNavigateToGroupSessions,
 }: ProviderMarketplaceProps) {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'behavioral' | 'therapy' | 'medical'>('all');
@@ -698,6 +700,15 @@ export function ProviderMarketplace({
       {/* Header */}
       <div className="bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white">
         <div className="max-w-4xl mx-auto px-4 py-8">
+          {onBack && (
+            <button
+              onClick={onBack}
+              aria-label="Go back"
+              className="mb-3 -ml-2 flex h-11 w-11 items-center justify-center rounded-full text-white transition-all hover:bg-white/15 active:scale-[0.97]"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          )}
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-white/20 rounded-xl">
               <Users className="w-6 h-6" />
@@ -727,7 +738,7 @@ export function ProviderMarketplace({
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by name, specialty, or condition..."
+              placeholder="Search by name or specialty"
               className="pl-12 h-12 bg-white text-[#132F43] border-0 shadow-lg"
             />
           </div>
@@ -737,7 +748,7 @@ export function ProviderMarketplace({
       {/* Category Tabs */}
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex gap-1 py-2 overflow-x-auto">
+          <div className="flex gap-2 py-2 overflow-x-auto">
             {[
               { id: 'all', label: 'All Guides', icon: Users },
               { id: 'behavioral', label: 'Behavioral', icon: Brain, desc: 'BCBA, RBT' },
@@ -747,7 +758,7 @@ export function ProviderMarketplace({
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id as typeof selectedCategory)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex shrink-0 items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                   selectedCategory === cat.id
                     ? 'bg-[#6B9080]/10 text-[#6B9080]'
                     : 'text-[#5A6B7A] hover:bg-[#EDF4F7]'
@@ -1098,8 +1109,8 @@ export function ProviderMarketplace({
             />
           ) : (
             <EmptyProviders
-              headline="Verified providers are not available yet"
-              description="Aminy only shows real provider availability during limited launch. Use AI guidance today and check back when live openings are verified."
+              headline="Providers are onboarding in your state now"
+              description="Check back soon — we only list real, verified openings. In the meantime, Aminy can guide you today."
             />
           )
         ) : (

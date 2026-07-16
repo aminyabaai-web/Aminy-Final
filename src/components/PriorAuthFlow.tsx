@@ -168,7 +168,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
       <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3 mb-4">
-            <Button variant="ghost" size="sm" onClick={handleBack}>
+            <Button variant="ghost" size="sm" onClick={handleBack} aria-label="Back">
               <ArrowLeft className="w-4 h-4" />
             </Button>
             <div>

@@ -72,8 +72,8 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
           <div className="w-16"></div>
         </nav>
 
-        {/* Success Content */}
-        <div className="flex-1 flex items-center justify-center px-6 py-8">
+        {/* Success Content — top-aligned like LoginScreen (no floating dead zone) */}
+        <div className="flex-1 flex items-start justify-center px-6 pb-8" style={{ paddingTop: 'clamp(24px, 6vh, 56px)' }}>
           <div className="w-full max-w-md text-center">
             {/* Success Icon */}
             <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 sm:mb-6">
@@ -161,8 +161,8 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
         <div className="w-16"></div>
       </nav>
 
-      {/* Reset Form Container */}
-      <div className="flex-1 flex items-center justify-center px-6 py-8">
+      {/* Reset Form Container — top-aligned like LoginScreen (no floating dead zone) */}
+      <div className="flex-1 flex items-start justify-center px-6 pb-8" style={{ paddingTop: 'clamp(24px, 6vh, 56px)' }}>
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">

@@ -15,6 +15,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme="light"
       className="toaster group"
+      // Keep toasts clear of the fixed bottom nav (~64px tabs + safe-area
+      // inset) so they are never clipped by the viewport edge or overlapped
+      // by the nav / chat FABs (July 2026 visual-audit fix).
+      offset={{ bottom: 24 }}
+      mobileOffset={{ bottom: 96 }}
       style={
         {
           "--normal-bg": "var(--popover)",

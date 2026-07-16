@@ -214,7 +214,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
         <Card className="p-3 sm:p-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="flex items-center gap-2 flex-1">
-              <MapPin className="w-4 h-4 text-blue-600" />
+              <MapPin className="w-4 h-4 text-[#2A7D99]" />
               <label htmlFor="benefits-state" className="text-sm font-medium">Your State:</label>
               <select
                 id="benefits-state"
@@ -361,7 +361,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                   onClick={() => onNavigate?.('prior-auth')}
                 >
                   <Send className="w-5 h-5" />
-                  <span className="text-sm">Prior Auth</span>
+                  <span className="text-sm">Approvals</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -412,7 +412,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                       />
                       <div className="min-w-0">
                         <p className="font-medium">{service.name}</p>
-                        <p className="text-sm text-muted-foreground truncate">
+                        <p className="text-sm text-muted-foreground line-clamp-2">
                           {service.coverage}
                         </p>
                       </div>

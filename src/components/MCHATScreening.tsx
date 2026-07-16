@@ -123,7 +123,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                 <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
                     <div className="max-w-2xl mx-auto px-4 py-4">
                         <div className="flex items-center gap-3">
-                            <Button variant="ghost" size="sm" onClick={onBack}>
+                            <Button variant="ghost" size="sm" onClick={onBack} aria-label="Back">
                                 <ChevronLeft className="w-4 h-4" />
                             </Button>
                             <h1 className="text-lg font-semibold text-[#132F43]">M-CHAT-R™ Screening</h1>
@@ -227,7 +227,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
             <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
                 <div className="max-w-2xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-3 mb-4">
-                        <Button variant="ghost" size="sm" onClick={() => currentStep === 0 ? setCurrentStep(-1) : setCurrentStep(prev => prev - 1)}>
+                        <Button variant="ghost" size="sm" onClick={() => currentStep === 0 ? setCurrentStep(-1) : setCurrentStep(prev => prev - 1)} aria-label="Previous question">
                             <ChevronLeft className="w-4 h-4" />
                         </Button>
                         <h1 className="text-lg font-semibold text-[#132F43] text-center flex-1">

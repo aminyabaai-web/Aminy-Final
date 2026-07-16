@@ -18,7 +18,11 @@ const STYLES = {
   hidden: 'border-[#E8E4DF] bg-[#EDF4F7] text-[#3A4A57]',
   internal: 'border-amber-200 bg-amber-50 text-amber-700',
   pilot: 'border-violet-200 bg-violet-50 text-violet-700',
-  limited_launch: 'border-sky-200 bg-sky-50 text-sky-700',
+  // white/90 + navy: this badge often sits on the teal screen headers
+  // (marketplace, telehealth) where the old sky-on-transparent read as
+  // low-contrast blue-on-teal (bg-sky-50/border-sky-200 are not in the
+  // precompiled CSS, so the fill was silently transparent).
+  limited_launch: 'border-[#E8E4DF] bg-white/90 text-[#132F43]',
   live: 'border-emerald-200 bg-emerald-50 text-emerald-700',
 } as const;
 

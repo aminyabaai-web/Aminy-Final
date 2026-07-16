@@ -573,6 +573,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 {onBack && (
                   <button
                     onClick={onBack}
+                    aria-label="Back"
                     className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -592,6 +593,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowSearch(!showSearch)}
+                  aria-label="Search messages"
                   className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <Search className="w-5 h-5 text-[#5A6B7A]" />

@@ -210,7 +210,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors">
+            <button onClick={onBack} aria-label="Back" className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors">
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -470,9 +470,11 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                 <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => onNavigate?.('marketplace')}>
                   See Cash-Pay Options
                 </Button>
-                <Button variant="ghost" className="w-full text-[#5A6B7A]" onClick={() => toast.info('Connecting you with a coverage expert...')}>
+                {/* No coverage-expert line exists yet — a "connecting…" toast would
+                    fake it. Honest disabled state until the service is live. */}
+                <Button variant="ghost" className="w-full text-[#5A6B7A]" disabled>
                   <Phone className="w-4 h-4 mr-2" />
-                  Talk to a Coverage Expert
+                  Talk to a Coverage Expert — coming soon
                 </Button>
               </div>
             </motion.div>
@@ -541,12 +543,14 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                 <Button className="w-full bg-primary hover:bg-primary text-white" onClick={() => onNavigate?.('marketplace')}>
                   See Cash-Pay Options
                 </Button>
-                <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => toast.info('Checking your state waiver eligibility...')}>
+                <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => setStep('waiver')}>
                   Check Waiver Eligibility
                 </Button>
-                <Button variant="ghost" className="w-full text-[#5A6B7A]" onClick={() => toast.info('Connecting you with a coverage expert...')}>
+                {/* No coverage-expert line exists yet — a "connecting…" toast would
+                    fake it. Honest disabled state until the service is live. */}
+                <Button variant="ghost" className="w-full text-[#5A6B7A]" disabled>
                   <Phone className="w-4 h-4 mr-2" />
-                  Talk to a Coverage Expert
+                  Talk to a Coverage Expert — coming soon
                 </Button>
               </div>
             </motion.div>
@@ -624,9 +628,10 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   <Shield className="w-4 h-4 mr-2" />
                   Verify My Benefits
                 </Button>
-                <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => toast.info('Connecting you with a coverage expert...')}>
+                {/* No coverage-expert line exists yet — honest disabled state. */}
+                <Button variant="outline" className="w-full border-[#E8E4DF]" disabled>
                   <Phone className="w-4 h-4 mr-2" />
-                  Talk to a Coverage Expert
+                  Talk to a Coverage Expert — coming soon
                 </Button>
               </div>
             </motion.div>

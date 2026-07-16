@@ -147,7 +147,7 @@ export function RedeemGiftScreen({ onBack, onCreateAccount, onSuccess }: RedeemG
           <button
             onClick={onSuccess}
             style={{
-              background: '#43AA8B', color: '#ffffff', border: 'none',
+              background: '#2A7D99', color: '#ffffff', border: 'none',
               borderRadius: '14px', padding: '14px 32px', fontSize: '16px',
               fontWeight: 600, fontFamily: fontStack, cursor: 'pointer',
             }}
@@ -182,8 +182,10 @@ export function RedeemGiftScreen({ onBack, onCreateAccount, onSuccess }: RedeemG
             <div style={{ width: '72px', height: '72px', borderRadius: '20px', background: 'rgba(67,170,139,0.12)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
               <Gift size={34} color="#43AA8B" />
             </div>
+            {/* No emoji in the H1 — the Lucide Gift icon above carries the
+                gift visual (Lucide-only on parent surfaces). */}
             <h1 style={{ fontSize: '26px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 10px' }}>
-              You've been gifted Aminy 🎁
+              You've been gifted Aminy
             </h1>
             <p style={{ fontSize: '15px', color: '#577590', margin: 0, lineHeight: 1.6 }}>
               {isAuthed === false
@@ -223,7 +225,7 @@ export function RedeemGiftScreen({ onBack, onCreateAccount, onSuccess }: RedeemG
             onClick={handleRedeem}
             disabled={isRedeeming || isAuthed === null}
             style={{
-              width: '100%', marginTop: '20px', height: '54px', background: '#43AA8B',
+              width: '100%', marginTop: '20px', height: '54px', background: '#2A7D99',
               color: '#ffffff', border: 'none', borderRadius: '14px', fontSize: '16px',
               fontWeight: 600, fontFamily: fontStack,
               cursor: isRedeeming || isAuthed === null ? 'default' : 'pointer',

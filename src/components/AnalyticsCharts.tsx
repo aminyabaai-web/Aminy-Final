@@ -75,6 +75,8 @@ interface AnalyticsChartsProps {
   childId?: string;
   dateRange?: 'week' | 'month' | 'quarter' | 'year';
   onDateRangeChange?: (range: string) => void;
+  /** Navigate to another screen (e.g. 'wins-journal' from the empty state). */
+  onNavigate?: (screen: string) => void;
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -554,7 +556,8 @@ export function AnalyticsCharts({
   childName,
   childId,
   dateRange = 'week',
-  onDateRangeChange
+  onDateRangeChange,
+  onNavigate
 }: AnalyticsChartsProps) {
   const [selectedRange, setSelectedRange] = useState(dateRange);
   const [isLoading, setIsLoading] = useState(false);
@@ -685,6 +688,15 @@ export function AnalyticsCharts({
           <p className="mt-1.5 text-sm text-[#5A6B7A] max-w-xs">
             As you track {childName}&rsquo;s activities, moods, and routines, more trends and insights will appear here.
           </p>
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('wins-journal')}
+              className="mt-5 inline-flex items-center gap-2 px-5 py-3 min-h-[44px] rounded-xl bg-[#2A7D99] hover:bg-[#376E80] active:scale-[0.98] text-white text-sm font-semibold transition-colors"
+            >
+              <TrendingUp className="w-4 h-4" aria-hidden="true" />
+              Log today&rsquo;s win
+            </button>
+          )}
         </Card>
       </div>
     );

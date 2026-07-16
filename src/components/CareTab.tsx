@@ -419,13 +419,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
   const renderMessages = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      {/* Coach Office Hours */}
+      {/* Coach Office Hours — navy/teal (brand), not royal blue */}
       <div className="p-4 bg-[#EEF4F8] rounded-lg border border-[#C8DDE8]">
         <div className="flex items-center gap-2 mb-2">
-          <Clock className="w-4 h-4 text-blue-600 dark:text-blue-300" />
-          <span className="font-medium text-blue-900 dark:text-blue-200">Coach Office Hours</span>
+          <Clock className="w-4 h-4 text-[#2A7D99] dark:text-teal-300" />
+          <span className="font-medium text-[#132F43] dark:text-slate-100">Coach Office Hours</span>
         </div>
-        <p className="text-sm text-blue-700 dark:text-blue-200">
+        <p className="text-sm text-[#3A4A57] dark:text-slate-300">
           Monday-Friday: 9:00 AM - 5:00 PM PST • Response time: Within 24 hours
         </p>
       </div>
@@ -954,7 +954,8 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     { id: 'messages' as CareTabView, label: 'Messages', icon: MessageCircle },
     { id: 'schedule' as CareTabView, label: 'Schedule', icon: Calendar },
     { id: 'minutes' as CareTabView, label: 'Minutes', icon: Clock },
-    { id: 'past-sessions' as CareTabView, label: 'Past Sessions', icon: FileText }
+    // "History" (not "Past Sessions") so the label fits beneath the icon at 390px
+    { id: 'past-sessions' as CareTabView, label: 'History', icon: FileText }
   ];
 
   return (
@@ -1084,14 +1085,17 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                     <button
                       key={tab.id}
                       onClick={() => setActiveView(tab.id)}
-                      className={`flex-1 flex items-center justify-center gap-1 py-3 px-2 rounded-md text-sm font-medium transition-all ${
+                      aria-label={tab.label}
+                      aria-current={activeView === tab.id ? 'true' : undefined}
+                      className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1 py-2 sm:py-3 px-2 rounded-md text-sm font-medium transition-all ${
                         activeView === tab.id
                           ? 'bg-white text-accent shadow-sm'
                           : 'text-[#5A6B7A] hover:text-[#132F43]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
-                      <span className="hidden sm:inline">{tab.label}</span>
+                      {/* Label always visible (was icon-only below sm) */}
+                      <span className="text-xs sm:text-sm">{tab.label}</span>
                     </button>
                   );
                 })}

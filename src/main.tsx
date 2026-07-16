@@ -10,9 +10,14 @@ import "./index.css";
 import { initEnvValidation } from "./lib/env-validation.ts";
 import { initTracking } from "./lib/tracking-init";
 import { initSentry } from "./lib/sentry";
+import { maybeSeedDemoFamily } from "./lib/demo-family-seed";
 
 // Initialize error monitoring before anything else
 initSentry();
+
+// DEV-only: `?demo=family` seeds localStorage with a lived-in demo family
+// (Sarah + Liam) BEFORE the app reads it. No-op in production builds.
+maybeSeedDemoFamily();
 
 // Capacitor native platform initialization
 async function initNativePlatform() {

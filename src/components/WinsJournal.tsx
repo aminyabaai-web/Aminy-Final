@@ -109,7 +109,7 @@ export function WinsJournal({ userId }: { userId: string }) {
       );
 
       if (response.ok) {
-        toast.success('Moment saved 💙');
+        toast.success('Moment saved — these little wins add up.');
         setNewMomentContent('');
         setIsAddingMoment(false);
         
@@ -263,7 +263,7 @@ export function WinsJournal({ userId }: { userId: string }) {
         streakDays: computeStreakDays(moments),
       });
       if (result === 'downloaded') {
-        toast.success('Win card saved — caption copied, ready to post 💙');
+        toast.success('Win card saved — caption copied, ready to post.');
       } else {
         toast.success('Win shared ✨');
       }
@@ -332,7 +332,7 @@ export function WinsJournal({ userId }: { userId: string }) {
                 <Textarea
                   value={newMomentContent}
                   onChange={(e) => setNewMomentContent(e.target.value)}
-                  placeholder="Example: She asked for help instead of getting upset. Such progress! 💙"
+                  placeholder="Example: She asked for help instead of getting upset. Such progress!"
                   className="min-h-[120px]"
                 />
                 <div className="flex gap-2">
@@ -440,7 +440,7 @@ export function WinsJournal({ userId }: { userId: string }) {
           {moments.length === 0 ? (
             <div className="text-center py-8 text-[#5A6B7A]">
               <p>No moments saved yet.</p>
-              <p className="text-sm mt-1">Start capturing your journey! 💙</p>
+              <p className="text-sm mt-1">Start capturing your journey — every small win counts.</p>
             </div>
           ) : (
             <div className="space-y-3">

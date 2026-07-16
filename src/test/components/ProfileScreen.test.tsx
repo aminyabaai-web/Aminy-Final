@@ -33,7 +33,9 @@ vi.mock('lucide-react', () => {
     'ArrowLeft', 'Camera', 'User', 'Mail', 'Phone', 'MapPin', 'Edit2', 'Check',
     'X', 'Plus', 'Trash2', 'Users', 'ChevronRight', 'Shield', 'Calendar', 'Clock',
     'Smartphone', 'Globe', 'Crown', 'Baby', 'Cake', 'Heart', 'AlertCircle',
-    'Upload', 'Loader2', 'LogOut', 'Link',
+    'Upload', 'Loader2', 'Lock', 'LogOut', 'Link',
+    // Used by UsageMeter, rendered inside ProfileScreen
+    'Brain', 'Sparkles', 'Zap', 'ArrowRight', 'MessageCircle', 'FileText',
   ];
   const mock: Record<string, unknown> = {};
   for (const name of iconNames) {
@@ -187,6 +189,15 @@ vi.mock('../../lib/tier-utils', () => ({
     };
     return names[tier || 'free'] || 'Free';
   }),
+  // UsageMeter (rendered inside ProfileScreen) needs these too — without
+  // them the whole tree throws and every assertion fails at "Loading".
+  normalizeTierName: vi.fn((tier?: string) => (tier === 'starter' ? 'core' : tier || 'free')),
+  getTierLimits: vi.fn(() => ({
+    messagesPerDay: 100,
+    documents: 100,
+    memoryFacts: 1000,
+    children: 3,
+  })),
 }));
 
 // =============================================================================
@@ -221,18 +232,20 @@ describe('ProfileScreen', () => {
 
     // Wait for the profile to load
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1, name: 'Profile' })).toBeInTheDocument();
     });
   });
 
   // ---------------------------------------------------------------------------
   // 2. Displays profile sections (My Profile tab content, tab navigation)
   // ---------------------------------------------------------------------------
-  it('displays profile tab navigation with My Profile, Children, and Security tabs', async () => {
+  it('displays profile tab navigation with Profile, Children, and Security tabs', async () => {
     render(<ProfileScreen {...defaultProps} />);
 
     await waitFor(() => {
-      expect(screen.getByText('My Profile')).toBeInTheDocument();
+      // Tab label is "Profile" (shortened from "My Profile" so it stays on
+      // one line at 390px); the page h1 is also "Profile", so expect both.
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(1);
     });
 
     expect(screen.getByText('Children')).toBeInTheDocument();
@@ -280,7 +293,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
 
     // The back button contains the ArrowLeft icon
@@ -297,7 +310,8 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="core" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Core')).toBeInTheDocument();
+      // Appears in the header tier badge and the UsageMeter pill
+      expect(screen.getAllByText('Core').length).toBeGreaterThan(0);
     });
 
     // Crown icon should be present in the tier badge
@@ -308,7 +322,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="pro" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Pro')).toBeInTheDocument();
+      expect(screen.getAllByText('Pro').length).toBeGreaterThan(0);
     });
   });
 
@@ -316,7 +330,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="proplus" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Family Plan')).toBeInTheDocument();
+      expect(screen.getAllByText('Family Plan').length).toBeGreaterThan(0);
     });
   });
 
@@ -324,7 +338,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="free" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
 
     // Crown icon should NOT be present when tier is free
@@ -341,7 +355,7 @@ describe('ProfileScreen', () => {
     expect(screen.getByText('Loading profile...')).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
   });
 
@@ -349,7 +363,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen />);
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
 
     // ArrowLeft icon should not appear (since no back button rendered)

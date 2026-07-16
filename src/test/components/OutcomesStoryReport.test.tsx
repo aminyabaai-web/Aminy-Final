@@ -98,7 +98,7 @@ describe('OutcomesStoryReport', () => {
     fetchOutcomeTrendMock.mockResolvedValue({ points: [mk(0, 3, 3, 3)], baseline: null });
     render(<OutcomesStoryReport childName="Riley" />);
     await waitFor(() =>
-      expect(screen.getByText(/Your story is just beginning/i)).toBeInTheDocument(),
+      expect(screen.getByText(/story is just beginning/i)).toBeInTheDocument(),
     );
   });
 
@@ -127,7 +127,7 @@ describe('OutcomesStoryReport', () => {
     fetchOutcomeTrendMock.mockResolvedValue({ points: [], baseline: null });
     render(<OutcomesStoryReport />);
     await waitFor(() =>
-      expect(screen.getByText(/check in weekly and this fills itself in/i)).toBeInTheDocument(),
+      expect(screen.getByText(/part of your child's progress story/i)).toBeInTheDocument(),
     );
   });
 

@@ -341,18 +341,20 @@ function DenialInbox({
             placeholder="Search patient, claim ID, code..."
             value={searchQuery}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-            className="pl-8 text-sm h-8"
+            className="pl-8 text-sm h-8 bg-white border-[#E8E4DF]"
           />
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Category filters — hidden when there are no real categories (an inbox with
+          no denials would otherwise show a lone orphan "All" chip above the status row) */}
+      {categories.length > 1 && (
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setFilterCategory(cat)}
-            className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+            className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
               filterCategory === cat
                 ? 'bg-slate-800 text-white'
                 : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
@@ -362,6 +364,7 @@ function DenialInbox({
           </button>
         ))}
       </div>
+      )}
 
       {/* Status filter */}
       <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
@@ -369,7 +372,7 @@ function DenialInbox({
           <button
             key={s}
             onClick={() => setFilterStatus(s)}
-            className={`px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap transition-colors ${
+            className={`shrink-0 px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap transition-colors ${
               filterStatus === s
                 ? 'bg-slate-700 text-white'
                 : 'bg-white text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#F6FBFB]'
@@ -961,7 +964,7 @@ export default function DenialWorkbench({
       <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">
           {onBack && (
-            <button onClick={onBack} className="text-[#5A6B7A]">
+            <button onClick={onBack} aria-label="Go back" className="text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}

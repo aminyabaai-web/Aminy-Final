@@ -295,6 +295,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
           <button
+            aria-label="Go back"
             onClick={phase === 'welcome' ? onBack : () => {
               const idx = PHASES.indexOf(phase);
               if (idx > 0) goTo(PHASES[idx - 1]);

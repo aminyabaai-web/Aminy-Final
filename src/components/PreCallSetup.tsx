@@ -408,6 +408,7 @@ export function PreCallSetup({
                 size="icon"
                 onClick={toggleVideo}
                 className="rounded-full"
+                aria-label={videoEnabled ? "Turn camera off" : "Turn camera on"}
               >
                 {videoEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4" />}
               </Button>
@@ -416,6 +417,7 @@ export function PreCallSetup({
                 size="icon"
                 onClick={toggleAudio}
                 className="rounded-full"
+                aria-label={audioEnabled ? "Mute microphone" : "Unmute microphone"}
               >
                 {audioEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
               </Button>

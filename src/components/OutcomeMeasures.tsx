@@ -90,7 +90,7 @@ function formatDate(iso: string): string {
 // Component
 // ---------------------------------------------------------------------------
 
-export function OutcomeMeasures({ userId, childId, childName = 'Your Child', onBack }: OutcomeMeasuresProps) {
+export function OutcomeMeasures({ userId, childId, childName = 'your child', onBack }: OutcomeMeasuresProps) {
   // In demo mode, use placeholder ids so the screen is fully explorable.
   // For real users, never fabricate ids — fall back to empty and guard persistence
   // so a fake child_id can't be written to the database.
@@ -234,6 +234,7 @@ export function OutcomeMeasures({ userId, childId, childName = 'Your Child', onB
         }}
       >
         <button
+          aria-label="Go back"
           onClick={view === 'selection' ? onBack : handleBackToSelection}
           style={{
             display: 'flex',
@@ -263,6 +264,7 @@ export function OutcomeMeasures({ userId, childId, childName = 'Your Child', onB
         {view === 'selection' && (
           <button
             onClick={handleShowHistory}
+            aria-label="View assessment history"
             style={{
               display: 'flex',
               alignItems: 'center',

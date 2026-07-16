@@ -208,15 +208,17 @@ export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheet
 
             <div style={{ maxWidth: '600px', margin: '0 auto', padding: '24px 20px' }}>
 
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '20px', marginBottom: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', border: '1px solid rgba(139, 92, 246, 0.18)' }}>
+                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '20px', marginBottom: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', border: '1px solid #E8E4DF' }}>
+                    {/* One accent (teal program badge) + neutral chips — the old 4-color
+                        purple/orange/blue/green stack competed with brand teal */}
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#F5F3FF', color: '#6D28D9', fontSize: '12px', fontWeight: 600 }}>Arizona DDD Pilot</span>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#FFFBEB', color: '#B45309', fontSize: '12px', fontWeight: 600 }}>SpokChoice Current</span>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontSize: '12px', fontWeight: 600 }}>DCI Transition Path</span>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#ECFDF5', color: '#047857', fontSize: '12px', fontWeight: 600 }}>Aminy Shadow + Export</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: 'rgba(42, 125, 153, 0.10)', color: '#2A7D99', fontSize: '12px', fontWeight: 600 }}>Arizona DDD Pilot</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EDF4F7', color: '#3A4A57', fontSize: '12px', fontWeight: 600 }}>SpokChoice Current</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EDF4F7', color: '#3A4A57', fontSize: '12px', fontWeight: 600 }}>DCI Transition Path</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EDF4F7', color: '#3A4A57', fontSize: '12px', fontWeight: 600 }}>Aminy Records + Export</span>
                     </div>
                     <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#374151', margin: 0 }}>
-                        Use Aminy to document shifts, capture EVV evidence, and export reconciliation data for the Arizona pilot. Do not treat Aminy as the payroll system of record until the DCI transition path is validated.
+                        Use Aminy to document shifts, capture visit evidence, and export your records for the Arizona pilot. Keep submitting payroll through your current system — it stays primary until the DCI transition is confirmed.
                     </p>
                 </div>
 
@@ -278,10 +280,10 @@ export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheet
 
                                         <div>
                                             <p style={{ fontSize: '14px', fontWeight: 600, color: authStatus === 'checking' ? '#374151' : authStatus === 'authorized' ? '#065F46' : '#991B1B', marginBottom: '4px' }}>
-                                                {authStatus === 'checking' ? 'Preparing pilot shadow session...' : authStatus === 'authorized' ? 'Shadow capture ready' : 'Review required before submission'}
+                                                {authStatus === 'checking' ? 'Preparing your session record...' : authStatus === 'authorized' ? 'Ready to record this visit' : 'Review required before submission'}
                                             </p>
                                             <p style={{ fontSize: '13px', color: authStatus === 'checking' ? '#6B7280' : authStatus === 'authorized' ? '#059669' : '#DC2626', lineHeight: 1.4 }}>
-                                                {authStatus === 'checking' ? 'Aminy is preparing a shadow EVV record. Confirm final authorization in SpokChoice until the DCI transition is live.' : authStatus === 'authorized' ? 'Aminy is ready to capture a shadow EVV record for Arizona pilot reconciliation. SpokChoice remains the payroll system of record.' : 'Pause here and review the authorization path in your external EVV system before submission.'}
+                                                {authStatus === 'checking' ? 'Aminy will record this visit alongside your current system. Confirm final authorization in SpokChoice until the DCI transition is live.' : authStatus === 'authorized' ? 'Aminy will record this visit alongside your current system so records can be compared. SpokChoice remains your current payroll system.' : 'Pause here and review the authorization path in your current EVV system before submission.'}
                                             </p>
                                         </div>
                                     </div>
@@ -364,7 +366,7 @@ export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheet
                                 <ShieldCheck size={120} color="rgba(255,255,255,0.03)" style={{ position: 'absolute', right: '-20px', top: '-20px' }} />
                                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginBottom: '8px' }}>Fiscal Intermediary Ready</h3>
                                 <p style={{ fontSize: '14px', color: '#9CA3AF', marginBottom: '20px', maxWidth: '80%', lineHeight: '1.5' }}>
-                                    Aminy captures Arizona pilot timesheets in shadow mode. Export for SpokChoice reconciliation now, then validate the DCI transition path before primary submission.
+                                    Aminy records Arizona pilot timesheets alongside your current system. Export them to compare against SpokChoice now; DCI comes next as your agency transitions.
                                 </p>
                                 <button
                                     onClick={handleExportData}

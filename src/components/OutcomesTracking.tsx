@@ -150,6 +150,8 @@ interface OutcomesTrackingProps {
   onExport?: () => void;
   /** Opens the 90-day outcomes story report (caregiver view header link). */
   onViewStory?: () => void;
+  /** Navigate to another screen (e.g. 'care-plan' from the empty state). */
+  onNavigate?: (screen: string) => void;
 }
 
 export function OutcomesTracking({
@@ -159,7 +161,8 @@ export function OutcomesTracking({
   organizationId,
   dateRange,
   onExport,
-  onViewStory
+  onViewStory,
+  onNavigate
 }: OutcomesTrackingProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [caregiverMetrics, setCaregiverMetrics] = useState<CaregiverMetrics | null>(null);
@@ -287,6 +290,15 @@ export function OutcomesTracking({
         <p className="text-sm text-[#5A6B7A] max-w-xs">
           Complete your first session and set therapy goals to start seeing outcomes here.
         </p>
+        {onNavigate && (
+          <button
+            onClick={() => onNavigate('care-plan')}
+            className="mt-5 inline-flex items-center gap-2 px-5 py-3 min-h-[44px] rounded-xl bg-[#2A7D99] hover:bg-[#376E80] active:scale-[0.98] text-white text-sm font-semibold transition-colors"
+          >
+            <Target className="w-4 h-4" aria-hidden="true" />
+            Set a first goal
+          </button>
+        )}
       </div>
     );
   }

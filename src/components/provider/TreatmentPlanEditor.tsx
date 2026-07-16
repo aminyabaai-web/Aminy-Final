@@ -280,7 +280,7 @@ function Section({
         className="w-full flex items-center justify-between px-5 py-4 text-left no-print"
       >
         <div className="flex items-center gap-3">
-          {icon && <span className="text-emerald-500">{icon}</span>}
+          {icon && <span className="text-[#2A7D99]">{icon}</span>}
           <span className="font-bold text-[#132F43] text-base">{title}</span>
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
@@ -883,30 +883,32 @@ export function TreatmentPlanEditor({
           <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
             <button
               onClick={onBack}
-              className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
+              className="flex shrink-0 items-center gap-2 text-slate-300 hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm">Back</span>
             </button>
 
-            <div className="text-center">
-              <p className="text-white font-semibold text-sm">Treatment Plan</p>
+            {/* flex-1 min-w-0 + truncate: at 390px the title was squeezed into a
+                3-line stack between Back and the icon cluster */}
+            <div className="flex-1 min-w-0 px-2 text-center">
+              <p className="text-white font-semibold text-sm truncate">Treatment Plan</p>
               {plan.isFinalized ? (
                 <div className="flex items-center justify-center gap-1">
-                  <Lock className="w-3 h-3 text-amber-400" />
-                  <span className="text-sm text-amber-400">Finalized</span>
+                  <Lock className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span className="text-sm text-amber-400 truncate">Finalized</span>
                 </div>
               ) : lastSaved ? (
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-slate-400 truncate">
                   {isSaving ? 'Saving...' : `Saved ${lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
                   {isDirty && !isSaving && ' · Unsaved changes'}
                 </p>
               ) : (
-                <p className="text-sm text-slate-400">Draft</p>
+                <p className="text-sm text-slate-400 truncate">Draft</p>
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <button
                 onClick={() => setShowVersionHistory(true)}
                 className="p-2 text-slate-400 hover:text-white"

@@ -515,9 +515,16 @@ export function ProviderReviews({
   ) : null;
 
   // No reviews yet — show an honest empty state instead of zero-filled stats
+  // Standalone-screen chrome: safe-area top padding + gutters so the header
+  // isn't cramped against the viewport edge (embedded use keeps no chrome).
+  const standaloneClass = onBack ? 'min-h-screen bg-app px-4 pb-8' : undefined;
+  const standaloneStyle = onBack
+    ? { paddingTop: 'max(env(safe-area-inset-top), 16px)' }
+    : undefined;
+
   if (reviews.length === 0) {
     return (
-      <div>
+      <div className={standaloneClass} style={standaloneStyle}>
         {backHeader}
         <div className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
           <div className="px-4 sm:px-6 py-8 text-center">
@@ -526,9 +533,12 @@ export function ProviderReviews({
             </div>
             <p className="font-medium text-[#132F43]">No reviews yet</p>
             <p className="text-sm text-[#5A6B7A] mt-1">
-              {providerName} hasn't received any reviews yet. Be the first to share your experience.
+              {/* "Provider" is the caller's generic fallback, not a real display name */}
+              {providerName && providerName !== 'Provider' ? providerName : 'This provider'} hasn't received any reviews yet. Be the first to share your experience.
             </p>
-            {onWriteReview && !showForm && (
+            {/* The review form is self-contained (writes to provider_reviews), so the CTA
+                shows even when no onWriteReview callback is passed by the caller. */}
+            {!showForm && (
               <button
                 onClick={handleOpenReviewForm}
                 className="mt-4 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
@@ -545,7 +555,7 @@ export function ProviderReviews({
   }
 
   return (
-    <div>
+    <div className={standaloneClass} style={standaloneStyle}>
       {backHeader}
       <div className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
       {/* Header with Stats */}
@@ -588,7 +598,7 @@ export function ProviderReviews({
               <p className="text-sm text-[#5A6B7A]">would recommend</p>
             </div>
 
-            {onWriteReview && !showForm && (
+            {!showForm && (
               <button
                 onClick={handleOpenReviewForm}
                 className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"

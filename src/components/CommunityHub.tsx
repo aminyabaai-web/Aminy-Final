@@ -983,21 +983,24 @@ export function CommunityHub({
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3 min-w-0">
               {onBack && (
-                <Button variant="ghost" size="sm" onClick={onBack}>
+                <Button variant="ghost" size="sm" onClick={onBack} className="shrink-0" aria-label="Back">
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
               )}
-              <div>
-                <h1 className="text-xl font-bold text-[#132F43] dark:text-white">Community</h1>
-                <p className="text-sm text-[#5A6B7A]">Connect with other parents</p>
+              <div className="min-w-0">
+                <h1 className="text-xl font-bold text-[#132F43] dark:text-white truncate">Community</h1>
+                <p className="text-sm text-[#5A6B7A] truncate">Connect with other parents</p>
               </div>
             </div>
-            <Button onClick={() => setShowNewPost(true)} className="flex items-center gap-2">
+            {/* "Post" (not "New Post") so the title block keeps enough room at
+                390px for the full subtitle — "Connect with other parents" was
+                truncating to "Connect with other par…" (July 2026 loop-back). */}
+            <Button onClick={() => setShowNewPost(true)} className="flex items-center gap-2 shrink-0">
               <Plus className="w-4 h-4" />
-              New Post
+              Post
             </Button>
           </div>
 
@@ -1046,11 +1049,17 @@ export function CommunityHub({
                   className="pl-10"
                 />
               </div>
+              {/* Category filter chips — demoted to neutral slate so they don't compete
+                  with the view-tab row above; teal (tinted) marks only the active chip. */}
               <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 pr-6">
                 <Button
-                  variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                  variant="outline"
                   size="sm"
-                  className="shrink-0 whitespace-nowrap"
+                  className={`shrink-0 whitespace-nowrap ${
+                    selectedCategory === 'all'
+                      ? 'border-[#2A7D99]/30 bg-[#2A7D99]/10 text-[#2A7D99] hover:bg-[#2A7D99]/20'
+                      : 'border-slate-200 bg-slate-50 text-slate-600'
+                  }`}
                   onClick={() => setSelectedCategory('all')}
                 >
                   All
@@ -1058,10 +1067,14 @@ export function CommunityHub({
                 {POST_CATEGORIES.map((cat) => (
                   <Button
                     key={cat.id}
-                    variant={selectedCategory === cat.id ? 'default' : 'outline'}
+                    variant="outline"
                     size="sm"
                     onClick={() => setSelectedCategory(cat.id)}
-                    className="inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap"
+                    className={`inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
+                      selectedCategory === cat.id
+                        ? 'border-[#2A7D99]/30 bg-[#2A7D99]/10 text-[#2A7D99] hover:bg-[#2A7D99]/20'
+                        : 'border-slate-200 bg-slate-50 text-slate-600'
+                    }`}
                   >
                     {cat.icon}
                     {cat.name}

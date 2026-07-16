@@ -806,7 +806,8 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
         <div className="p-4 sm:p-5 md:p-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
             <div>
-              <div className="flex flex-wrap items-center gap-2 mb-1">
+              {/* gap-3: keeps the "Ask Aminy" chip from abutting the title */}
+              <div className="flex flex-wrap items-center gap-3 mb-1">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -820,9 +821,9 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 <h2 className="sr-only">Records overview</h2>
                 <h3 className="sr-only">Documents, uploads, and sharing controls</h3>
                 <AISparkleButton prompt="What documents should every ABA family keep organized, and how should I use the records vault effectively?" label="Ask Aminy" />
-                <Badge variant="outline" className="text-sm">
+                <Badge variant="outline" className="text-sm" title="HIPAA-conscious — health records encrypted">
                   <Shield className="w-3 h-3 mr-1" />
-                  PHI encrypted
+                  Private &amp; encrypted
                 </Badge>
                 <Badge variant="outline" className="text-sm">
                   Secure sharing
@@ -833,15 +834,19 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
               </p>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
               <div className="relative flex-1 sm:w-96">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                {/* Explicit bg + border: the theme border-input/bg-input-background
+                    vars render invisibly here, leaving a floating placeholder
+                    with no visible field. Matches other inputs (white +
+                    #E8E4DF). */}
                 <Input
                   aria-label="Search records vault"
                   placeholder="Search titles, tags, or text inside docs…"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-full"
+                  className="vault-search-input pl-9 w-full bg-white dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-700 rounded-xl"
                 />
               </div>
               <Sheet open={showAddRecord} onOpenChange={setShowAddRecord}>
@@ -1062,7 +1067,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
               )}
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {capabilities.search?.fullText && (
                 <Badge variant="outline" className="text-sm">Full-text search, sharing links</Badge>
               )}

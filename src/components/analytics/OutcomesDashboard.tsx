@@ -310,6 +310,10 @@ function EmptyPanel({ message }: { message: string }) {
 
 export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps) {
   const demo = isDemoMode();
+  // Without a providerId this screen is reached from the parent app (real accounts
+  // only ever see their own family's data). "Platform" framing is kept for demo
+  // walkthroughs; real parent accounts get family-first language.
+  const parentView = !providerId && !demo;
   // Real accounts start empty and fill from their own Supabase data. Demo mode
   // seeds the sample dataset so prospect walkthroughs look complete.
   const [kpi, setKpi]           = useState<KPIData>(demo ? MOCK_KPI : EMPTY_KPI);
@@ -488,7 +492,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
     <div className="min-h-screen bg-[#F8F8F6]">
       {/* Header */}
       <ScreenHeader
-        title={providerId ? 'Provider Outcomes' : 'Platform Outcomes'}
+        title={providerId ? 'Provider Outcomes' : parentView ? 'Progress Overview' : 'Platform Outcomes'}
         onBack={onBack}
         variant="flat"
         sticky
@@ -513,34 +517,38 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
 
         {/* ── Section 1: KPI Tiles ─────────────────────────── */}
         <section>
-          <h2 className="text-xs font-bold text-[#5A6B7A] uppercase tracking-widest mb-3">Platform Summary</h2>
+          <h2 className="text-xs font-bold text-[#5A6B7A] uppercase tracking-widest mb-3">
+            {parentView ? 'Your Family at a Glance' : 'Platform Summary'}
+          </h2>
           {kpiIsEmpty && (
             <p className="text-sm text-slate-400 mb-3">
-              Your outcomes view fills in as you hold sessions and set goals.
+              {parentView
+                ? 'This view fills in as sessions happen and goals are set — one step at a time.'
+                : 'Your outcomes view fills in as you hold sessions and set goals.'}
             </p>
           )}
           <div className="grid grid-cols-2 gap-3">
             <KPITile
-              label="Active Clients"
+              label={parentView ? 'Children' : 'Active Clients'}
               value={kpiIsEmpty ? '–' : kpi.activeClients}
-              sub="enrolled families"
+              sub={parentView ? 'with recent sessions' : 'enrolled families'}
               color={kpiIsEmpty ? 'text-slate-300' : 'text-[#132F43]'}
             />
             <KPITile
-              label="Sessions This Month"
+              label={parentView ? 'Sessions Completed' : 'Sessions This Month'}
               value={kpiIsEmpty ? '–' : kpi.sessionsThisMonth}
-              sub="completed sessions"
+              sub={parentView ? 'in the last 30 days' : 'completed sessions'}
               color={kpiIsEmpty ? 'text-slate-300' : 'text-[#132F43]'}
             />
             <KPITile
-              label="Goals at Mastery"
+              label={parentView ? 'Goals Reached' : 'Goals at Mastery'}
               value={kpiIsEmpty ? '–' : kpi.goalsAtMastery}
               unit={kpiIsEmpty ? undefined : '%'}
-              sub="> 80% criterion met"
+              sub={parentView ? 'skills fully learned' : '> 80% criterion met'}
               color={kpiIsEmpty ? 'text-slate-300' : 'text-emerald-500'}
             />
             <KPITile
-              label="Avg to First Mastery"
+              label={parentView ? 'Weeks to First Win' : 'Avg to First Mastery'}
               value={kpiIsEmpty ? '–' : kpi.avgWeeksToFirstMastery}
               unit={kpiIsEmpty ? undefined : 'wks'}
               sub="from program start"
@@ -573,9 +581,11 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
           <div className="mb-4">
             <h2 className="text-sm font-bold text-[#132F43]">Session Frequency Distribution</h2>
             <p className="text-sm text-slate-400 mt-0.5">
-              {frequency.length > 0 && kpi.activeClients > 0
-                ? `Sessions per week across ${kpi.activeClients} active clients`
-                : 'Sessions per week across active clients'}
+              {parentView
+                ? 'Sessions per week for your family'
+                : frequency.length > 0 && kpi.activeClients > 0
+                  ? `Sessions per week across ${kpi.activeClients} active clients`
+                  : 'Sessions per week across active clients'}
             </p>
           </div>
           {frequency.length > 0 ? (
@@ -601,7 +611,9 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#E8E4DF]">
             <h2 className="text-sm font-bold text-[#132F43]">Top Programs by Mastery Rate</h2>
-            <p className="text-sm text-slate-400 mt-0.5">Across all active treatment plans</p>
+            <p className="text-sm text-slate-400 mt-0.5">
+              {parentView ? "Across your child's active goals" : 'Across all active treatment plans'}
+            </p>
           </div>
           {programs.length > 0 ? (
             <div className="overflow-x-auto">
@@ -638,7 +650,8 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         </section>
 
         {/* ── Section 5: Provider Performance ─────────────── */}
-        {!providerId && (
+        {/* Team-level rankings only make sense on the platform/demo view — never for a parent account */}
+        {!providerId && !parentView && (
           <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
             <div className="px-5 py-4 border-b border-[#E8E4DF]">
               <h2 className="text-sm font-bold text-[#132F43]">Provider Performance</h2>

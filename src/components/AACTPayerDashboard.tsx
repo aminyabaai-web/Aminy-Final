@@ -374,24 +374,24 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
 
   return (
     <div className="min-h-screen bg-mist dark:bg-slate-950">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 text-white">
+      {/* Header — mist-consistent chrome (white surface, teal accent) */}
+      <div className="bg-white border-b border-[#E8E4DF] dark:bg-slate-900 dark:border-slate-700">
         <div className="max-w-5xl mx-auto px-4 py-6">
           <div className="flex items-center gap-3 mb-4">
             {onBack && (
-              <button onClick={onBack} aria-label="Go back" className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
-                <ArrowLeft className="w-5 h-5" />
+              <button onClick={onBack} aria-label="Go back" className="p-2 rounded-xl bg-[#F6FBFB] border border-[#E8E4DF] hover:bg-slate-50 transition-colors">
+                <ArrowLeft className="w-5 h-5 text-[#132F43] dark:text-slate-100" />
               </button>
             )}
-            <div className="p-2 bg-primary/20 rounded-xl border border-[#6B9080]/30">
-              <BarChart3 className="w-6 h-6 text-primary" />
+            <div className="p-2 bg-[#2A7D99]/10 rounded-xl border border-[#2A7D99]/20">
+              <BarChart3 className="w-6 h-6 text-[#2A7D99]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold">AACT Payer Scorecard</h1>
-                <Badge className="bg-primary/20 text-[#7BA7BC] border border-[#6B9080]/30 text-sm">Arizona</Badge>
+                <h1 className="text-xl font-bold text-[#132F43] dark:text-slate-100">AACT Payer Scorecard</h1>
+                <Badge className="bg-[#2A7D99]/10 text-[#2A7D99] border border-[#2A7D99]/20 text-sm">Arizona</Badge>
               </div>
-              <p className="text-sm text-slate-400 mt-0.5">Rate negotiation · Network adequacy · MCO reporting</p>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">Rate negotiation · Network adequacy · MCO reporting</p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -400,7 +400,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
               variant="outline"
               onClick={handleSaveToCloud}
               disabled={isSaving}
-              className="border-white/20 text-white hover:bg-white/10 bg-transparent"
+              className="border-[#2A7D99]/25 text-[#2A7D99] hover:bg-[#2A7D99]/10 bg-white"
             >
               <Save className="w-3.5 h-3.5 mr-1.5" />
               {isSaving ? 'Saving…' : 'Save'}
@@ -409,20 +409,20 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
               size="sm"
               variant="outline"
               onClick={handleExportScorecard}
-              className="border-white/20 text-white hover:bg-white/10 bg-transparent"
+              className="border-[#2A7D99]/25 text-[#2A7D99] hover:bg-[#2A7D99]/10 bg-white"
             >
               <Download className="w-3.5 h-3.5 mr-1.5" />
               Export Scorecard
             </Button>
             {lastSaved && (
-              <span className="text-sm text-slate-400">Saved {lastSaved}</span>
+              <span className="text-sm text-[#5A6B7A]">Saved {lastSaved}</span>
             )}
           </div>
         </div>
       </div>
 
       {/* Summary Bar */}
-      <div className="max-w-5xl mx-auto px-4 -mt-2 mb-4">
+      <div className="max-w-5xl mx-auto px-4 mt-4 mb-4">
         <ScorecardSummaryBar categories={categories} />
       </div>
 
@@ -459,8 +459,9 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
                     : 'text-[#5A6B7A] hover:bg-[#F6FBFB]'
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{cat.label}</span>
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                {/* Text label always visible — icon-only tabs failed the design audit */}
+                <span>{cat.id === 'clinical' ? 'Clinical' : cat.label}</span>
                 {offTarget > 0 && (
                   <span className="w-4 h-4 text-xs font-bold bg-red-500 text-white rounded-full flex items-center justify-center">{offTarget}</span>
                 )}

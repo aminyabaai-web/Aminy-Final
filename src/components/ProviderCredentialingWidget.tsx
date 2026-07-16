@@ -163,7 +163,8 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
 
       {/* Progress bar */}
       <div className="px-4 pb-3">
-        <div className="h-1.5 rounded-full bg-[#EDF4F7] overflow-hidden">
+        {/* Hollow track (white + border) so 0% reads as empty, not filled */}
+        <div className="h-2 rounded-full bg-white border border-[#E8E4DF] overflow-hidden">
           <div
             className="h-full transition-all duration-500"
             style={{
@@ -201,7 +202,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                     {statusStyle.label}
                   </span>
                 </div>
-                <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
+                <p className="text-sm text-[#5A6B7A] line-clamp-2">{meta.description}</p>
                 {row.check.failureReason && (
                   <p className="text-sm text-red-600 mt-0.5">{row.check.failureReason}</p>
                 )}

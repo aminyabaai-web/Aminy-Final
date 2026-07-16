@@ -6113,7 +6113,13 @@ textarea {
   display: inline-flex;
 }
 
-[data-sonner-toast], [data-toast], .toast-container {
+/* NOTE: [data-sonner-toast] / [data-toast] were removed from this perf rule
+   (July 2026 visual audit). Sonner toasts are position:absolute INSIDE the
+   fixed [data-sonner-toaster] list — forcing them fixed re-pinned every toast
+   to the viewport edge (stacked/clipped), `contain: strict` size-collapsed
+   them into empty white pills, and pointer-events:none made them untappable.
+   See the guard block at the end of this file. */
+.toast-container {
   contain: strict;
   pointer-events: none;
   position: fixed !important;
@@ -14377,7 +14383,16 @@ html body [data-radix-select-content][data-field-type="age"] {
   z-index: 1000;
 }
 
-.toast, .notification, .sonner-toast, [data-sonner-toast], [data-toast] {
+/* NOTE: [data-sonner-toast] / .sonner-toast / [data-toast] were removed from
+   this z-index rule (July 2026 loop-back fix). Sonner assigns each toast its
+   own stacked z-index via `z-index: var(--z-index)` (front toast highest).
+   Flattening them all to 1100 made DOM order decide paint order — and sonner
+   renders the NEWEST toast as the FIRST <li>, so an older collapsed toast
+   (whose content sonner hides) painted OVER the front toast as an empty
+   white pill, occluding its text. Layering vs overlays is handled by the
+   [data-sonner-toaster] viewport itself, not the <li>s. See the sonner
+   guard block near the end of this file. */
+.toast, .notification {
   z-index: 1100;
 }
 
@@ -15080,9 +15095,23 @@ body:has([role="dialog"]) #global-support-footer, body:has([role="alertdialog"])
   }
 }
 
-.badge, .inline-flex.items-center.rounded-full, [class*="h-5 w-"], [class*="h-6 w-"] {
+/* Badge polish. The original selector list also included the substring hacks
+   [class*="h-5 w-"] and [class*="h-6 w-"] ("anything badge-sized"). Those
+   accidentally matched EVERY element whose class list reads h-before-w — most
+   fatally Lucide icons written `h-5 w-5`/`h-6 w-6` (~100 across the app): with
+   box-sizing:border-box, the !important 3px/7px padding left a 1×1px SVG
+   viewport, so the 24-unit viewBox painted at 1/24 scale — the "blank icon
+   circle" bug (dashboard "Start gently today", conversational-booking back
+   button, etc.). Verified via getCTM() === 1/24 + minimal repro. Icons written
+   `w-5 h-5` escaped, which is why only some icons vanished. Do NOT reintroduce
+   size-class substring selectors. */
+.badge, .inline-flex.items-center.rounded-full {
   font-size: calc(var(--font-size)  - 1px) !important;
   padding: calc(.25rem - 1px) calc(.5rem - 1px) !important;
+}
+/* Belt-and-braces: an icon must never carry blockquote-style padding. */
+svg[class*="lucide"] {
+  padding: 0 !important;
 }
 
 .space-y-6 > * + * {
@@ -17632,6 +17661,13 @@ button, a, [role="button"] {
   transform: translateY(-1px);
 }
 
+/* Brand press states — Tailwind is precompiled here, so arbitrary
+   active:scale-[…] classes used in components need literal rules */
+.active\:scale-\[0\.98\]:active { transform: scale(0.98); }
+.active\:scale-\[0\.99\]:active { transform: scale(0.99); }
+.active\:scale-\[0\.97\]:active { transform: scale(0.97); }
+.active\:scale-95:active { transform: scale(0.95); }
+
 /* Button press feedback already in button.tsx (active:scale-[0.97]);
    add consistent focus ring glow for brand */
 [data-slot="button"]:focus-visible {
@@ -17763,8 +17799,13 @@ tr:hover td, .hover-row:hover {
 .border-\[\#6B9080\]\/30 { border-color: rgba(78,147,168,0.30); }
 .bg-\[\#6B9080\]\/5 { background-color: rgba(78,147,168,0.05); }
 .bg-\[\#FAF7F2\]\/80 { background-color: rgba(250,247,242,0.80); }
-.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(78,147,168,0)); }
-.to-\[\#7BA7BC\] { --tw-gradient-to: #7BA7BC; }
+/* Design-excellence round 1 (July 2026): these two late declarations used the
+   raw sage/steel hexes, silently overriding the earlier brand-teal redirects
+   (≈ lines 16041/16779) because they come last in the cascade — the marketplace
+   header (and every from-[#6B9080]→to-[#7BA7BC] hero) rendered SAGE instead of
+   brand teal. Keep the values on the Aminy teal family. */
+.from-\[\#6B9080\] { --tw-gradient-from: #2A7D99; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(42,125,153,0)); }
+.to-\[\#7BA7BC\] { --tw-gradient-to: #4795AE; }
 .from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(250,247,242,0)); }
 .to-\[\#F5F2EC\] { --tw-gradient-to: #F5F2EC; }
 
@@ -18590,4 +18631,209 @@ tr:hover td, .hover-row:hover {
    ============================================================ */
 .bg-background\/90 {
   background-color: color-mix(in oklab, var(--background) 90%, transparent);
+}
+
+/* ============================================================
+   Layout-audit fixes (July 2026) — Tailwind v4 is precompiled
+   here, so these previously-missing utilities must be defined
+   manually. CaregiverEnrollmentWizard CTAs used bg-emerald-600 /
+   hover:bg-emerald-700, which did not exist in this file → the
+   buttons rendered with NO background (white "Continue" text on
+   a near-white page). disabled:bg-slate-400 gives the disabled
+   state a visible muted-gray container + white text (the global
+   `* { opacity: 1 !important }` WAAPI hack neutralizes
+   disabled:opacity-*, so an opacity-based disabled look is not
+   viable). Keep the disabled rule LAST so it wins over :hover.
+   ============================================================ */
+.bg-emerald-600 { background-color: #059669; }
+.hover\:bg-emerald-700:hover { background-color: #047857; }
+.disabled\:bg-slate-400:disabled { background-color: #94a3b8; }
+
+/* ============================================================
+   Visual-audit fixes (July 2026)
+   ============================================================ */
+
+/* 1) Programmatic-focus outline on page H1s.
+   useAccessibilityEnhancements/useScreenFocus set tabindex="-1" on the
+   main heading and .focus() it after every screen change (screen-reader
+   announce pattern). Chromium treats script focus as :focus-visible, so
+   the UA focus ring (tinted teal by `* { outline-color: var(--ring) }`)
+   drew a debug-style box around the H1 on every screen. Elements with
+   tabindex="-1" are programmatic-focus-only — they can never be reached
+   by Tab — so hiding their ring loses nothing for keyboard users;
+   interactive elements keep their :focus-visible styling. */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 2) Sonner toast guard (companion to the .toast-container perf rule
+   edit near line 6116). Restore sonner's own layout model in case any
+   other generic rule re-pins toasts: toasts are absolutely positioned
+   INSIDE the fixed [data-sonner-toaster] viewport, must keep their
+   intrinsic size (no size containment), and must be tappable.
+   z-index MUST stay sonner's per-toast var(--z-index) (front toast
+   highest): a blanket z-index flattens the stack so DOM order paints,
+   and sonner puts the NEWEST toast FIRST in the list — an older
+   collapsed toast (content hidden by sonner) then paints over the
+   front toast as an empty white pill occluding its text. */
+[data-sonner-toast] {
+  position: absolute !important;
+  contain: none !important;
+  pointer-events: auto !important;
+  z-index: var(--z-index) !important;
+}
+
+/* ParentIntakeFlow step indicator: the generic perf rule
+   `[role="progressbar"] { contain: strict; height: 8px }` (≈ line 6091)
+   clamps this icon-based stepper to 8px, vertically clipping its 36px
+   step icons at the top of the intake content area. Restore natural
+   sizing for this discrete stepper only. Also define sm:mt-[-14px]
+   (Tailwind is precompiled — the arbitrary class was silently inert),
+   which re-centers the connector lines on the icon row at ≥sm where
+   step labels are visible; on mobile the labels are hidden and the
+   connectors are already centered, so no base-width rule. */
+.intake-step-indicator[role="progressbar"] {
+  contain: none;
+  will-change: auto;
+  height: auto;
+}
+@media (min-width: 640px) {
+  .sm\:mt-\[-14px\] { margin-top: -14px; }
+}
+
+/* ============================================================
+   Design-excellence round 1 (July 2026)
+   ============================================================ */
+
+/* Body-text slate (#3A4A57) — components across the app use
+   text-[#3A4A57] but only the .dark override existed (Tailwind v4
+   is precompiled here, so the base utility was silently inert and
+   text fell back to inherited color). */
+.text-\[\#3A4A57\] { color: #3A4A57; }
+
+/* Switch (ui/switch.tsx, Radix) — restore the pill+knob look.
+   Two compounding breakages made it render as a big solid square
+   with no knob on memory-settings and everywhere else:
+   1) the thumb's `size-5` utility is not in this precompiled CSS,
+      so the knob had zero size (invisible);
+   2) the global mobile touch-target rule (`button { min-width/
+      min-height: 44px }`, ~line 7206) inflates the 44x24 track
+      into a ~44x44 square.
+   These rules pin the visual track to 44x24 with a 20px knob and
+   restore the intended 44px tap area via an ::after overlay
+   (the component's own `before:inset-[-10px]` class is also not
+   compiled). !important is needed to beat the touch-target rule. */
+button[data-slot="switch"] {
+  width: 44px !important;
+  height: 24px !important;
+  min-width: 44px !important;
+  min-height: 24px !important;
+  border-radius: 9999px;
+  position: relative;
+}
+button[data-slot="switch"]::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+}
+[data-slot="switch-thumb"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+}
+
+/* ============================================================
+   Design-excellence round 1 (July 2026) — missing precompiled
+   gap-x-* / gap-y-* utilities. Tailwind v4 is frozen here, so
+   these were silently inert wherever used; most visibly the
+   ProviderLanding benefit checklist rendered its items with NO
+   horizontal gap ("Free to join✓Competitive rates").
+   ============================================================ */
+.gap-x-4 { column-gap: calc(var(--spacing) * 4); }
+.gap-x-6 { column-gap: calc(var(--spacing) * 6); }
+.gap-x-8 { column-gap: calc(var(--spacing) * 8); }
+.gap-y-1\.5 { row-gap: calc(var(--spacing) * 1.5); }
+.gap-y-2 { row-gap: calc(var(--spacing) * 2); }
+.gap-y-3 { row-gap: calc(var(--spacing) * 3); }
+@media (min-width: 640px) {
+  .sm\:gap-x-8 { column-gap: calc(var(--spacing) * 8); }
+  .sm\:gap-y-3 { row-gap: calc(var(--spacing) * 3); }
+}
+
+/* ============================================================
+   Phase 5 — Interaction feel (July 2026)
+   ============================================================ */
+
+/* 1) Brand press feedback for every `.action-button` surface
+   (ui/button.tsx base class + the styled-inline CTAs on splash /
+   login / create-account / forgot-password, which set transition
+   via inline style so a class-based :active transform still
+   applies — inline styles there never set transform). */
+.action-button:active {
+  transform: scale(0.98);
+}
+
+/* 2) Skeleton shimmer — `animate-pulse` animates opacity, which the
+   WAAPI opacity workarounds neutralize, freezing every skeleton into
+   a static block. Re-animate via background-position instead of
+   opacity: a translucent sheen sweeps across the element. Uses
+   background-image (NOT the `background` shorthand) so each
+   skeleton keeps its own bg-* color underneath, and small non-empty
+   uses of animate-pulse (recording dots, live badges) keep their
+   color and just get the subtle sheen. No !important on `animation`
+   so reduced-motion.css (`animation: none !important`) still wins. */
+@keyframes aminy-shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+.animate-pulse {
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  background-size: 200% 100%;
+  animation: aminy-shimmer 1.6s ease-in-out infinite;
+}
+/* Empty skeleton blocks that set no bg color would otherwise show
+   only the faint sheen — give them the brand mist base as a canvas.
+   Scoped to elements without any bg- utility so colored status dots
+   (also :empty, but always carrying a bg-* class) are untouched. */
+.animate-pulse:empty:not([class*="bg-"]) {
+  background-color: #EDF4F7;
+}
+
+/* Loop-back fix: ProviderAnalytics 4th stat card (Session Completion) uses
+   bg-violet-500, which was never emitted by the precompiled Tailwind build —
+   the white icon rendered invisibly on the white card. Violet is an approved
+   provider accent. */
+.bg-violet-500 { background-color: #8b5cf6; }
+
+/* Loop-back fix: CareTab (care-plan) top tab bar — labels are now always
+   visible (stacked under the icon on mobile, inline beside it at >=sm).
+   These sm: variants were missing from the precompiled build (`hidden
+   sm:inline` was silently inert, which is why the tabs were icon-only). */
+@media (min-width: 640px) {
+  .sm\:inline { display: inline; }
+  .sm\:text-sm { font-size: var(--text-sm); line-height: var(--tw-leading, var(--text-sm--line-height)); }
+  .sm\:py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  .sm\:gap-1 { gap: 0.25rem; }
+  .sm\:gap-1\.5 { gap: 0.375rem; }
+}
+
+/* Loop-back fix: RecordsVault search field. The global warm-input rule
+   (`input:not([type=checkbox])... { background-color: var(--input-background) }`,
+   specificity 0-3-1) silently beats the .bg-white utility, leaving the field
+   the same mist as the header behind it. Match+exceed that specificity so the
+   vault search reads as a real white input with a visible border. */
+input.vault-search-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  background-color: #ffffff;
+  border-color: #E8E4DF;
+}
+.dark input.vault-search-input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  background-color: #1e293b;
+  border-color: #334155;
 }

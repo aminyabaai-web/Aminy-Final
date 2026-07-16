@@ -548,6 +548,9 @@ export function CommunityForYou({
   const renderForYou = () => (
     <div className="space-y-4">
       {resolvedPosts.length === 0 ? (
+        /* Inline min-height centers the empty state in the viewport instead of
+           leaving ~60% dead space below (Tailwind is precompiled — no min-h-[Nvh]). */
+        <div style={{ minHeight: '55vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <Card className="p-6 sm:p-8 text-center">
           <BookOpen className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
           <h4 className="font-medium text-[#132F43] dark:text-white mb-2">
@@ -560,7 +563,14 @@ export function CommunityForYou({
               : "your child's"}{' '}
             journey.
           </p>
+          <button
+            onClick={() => setActiveTab('groups')}
+            className="mt-4 px-4 py-2 bg-[#2A7D99] hover:bg-[#376E80] text-white text-sm font-medium rounded-full transition-colors"
+          >
+            Browse groups
+          </button>
         </Card>
+        </div>
       ) : (
         resolvedPosts.map((post) => (
           <Card key={post.id} className="p-4 hover:shadow-md transition-shadow">
@@ -710,12 +720,16 @@ export function CommunityForYou({
       {liveEvents.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No events scheduled yet</p>
-          <p className="text-sm mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
+          {/* No waitlist backend exists — a "you're on the list!" toast would fake
+              a signup. Honest copy + a real action (the community feed) instead. */}
+          <p className="text-sm mt-1">
+            BCBA-hosted webinars and parent workshops are launching this summer — they'll appear right here.
+          </p>
           <button
             className="mt-3 text-sm text-[#6B9080] font-semibold underline"
-            onClick={() => toast.success('You\'re on the list! We\'ll notify you when events open up.')}
+            onClick={() => setActiveTab('for-you')}
           >
-            Notify me when events launch →
+            Meet other parents in the meantime →
           </button>
         </div>
       )}

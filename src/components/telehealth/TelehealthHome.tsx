@@ -201,8 +201,8 @@ export function TelehealthHome({
     <div className="min-h-screen bg-app">
       {/* Header */}
       <header className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/90 px-4 py-3 backdrop-blur-xl">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-3">
             <button
               onClick={onBack}
               className="p-2 -ml-2 rounded-full hover:bg-[#6B9080]/10 transition-colors"
@@ -236,8 +236,8 @@ export function TelehealthHome({
             <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
             {featuredProvidersProvenance ? <DataProvenanceBadge provenance={featuredProvidersProvenance} /> : null}
           </div>
-          <p className="text-sm text-sky-800">{providerAvailabilityNote}</p>
-          <p className="mt-2 text-sm leading-5 text-sky-700">
+          <p className="text-sm text-[#132F43]">{providerAvailabilityNote}</p>
+          <p className="mt-2 text-sm leading-5 text-[#5A6B7A]">
             Cash-pay booking is live in supported states, and Aminy keeps the booking, reminders, secure room link, and follow-up together in one place.
           </p>
         </div>

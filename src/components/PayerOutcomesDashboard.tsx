@@ -30,6 +30,7 @@ import {
   CheckCircle2,
   Building2,
   Activity,
+  ArrowLeft,
 } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -75,6 +76,7 @@ interface PayerOutcomesDashboardProps {
   metrics?: Partial<PayerMetrics>;
   dateRange?: { start: Date; end: Date };
   onExportReport?: () => void;
+  onBack?: () => void;
   state?: SupportedProviderState;
 }
 
@@ -117,6 +119,7 @@ export function PayerOutcomesDashboard({
   metrics: providedMetrics,
   dateRange,
   onExportReport,
+  onBack,
   state = 'AZ',
 }: PayerOutcomesDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -221,6 +224,15 @@ export function PayerOutcomesDashboard({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
+              {onBack && (
+                <button
+                  onClick={onBack}
+                  aria-label="Go back"
+                  className="mb-2 -ml-2 flex h-11 w-11 items-center justify-center rounded-full text-[#5A6B7A] transition-all hover:bg-[#EDF4F7] hover:text-[#3A4A57] active:scale-[0.97]"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              )}
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 <Building2 className="w-5 h-5 text-[#2A7D99]" />
                 <Badge variant="outline" className="text-sm">
