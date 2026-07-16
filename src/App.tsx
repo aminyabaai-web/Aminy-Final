@@ -3588,6 +3588,7 @@ export default function App() {
                   <OutcomesStoryReport
                     childName={userData.childName || 'Your child'}
                     childId={userData.activeChildId || userData.childId}
+                    onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
                   />
                 </div>
               </div>

@@ -49,6 +49,9 @@ import {
 interface OutcomesStoryReportProps {
   childName?: string;
   childId?: string;
+  /** Optional deep-link (same pattern as OutcomesTracking) — lets the empty
+   *  state offer one concrete action instead of a dead end. */
+  onNavigate?: (screen: string) => void;
 }
 
 interface WeekBar {
@@ -180,7 +183,7 @@ const gridStroke = (dark: boolean) => (dark ? '#334155' : '#e2e8f0');
 
 // ── Main component ──────────────────────────────────────────────────────────────
 
-export function OutcomesStoryReport({ childName, childId: _childId }: OutcomesStoryReportProps) {
+export function OutcomesStoryReport({ childName, childId: _childId, onNavigate }: OutcomesStoryReportProps) {
   void _childId;
   const child = (childName && childName.trim()) || 'your child';
   const isDark = useIsDark();
@@ -321,6 +324,15 @@ export function OutcomesStoryReport({ childName, childId: _childId }: OutcomesSt
           Every routine and win you log becomes part of {child}&apos;s progress story.
           After two weekly check-ins you&apos;ll see how far you&apos;ve come, ready to share with your provider.
         </p>
+        {onNavigate && (
+          <button
+            onClick={() => onNavigate('wins-journal')}
+            className="mt-5 inline-flex items-center gap-2 px-5 py-3 min-h-[44px] rounded-xl bg-[#2A7D99] hover:bg-[#376E80] active:scale-[0.98] text-white text-sm font-semibold transition-colors"
+          >
+            <Sparkles className="w-4 h-4" aria-hidden="true" />
+            Log today&apos;s win
+          </button>
+        )}
       </div>
     );
   }
