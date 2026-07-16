@@ -138,7 +138,8 @@ describe('CommunityHub', () => {
 
   it('shows new post button', () => {
     render(<CommunityHub {...defaultProps} />);
-    expect(screen.getByText('New Post')).toBeInTheDocument();
+    // Labeled "Post" (not "New Post") so the header subtitle fits at 390px
+    expect(screen.getByText('Post')).toBeInTheDocument();
   });
 
   it('shows search input for posts', () => {

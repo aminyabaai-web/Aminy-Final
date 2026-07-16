@@ -995,9 +995,12 @@ export function CommunityHub({
                 <p className="text-sm text-[#5A6B7A] truncate">Connect with other parents</p>
               </div>
             </div>
+            {/* "Post" (not "New Post") so the title block keeps enough room at
+                390px for the full subtitle — "Connect with other parents" was
+                truncating to "Connect with other par…" (July 2026 loop-back). */}
             <Button onClick={() => setShowNewPost(true)} className="flex items-center gap-2 shrink-0">
               <Plus className="w-4 h-4" />
-              New Post
+              Post
             </Button>
           </div>
 
