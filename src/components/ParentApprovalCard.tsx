@@ -158,7 +158,23 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
                 )}
               </div>
               <p className="text-sm text-[#132F43]">
-                Suggested by <strong>{suggestion.providerName}</strong>
+                {/* Credential token (after the last comma, e.g. "BCBA-D") is
+                    non-breaking so it never wraps at its hyphen and orphans
+                    a trailing "D" on its own line. */}
+                Suggested by{' '}
+                <strong>
+                  {(() => {
+                    const name = suggestion.providerName || '';
+                    const i = name.lastIndexOf(', ');
+                    if (i === -1) return name;
+                    return (
+                      <>
+                        {name.slice(0, i + 2)}
+                        <span className="whitespace-nowrap">{name.slice(i + 2)}</span>
+                      </>
+                    );
+                  })()}
+                </strong>
                 {suggestion.providerRole &&
                   !suggestion.providerName?.toLowerCase().includes(suggestion.providerRole.toLowerCase()) && (
                     <span className="text-[#5A6B7A] ml-1">({suggestion.providerRole})</span>

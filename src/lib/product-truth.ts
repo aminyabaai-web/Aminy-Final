@@ -362,7 +362,9 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
     state: 'limited_launch',
     badgeLabel: `Live in ${SUPPORTED_PROVIDER_STATE_LABEL}`,
     message:
-      "We only show you real providers with real availability — we're live in AZ, MT, TX, FL & NV and adding states fast.",
+      // State list intentionally NOT repeated here — the badge above the
+      // paragraph already lists them ("Live in AZ · MT · TX · FL · NV").
+      "We only show you real providers with real availability — we're live in five states and growing.",
     audienceScope: {
       states: SUPPORTED_MARKET_STATES,
     },

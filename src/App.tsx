@@ -912,7 +912,10 @@ const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
   };
   const hasCta = Boolean(baseMsg.ctaLabel && baseMsg.ctaScreen && onNavigate);
   return (
-    <div className="min-h-screen bg-app dark:bg-slate-900 flex items-center justify-center p-4">
+    // Top-aligned (not vertically centered): centering left a ~45% dead zone
+    // above the card at 390x844 with no header — top alignment matches the
+    // other gate/empty states.
+    <div className="min-h-screen bg-app dark:bg-slate-900 flex items-start justify-center px-4 pt-8 pb-4">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-[#2A7D99]/15 dark:border-slate-700 p-8 max-w-md text-center">
         <div className="w-16 h-16 bg-[#2A7D99]/10 dark:bg-teal-900 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg className="w-8 h-8 text-[#2A7D99] dark:text-teal-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

@@ -40,7 +40,9 @@ export function DataProvenanceBadge({ provenance, className }: DataProvenanceBad
     >
       <Icon className="h-3.5 w-3.5" />
       <span>{provenance.label}</span>
-      {timestamp ? <span className="opacity-80">• {timestamp}</span> : null}
+      {/* whitespace-nowrap: when the pill wraps, keep "• Jul 15, 11:37 PM"
+          together as one token instead of breaking mid-timestamp */}
+      {timestamp ? <span className="opacity-80 whitespace-nowrap">• {timestamp}</span> : null}
     </Badge>
   );
 }

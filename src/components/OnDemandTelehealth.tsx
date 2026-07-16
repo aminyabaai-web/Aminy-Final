@@ -244,7 +244,9 @@ export function OnDemandTelehealth({
     const allProviders = await fetchProviders();
 
     if (allProviders.length > 0) {
-      setProviderProvenance(createDataProvenance('live', 'Verified real-time provider availability', {
+      // "Verified provider availability" (matches the marketplace pill) —
+      // the longer "real-time" label forced an ugly 2-line wrap at 390px.
+      setProviderProvenance(createDataProvenance('live', 'Verified provider availability', {
         isVerified: true,
         lastUpdatedAt: new Date().toISOString(),
       }));
@@ -492,13 +494,14 @@ export function OnDemandTelehealth({
           </div>
         </div>
 
-        {/* Urgent Support Banner */}
-        <div className="bg-green-50 border-b border-green-200 px-4 py-3">
+        {/* Privacy banner — mist + teal (informational, not an earned-success
+            state, so no green) */}
+        <div className="bg-[#EDF4F7] border-b border-[#E8E4DF] px-4 py-3">
           <div className="max-w-2xl mx-auto flex items-center gap-3">
-            <Shield className="w-5 h-5 text-green-600" />
+            <Shield className="w-5 h-5 text-[#2A7D99]" />
             <div>
-              <p className="text-sm font-medium text-green-900">Private, encrypted video sessions</p>
-              <p className="text-sm text-green-700/70">Secure video calls with licensed professionals. Your session stays private.</p>
+              <p className="text-sm font-medium text-[#132F43]">Private, encrypted video sessions</p>
+              <p className="text-sm text-[#5A6B7A]">Secure video calls with licensed professionals. Your session stays private.</p>
             </div>
           </div>
         </div>

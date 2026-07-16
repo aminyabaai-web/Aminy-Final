@@ -122,6 +122,9 @@ const TOTAL_STEPS = 5;
 // that needs the solid color is applied via inline style to guarantee it renders.
 const EMERALD = '#10b981';
 const EMERALD_HOVER = '#0d9d6f';
+// Brand teal — the ACTIVE (in-progress) step color. Green is reserved for
+// COMPLETED steps only ("green only when earned").
+const TEAL = '#2A7D99';
 
 const STEP_META = [
   { icon: User,    label: 'Welcome'  },
@@ -179,7 +182,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
                   done
                     ? { backgroundColor: EMERALD, borderColor: EMERALD }
                     : active
-                      ? { borderColor: EMERALD, color: EMERALD }
+                      ? { borderColor: TEAL, color: TEAL }
                       : undefined
                 }
               >
@@ -191,7 +194,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
               </div>
               <span
                 className={`text-sm font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
-                style={active ? { color: EMERALD } : undefined}
+                style={active ? { color: TEAL } : undefined}
               >
                 {step.label}
               </span>

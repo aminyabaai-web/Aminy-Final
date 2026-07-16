@@ -1991,12 +1991,17 @@ export function Dashboard10({
       {/* ========================================
           6. PERSISTENT AI COMPANION (Floating)
           ======================================== */}
-      {/* CHAT-FIRST: Toggle button - no longer pulsing since chat starts open */}
+      {/* CHAT-FIRST: Toggle button - no longer pulsing since chat starts open.
+          bottom-36 (not bottom-24): at 390x844 the initial fold puts the teal
+          time-of-day chip row exactly at y~706-761, and a bottom-24 FAB
+          (y~692-748) sat on top of the teal "Bedtime Routine" chip —
+          teal-on-teal read as a layout bug. bottom-36 clears the chip row and
+          hovers over the (white) goals card instead. */}
       {!isFullScreenChat && (
         <button
           ref={chatButtonRef}
           onClick={() => setShowAIChat(!showAIChat)}
-          className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full transition-all duration-300 active:scale-95 ${
+          className={`fixed bottom-36 right-4 z-40 w-14 h-14 rounded-full transition-all duration-300 active:scale-95 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0 shadow-lg'
               : 'bg-[#2A7D99] text-white hover:bg-[#1F6080]'

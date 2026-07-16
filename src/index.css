@@ -18811,3 +18811,15 @@ button[data-slot="switch"]::after {
    the white icon rendered invisibly on the white card. Violet is an approved
    provider accent. */
 .bg-violet-500 { background-color: #8b5cf6; }
+
+/* Loop-back fix: CareTab (care-plan) top tab bar — labels are now always
+   visible (stacked under the icon on mobile, inline beside it at >=sm).
+   These sm: variants were missing from the precompiled build (`hidden
+   sm:inline` was silently inert, which is why the tabs were icon-only). */
+@media (min-width: 640px) {
+  .sm\:inline { display: inline; }
+  .sm\:text-sm { font-size: var(--text-sm); line-height: var(--tw-leading, var(--text-sm--line-height)); }
+  .sm\:py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  .sm\:gap-1 { gap: 0.25rem; }
+  .sm\:gap-1\.5 { gap: 0.375rem; }
+}
