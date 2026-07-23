@@ -109,9 +109,6 @@ app.get("/make-server-8a022548/health", (c) => {
   return c.json({ status: "ok" });
 });
 
-// Mount the wins/conversation/notifications/analytics/emotion/privacy
-// sub-router under the same function prefix as every inline route above.
-app.route("/make-server-8a022548", newRoutes);
 
 // ============================================================================
 // AI PROVIDER UTILITIES - Support both OpenAI and Anthropic (Claude)
@@ -4681,5 +4678,17 @@ p{font-size:15px;line-height:1.6;color:#3A4A57;margin:0 0 16px}
     return c.json({ error: 'Failed to send message' }, 500);
   }
 });
+
+// Mount the wins/conversation/notifications/analytics/emotion/privacy
+// sub-router LAST, after every inline route above. Registration order matters
+// twice over (Hono runs matched handlers in registration order):
+// 1. new-routes.tsx carries a catch-all auth middleware (routes.use('*')) that
+//    matches the whole function prefix — mounting it early would push 401s in
+//    front of later-registered inline routes (incl. pre-auth ones like
+//    /ai/chat and /ai/brain used before signup).
+// 2. new-routes.tsx still contains legacy /ai/chat + /analytics/track
+//    duplicates; the canonical inline handlers (Claude-first, rate-limited)
+//    must keep winning for those paths.
+app.route("/make-server-8a022548", newRoutes);
 
 Deno.serve(app.fetch);

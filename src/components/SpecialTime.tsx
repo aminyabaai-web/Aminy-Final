@@ -32,7 +32,8 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { projectId } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 import { trackEvent } from '../lib/analytics-tracker';
 import {
   INTEREST_LABELS,
@@ -200,16 +201,21 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
         ? `We laughed together during Special Time — ${idea.title}.`
         : `Ten calm minutes in ${kidPossessive} world — ${idea.title}.`;
     try {
+      // /wins/save now requires the user's session JWT (server derives the
+      // user from it). No session → skip the sync; winSynced stays false so a
+      // later save can retry. The local save above already succeeded.
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return false;
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/save`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({
-            userId,
             moment: {
               id: `win_${Date.now()}`,
               userId,

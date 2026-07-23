@@ -9,6 +9,7 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 export type AnalyticsEvent =
   | 'aminyjr_session_start'
@@ -215,16 +216,19 @@ export async function getAnalyticsSummary(
   topEvents: { event: string; count: number }[];
 }> {
   try {
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
+    // /analytics/summary derives the user from the session JWT (anon key
+    // gets a 401). No session → fall through to the empty-data fallback.
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) {
       throw new Error('User not authenticated');
     }
 
     const response = await fetch(
-      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/analytics/summary?userId=${userId}&timeRange=${timeRange}`,
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/analytics/summary?timeRange=${timeRange}`,
       {
         headers: {
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${token}`,
         },
       }
     );
@@ -316,11 +320,18 @@ export const trackSpecificEvents = {
  */
 export async function exportCohortData(signupWeek: string): Promise<Blob> {
   try {
+    // Auth-required endpoint — needs the user's session JWT.
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) {
+      throw new Error('Sign in required to export cohort data');
+    }
+
     const response = await fetch(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/analytics/cohort/export?week=${signupWeek}`,
       {
         headers: {
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${token}`,
         },
       }
     );

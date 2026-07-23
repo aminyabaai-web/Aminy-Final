@@ -16,7 +16,8 @@ import { Textarea } from './ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { projectId } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 import { trackEvent, trackSpecificEvents } from '../lib/analytics-tracker';
 import { shareWinCard } from '../lib/share-win-card';
 
@@ -56,11 +57,18 @@ export function WinsJournal({ userId }: { userId: string }) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 6000);
     try {
+      // Server derives the user from the session JWT — anon key gets a 401.
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        // Not signed in: nothing server-side to load — show the empty journal.
+        return;
+      }
       const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/load?userId=${userId}`,
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/load`,
         {
           headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
           signal: controller.signal,
         }
@@ -96,15 +104,22 @@ export function WinsJournal({ userId }: { userId: string }) {
         tags: extractTags(newMomentContent),
       };
 
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error('Please sign in to save moments');
+        return;
+      }
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/save`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, moment }),
+          body: JSON.stringify({ moment }),
         }
       );
 
@@ -160,16 +175,22 @@ export function WinsJournal({ userId }: { userId: string }) {
     if (!weeklySummary) return;
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error('Please sign in to share');
+        return;
+      }
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/share`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({
-            userId,
             summary: weeklySummary,
             target,
           }),
@@ -192,16 +213,22 @@ export function WinsJournal({ userId }: { userId: string }) {
     if (!weeklySummary) return;
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error('Please sign in to download');
+        return;
+      }
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/export`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({
-            userId,
             summary: weeklySummary,
           }),
         }
