@@ -210,11 +210,18 @@ export async function isVillageSeeded(): Promise<boolean> {
     if (localStorage.getItem(SEED_LOCALSTORAGE_KEY) === '1') return true;
   } catch { /* storage unavailable — fall through to DB check */ }
   try {
-    const { data } = await supabase
+    // Race with a timeout so a hung request can't leave the admin action
+    // stuck on "Checking…" — an unreachable DB just means "not seeded yet"
+    // (inserts are idempotent-guarded again at seed time).
+    const marker = supabase
       .from('community_posts')
       .select('id')
       .eq('title', SEED_MARKER_TITLE)
       .limit(1);
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Seed-marker check timed out')), 4000)
+    );
+    const { data } = await Promise.race([marker, timeout]);
     if (data && data.length > 0) {
       try { localStorage.setItem(SEED_LOCALSTORAGE_KEY, '1'); } catch { /* best-effort */ }
       return true;

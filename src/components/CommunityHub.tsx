@@ -1567,7 +1567,9 @@ export function CommunityHub({
               </Card>
             ) : (
               events.map((event) => {
-                const isMine = !!userId && event.createdBy === userId;
+                // "local-" ids are events created this session in demo/dev
+                // walkthroughs — always the viewer's own.
+                const isMine = (!!userId && event.createdBy === userId) || event.id.startsWith('local-');
                 const isFull = event.capacity != null && event.attendeeCount >= event.capacity;
                 return (
                   <Card key={event.id} className="p-4">
