@@ -54,11 +54,15 @@ import {
   Camera,
   Download,
   ClipboardCheck,
+  Laugh,
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { StreakTracker } from './StreakTracker';
+import { StreakCelebration } from './StreakCelebration';
+import { MicroAffirmationBanner } from './MicroAffirmationBanner';
+import { useStreakTracker } from '../hooks/useStreakTracker';
 import { useConversation } from '../context/ConversationContext';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 import { useWorkflowSyncState } from '../lib/core-workflow-sync';
@@ -71,7 +75,8 @@ import { AISparkleButton } from './AISparkleButton';
 import { calculateWellnessScore } from '../lib/developmental-wellness-score';
 import { QuickShareButton } from './ShareWinFlow';
 import { ProactiveNudgeSystem } from './ProactiveNudgeSystem';
-import { ProactiveCheckIn, useProactiveCheckIns } from './ProactiveCheckIn';
+import { ProactiveCheckIn, useProactiveCheckIns, canOfferStressCheckIn } from './ProactiveCheckIn';
+import { StressCheckIn } from './StressCheckIn';
 import { MorningMission, useMorningMission } from './MorningMission';
 import { ActionItems } from './ActionItems';
 import { HealthDataIntegration } from './HealthDataIntegration';
@@ -98,6 +103,7 @@ import PostSessionReview from './PostSessionReview';
 import { loadDueScreenings, screeningScreenFor, type ScreeningDue } from '../lib/screening-schedule';
 import { SCREENING_INSTRUMENTS, type ScreeningType } from '../lib/screening-instruments';
 import { updateUserContext } from '../ai/contextLayer';
+import { peekTodaysIdea, ageBandForAge } from '../content/special-time-ideas';
 
 // Screening nudge throttle — once dismissed, stay quiet for 7 days
 const SCREENING_NUDGE_DISMISS_KEY = 'aminy-screening-nudge-dismissed-at';
@@ -246,7 +252,6 @@ export function Dashboard10({
   const [isFullScreenChat, setIsFullScreenChat] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
-  const [showStreakCelebration, setShowStreakCelebration] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [badges, setBadges] = useState<EarnedBadge[]>([]);
   const [showSoftNudge, setShowSoftNudge] = useState(false);
@@ -313,7 +318,25 @@ export function Dashboard10({
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(true);
 
   // Proactive check-in system
-  const { currentCheckIn, dismissCheckIn, triggerCheckIn } = useProactiveCheckIns();
+  const { currentCheckIn, showCheckIn, dismissCheckIn, triggerCheckIn } = useProactiveCheckIns();
+  void triggerCheckIn; // generic greetings stay quiet on load (inline coaching cards cover them)
+
+  // Gentle "how are YOU?" parent check-in (opened by the stress_check prompt)
+  const [showParentCheckIn, setShowParentCheckIn] = useState(false);
+
+  // Surface ONLY the gentle "how are YOU?" prompt — on its own throttle
+  // (~2x/week, never consecutive days, never right after a crisis-resources
+  // visit, never after opt-out). The generic greeting prompts remain off.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (canOfferStressCheckIn()) {
+        const hour = new Date().getHours();
+        if (hour >= 9 && hour < 21) showCheckIn('stress_check');
+      }
+    }, 8000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Nudge engine for personalized tips
   const { getNudge, getPersonalizedTip } = useNudgeEngine();
@@ -519,6 +542,10 @@ export function Dashboard10({
   const childPossessive = hasRealChildName ? `${child.name}'s` : "your child's";
   const parentFirstName = userData.parentName?.trim();
 
+  // Special Time — today's child-led play idea (read-only peek; the screen
+  // records the pick). Same deterministic idea the special-time screen opens.
+  const specialTimeIdea = useMemo(() => peekTodaysIdea(ageBandForAge(child.age)), [child.age]);
+
   // SAFETY: Ensure upcomingEvents is always an array
   const safeUpcomingEvents = Array.isArray(dashboardData.upcomingEvents) ? dashboardData.upcomingEvents : [];
   const upcomingEvents: UpcomingEvent[] = safeUpcomingEvents.length > 0
@@ -574,9 +601,34 @@ export function Dashboard10({
   const aiMemorySync = useWorkflowSyncState('aiMemory');
   const juniorProgressSync = useWorkflowSyncState('juniorProgress');
 
-  // Real streak data from database
-  const streakDays = dashboardData.streak;
+  // Streak system — cloud (DB) streak merged with the local-first tracker.
+  // useStreakTracker also owns milestone celebrations (once each, persisted).
+  const streakTracker = useStreakTracker(userId);
+  const streakDays = Math.max(dashboardData.streak, streakTracker.currentStreak);
   const todaysWins = dashboardData.milestonesEarned;
+
+  // Map milestone day-counts to the StreakCelebration variants. Milestones
+  // without a variant (3/14/60-day badges) are acknowledged silently below.
+  const CELEBRATION_VARIANTS: Record<number, 'first' | 'week' | 'month' | 'hundred' | 'year'> = {
+    1: 'first',
+    7: 'week',
+    30: 'month',
+    100: 'hundred',
+    365: 'year',
+  };
+  const pendingMilestoneDays = streakTracker.pendingMilestone?.days;
+  const celebrationVariant =
+    pendingMilestoneDays != null ? CELEBRATION_VARIANTS[pendingMilestoneDays] ?? null : null;
+
+  // Badge-type milestones (no celebration variant) get marked as seen without
+  // a modal, so they never wedge the pending queue.
+  const { pendingMilestone: trackerPendingMilestone, dismissMilestone: trackerDismissMilestone } = streakTracker;
+  useEffect(() => {
+    if (trackerPendingMilestone && !CELEBRATION_VARIANTS[trackerPendingMilestone.days]) {
+      trackerDismissMilestone();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackerPendingMilestone, trackerDismissMilestone]);
 
   const wellnessScore = useMemo(() => {
     const completedToday = safeTodaysRoutines.reduce(
@@ -653,17 +705,6 @@ export function Dashboard10({
     // Mix time-based and progress-based prompts
     return [...timePrompts.slice(0, 2), ...progressPrompts.slice(0, 1)];
   };
-
-  // Celebrate milestone streaks (5, 7, 14, 21, 30 days)
-  useEffect(() => {
-    const milestones = [5, 7, 14, 21, 30, 60, 90];
-    if (milestones.includes(streakDays)) {
-      setShowStreakCelebration(true);
-      fireConfetti('streak');
-      const timer = setTimeout(() => setShowStreakCelebration(false), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [streakDays]);
 
   // Variable / intermittent reward — fires on unexpected behavioral patterns,
   // not just predictable day counts. The surprise is what makes it stick.
@@ -930,65 +971,6 @@ export function Dashboard10({
       style={{ background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)' }}
     >
       {/* ========================================
-          STREAK CELEBRATION OVERLAY
-          Animated celebration for milestone streaks
-          ======================================== */}
-      {showStreakCelebration && (
-        <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            className="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-8 rounded-3xl shadow-2xl pointer-events-auto"
-          >
-            <div className="text-center">
-              <motion.div
-                initial={{ rotate: 0 }}
-                animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-6xl mb-4"
-              >
-                🎉
-              </motion.div>
-              <h2 className="text-xl sm:text-2xl font-bold mb-2">
-                {streakDays}-Day Streak!
-              </h2>
-              <p className="text-amber-100">
-                Amazing consistency, {userData.parentName}!
-              </p>
-              <p className="text-sm text-amber-200 mt-2">
-                {child.name} is building great habits thanks to you.
-              </p>
-              <div className="mt-4 flex flex-col gap-2">
-                <button
-                  onClick={() => {
-                    const shareText = `${child.name} just hit a ${streakDays}-day streak on Aminy — building amazing habits day by day! 🎉 app.aminy.ai`;
-                    if (navigator.share) {
-                      navigator.share({ title: `${streakDays}-Day Streak!`, text: shareText }).catch(() => {});
-                    } else {
-                      navigator.clipboard?.writeText(shareText).then(() => {
-                        toast.success('Copied to clipboard!');
-                      }).catch(() => {});
-                    }
-                    setShowStreakCelebration(false);
-                  }}
-                  className="px-6 py-2 bg-white text-amber-600 rounded-full text-sm font-semibold transition-colors hover:bg-amber-50"
-                >
-                  Share your win 🎉
-                </button>
-                <button
-                  onClick={() => setShowStreakCelebration(false)}
-                  className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-full text-sm transition-colors"
-                >
-                  Keep Going! 💪
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-
-      {/* ========================================
           TASK COMPLETION CONFETTI — CSS-only sparkle burst (Change 4)
           Auto-dismisses after 1.5s via state timeout above
           ======================================== */}
@@ -1194,6 +1176,10 @@ export function Dashboard10({
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
+        {/* Daily micro-affirmation — one quiet breath under the greeting,
+            dismissible for the day (localStorage-backed). */}
+        <MicroAffirmationBanner parentName={userData.parentName} />
+
         {shouldShowWellnessScore && (
           <motion.div className="relative" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.08 }}>
             <WellnessScoreWidget
@@ -1432,8 +1418,9 @@ export function Dashboard10({
             <div className="mt-4">
               <StreakTracker
                 currentStreak={streakDays}
-                longestStreak={streakDays}
-                isPaused={false}
+                longestStreak={Math.max(streakDays, streakTracker.longestStreak)}
+                isPaused={streakTracker.isPaused}
+                lastCheckIn={streakTracker.hasActivityToday ? new Date().toISOString() : undefined}
               />
             </div>
           </div>
@@ -1560,6 +1547,35 @@ export function Dashboard10({
             )}
           </Card>
         </motion.section>
+
+        {/* ========================================
+            SPECIAL TIME — 10 minutes of their world
+            Joy-first, child-led play prompt. Not therapy: no
+            scoring, no goals. White card + small teal accent —
+            the routine hub above owns this region's primary teal.
+            ======================================== */}
+        <section>
+          <button
+            onClick={() => onNavigate?.('special-time')}
+            data-testid="special-time-card"
+            className="w-full flex items-center gap-3 rounded-xl border border-[#E8E4DF] bg-white p-4 text-left shadow-sm transition-all hover:border-[#2A7D99]/20 hover:bg-[#F6FBFB] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700/70"
+            aria-label={`Special Time — 10 minutes of ${childPossessive} world. Today's idea: ${specialTimeIdea.title}`}
+          >
+            <div className="w-10 h-10 rounded-lg bg-[#2A7D99]/10 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
+              <Laugh className="w-5 h-5 text-[#2A7D99] dark:text-[#4795AE]" strokeWidth={1.5} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-[#132F43] dark:text-slate-100">Special Time</h3>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                10 minutes of {childPossessive} world, their lead
+              </p>
+              <p className="text-sm font-medium text-[#2A7D99] dark:text-teal-300 mt-1">
+                Today: {specialTimeIdea.title}
+              </p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
+          </button>
+        </section>
 
         {/* ========================================
             WEEKLY CHECK-IN — Subtle outcome data capture
@@ -2211,6 +2227,10 @@ export function Dashboard10({
               case 'review':
                 onNavigate?.('weekly-insights');
                 break;
+              case 'checkin':
+                // "How are you holding up?" — the gentle parent check-in
+                setShowParentCheckIn(true);
+                break;
               case 'close':
                 // Just dismiss
                 break;
@@ -2219,6 +2239,13 @@ export function Dashboard10({
           childName={child.name}
         />
       )}
+
+      {/* Gentle parent check-in — a friend asking, not a screener */}
+      <StressCheckIn
+        isOpen={showParentCheckIn}
+        onClose={() => setShowParentCheckIn(false)}
+        context={new Date().getHours() < 12 ? 'morning' : 'evening'}
+      />
 
       {/* ========================================
           TRIAL MODALS - Soft nudge & hard paywall
@@ -2277,6 +2304,21 @@ export function Dashboard10({
           />
         )}
       </AnimatePresence>
+
+      {/* ========================================
+          STREAK MILESTONE CELEBRATION
+          Fires once per crossed milestone (1/7/30/100/365 days), persisted in
+          localStorage by useStreakTracker. Dismissible, reduced-motion aware.
+          Mounted LAST: the global "[role=dialog] + *" modal CSS pins the next
+          DOM sibling fullscreen, so the dialog must have no following sibling.
+          ======================================== */}
+      <StreakCelebration
+        streakDays={streakDays}
+        isOpen={celebrationVariant != null}
+        onClose={trackerDismissMilestone}
+        childName={child.name}
+        milestone={celebrationVariant}
+      />
     </div>
   );
 }

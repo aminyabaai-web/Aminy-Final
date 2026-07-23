@@ -22,6 +22,7 @@ import {
   BarChart3,
   Baby,
   Heart,
+  Laugh,
   Video
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -182,6 +183,12 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       label: 'Aminy Jr ★',
       icon: Baby,
       description: "Your child's calm corner, rewards & activities — tap to open"
+    },
+    {
+      id: 'special-time',
+      label: 'Special Time',
+      icon: Laugh,
+      description: '10 minutes of their world — child-led play'
     },
     {
       id: 'document-vault',

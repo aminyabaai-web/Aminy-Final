@@ -39,12 +39,14 @@ type CheckInType =
   | 'stress_check'
   | 'win_prompt';
 
+type CheckInAction = 'chat' | 'log' | 'review' | 'close' | 'checkin';
+
 interface CheckInConfig {
   icon: React.ElementType;
   title: string;
   messages: string[];
   cta: string;
-  ctaAction: 'chat' | 'log' | 'review' | 'close';
+  ctaAction: CheckInAction;
   gradient: string;
 }
 
@@ -123,14 +125,14 @@ const checkInConfigs: Record<CheckInType, CheckInConfig> = {
   },
   stress_check: {
     icon: Cloud,
-    title: 'How are you feeling?',
+    title: 'How are you holding up?',
     messages: [
-      "Parenting is hard. How are YOU doing?",
-      "Remember to take care of yourself too",
-      "Need to talk through anything?",
+      "Quick one, just about you — not the to-do list.",
+      "You check on everyone else. This one's for you.",
+      "One tap, ten seconds. How's your tank today?",
     ],
-    cta: 'Talk to Aminy',
-    ctaAction: 'chat',
+    cta: 'One-tap check-in',
+    ctaAction: 'checkin',
     gradient: 'from-blue-400 to-indigo-500',
   },
   win_prompt: {
@@ -151,8 +153,53 @@ interface ProactiveCheckInProps {
   type: CheckInType;
   isOpen: boolean;
   onClose: () => void;
-  onAction: (action: 'chat' | 'log' | 'review' | 'close') => void;
+  onAction: (action: CheckInAction) => void;
   childName?: string;
+}
+
+// ─── Gentle cadence for the "how are YOU?" check-in ─────────────────────────
+// At most ~2x/week, never two days in a row, never within 24h of a
+// crisis-resources visit, and never once the parent opts out. All
+// localStorage-throttled, matching the existing check-in pattern.
+
+const STRESS_CHECKIN_DAYS_KEY = 'aminy_stress_checkin_days';
+const CRISIS_VISIT_KEY = 'aminy_crisis_resource_visit';
+const PARENT_CHECKIN_OPTOUT_KEY = 'aminy_parent_checkin_optout';
+
+export function canOfferStressCheckIn(now: Date = new Date()): boolean {
+  try {
+    if (localStorage.getItem(PARENT_CHECKIN_OPTOUT_KEY) === 'true') return false;
+
+    // Never right after a crisis-resources visit
+    const crisisTs = Number(localStorage.getItem(CRISIS_VISIT_KEY) || 0);
+    if (crisisTs && now.getTime() - crisisTs < 24 * 60 * 60 * 1000) return false;
+
+    const days: string[] = JSON.parse(localStorage.getItem(STRESS_CHECKIN_DAYS_KEY) || '[]');
+    const today = now.toISOString().slice(0, 10);
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    if (days.includes(today)) return false;
+    if (days.includes(yesterday)) return false; // never two days in a row
+
+    // At most 2 offers in the trailing 7 days
+    const weekAgo = now.getTime() - 7 * 24 * 60 * 60 * 1000;
+    const offersThisWeek = days.filter(
+      (d) => new Date(`${d}T12:00:00`).getTime() >= weekAgo
+    );
+    return offersThisWeek.length < 2;
+  } catch {
+    return false; // if storage is unreadable, err on the quiet side
+  }
+}
+
+export function recordStressCheckInOffered(now: Date = new Date()): void {
+  try {
+    const days: string[] = JSON.parse(localStorage.getItem(STRESS_CHECKIN_DAYS_KEY) || '[]');
+    const today = now.toISOString().slice(0, 10);
+    if (!days.includes(today)) days.push(today);
+    localStorage.setItem(STRESS_CHECKIN_DAYS_KEY, JSON.stringify(days.slice(-10)));
+  } catch {
+    // ignore
+  }
 }
 
 export function ProactiveCheckIn({
@@ -286,6 +333,12 @@ export function useProactiveCheckIns() {
       return 'missed_you';
     }
 
+    // Gentle "how are YOU?" check-in — its own throttle (~2x/week, never
+    // consecutive days, never right after a crisis-resources visit).
+    if (hour >= 9 && hour < 21 && canOfferStressCheckIn(now)) {
+      return 'stress_check';
+    }
+
     // Morning greeting (6am - 10am)
     if (hour >= 6 && hour < 10) {
       return 'morning_greeting';
@@ -310,6 +363,11 @@ export function useProactiveCheckIns() {
   };
 
   const showCheckIn = (type: CheckInType) => {
+    // Count the offer itself (shown, not answered) so a dismissed prompt
+    // still respects "never two days in a row / ~2x per week".
+    if (type === 'stress_check') {
+      recordStressCheckInOffered();
+    }
     setCurrentCheckIn(type);
   };
 
@@ -345,12 +403,14 @@ export function ProactiveCheckInProvider({
   onChat,
   onLog,
   onReview,
+  onCheckIn,
 }: {
   children: React.ReactNode;
   childName?: string;
   onChat?: () => void;
   onLog?: () => void;
   onReview?: () => void;
+  onCheckIn?: () => void;
 }) {
   const { currentCheckIn, dismissCheckIn, triggerCheckIn } = useProactiveCheckIns();
 
@@ -368,7 +428,7 @@ export function ProactiveCheckInProvider({
     };
   }, []);
 
-  const handleAction = (action: 'chat' | 'log' | 'review' | 'close') => {
+  const handleAction = (action: CheckInAction) => {
     dismissCheckIn();
 
     switch (action) {
@@ -380,6 +440,11 @@ export function ProactiveCheckInProvider({
         break;
       case 'review':
         onReview?.();
+        break;
+      case 'checkin':
+        // Fall back to chat if no dedicated check-in flow is mounted
+        if (onCheckIn) onCheckIn();
+        else onChat?.();
         break;
     }
   };

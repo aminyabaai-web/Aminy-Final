@@ -212,6 +212,7 @@ const SCREEN_DISPLAY_NAMES: Record<string, string> = {
   'analytics-charts': 'Analytics',
   'clinical-report': 'Clinical Report',
   'calm-tools': 'Calm Tools',
+  'special-time': 'Special Time',
   'coach': 'Coach',
   'data-sharing': 'Data Sharing',
   'referrals': 'Referrals',

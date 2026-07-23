@@ -63,12 +63,16 @@ interface CaregiverMetrics {
     }>;
   };
   parentWellbeing: {
-    // Stress + confidence require a wellbeing input source that isn't wired yet.
-    // Left null until derivable so we never show a fabricated value.
+    // Derived from real "how are you holding up?" check-ins (stress_logs)
+    // when the parent has answered at least 3 times in the period; otherwise
+    // null so we never show a fabricated value. Presented gently — this is a
+    // reflection, never a score to improve.
     stressLevel: 'low' | 'moderate' | 'high' | null;
     stressTrend: 'improving' | 'stable' | 'worsening' | null;
     confidenceScore: number | null;
     supportSessions: number;
+    /** How many check-ins the aggregate is built from (0 = none yet). */
+    checkInCount: number;
   };
   engagement: {
     daysActiveThisWeek: number;
@@ -193,7 +197,7 @@ export function OutcomesTracking({
 
     const periodStart = getPeriodStart(selectedPeriod);
 
-    const [goalsResult, sessionsResult, aiChatsResult] = await Promise.allSettled([
+    const [goalsResult, sessionsResult, aiChatsResult, stressResult] = await Promise.allSettled([
       supabase
         .from('goals')
         .select('id, title, category, is_active, status, progress_percent, baseline_value, current_value, target_value')
@@ -209,11 +213,41 @@ export function OutcomesTracking({
         .eq('user_id', user.id)
         .eq('event_type', 'AI_CHAT')
         .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+      // "How are you holding up?" check-ins — real parent-wellbeing input
+      supabase
+        .from('stress_logs')
+        .select('stress_level, created_at')
+        .eq('user_id', user.id)
+        .gte('created_at', `${periodStart}T00:00:00`)
+        .order('created_at', { ascending: true }),
     ]);
 
     const goals = goalsResult.status === 'fulfilled' ? (goalsResult.value.data ?? []) : [];
     const sessions = sessionsResult.status === 'fulfilled' ? (sessionsResult.value.data ?? []) : [];
     const aiChats = aiChatsResult.status === 'fulfilled' ? (aiChatsResult.value.data ?? []) : [];
+    const stressRows = stressResult.status === 'fulfilled' ? (stressResult.value.data ?? []) : [];
+
+    // Parent wellbeing — only derived from >=3 real check-ins; otherwise stay
+    // null (honest empty state, never fabricated).
+    const stressLevels = stressRows
+      .map((r: { stress_level?: number }) => r.stress_level)
+      .filter((n): n is number => typeof n === 'number');
+    let stressLevel: 'low' | 'moderate' | 'high' | null = null;
+    let stressTrend: 'improving' | 'stable' | 'worsening' | null = null;
+    if (stressLevels.length >= 3) {
+      const avg = stressLevels.reduce((a, b) => a + b, 0) / stressLevels.length;
+      stressLevel = avg <= 3.5 ? 'low' : avg <= 6.5 ? 'moderate' : 'high';
+      if (stressLevels.length >= 4) {
+        const half = Math.floor(stressLevels.length / 2);
+        const olderAvg = stressLevels.slice(0, half).reduce((a, b) => a + b, 0) / half;
+        const recent = stressLevels.slice(half);
+        const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
+        stressTrend =
+          recentAvg < olderAvg - 0.5 ? 'improving' :
+          recentAvg > olderAvg + 0.5 ? 'worsening' :
+          'stable';
+      }
+    }
 
     const activeGoals = goals.filter((g: { is_active: boolean }) => g.is_active);
     const masteredGoals = goals.filter((g: { status: string }) => g.status === 'mastered' || g.status === 'completed');
@@ -236,12 +270,14 @@ export function OutcomesTracking({
         improvementAreas,
       },
       parentWellbeing: {
-        // No wellbeing-check input source wired yet — keep null so the UI hides
-        // these rather than showing a fabricated/zero value as if it were real.
-        stressLevel: null,
-        stressTrend: null,
+        // Derived from real "how are you holding up?" check-ins when >=3 exist
+        // in the period; otherwise null (honest empty state, never fabricated).
+        stressLevel,
+        stressTrend,
+        // Confidence still has no input source — stays null until one exists.
         confidenceScore: null,
         supportSessions: sessions.length,
+        checkInCount: stressLevels.length,
       },
       engagement: {
         daysActiveThisWeek: 0,
@@ -457,20 +493,26 @@ export function OutcomesTracking({
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {caregiverMetrics.parentWellbeing.stressLevel !== null && (
-              <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
-                <div className={`text-xl sm:text-2xl font-bold ${
-                  caregiverMetrics.parentWellbeing.stressLevel === 'low' ? 'text-green-600' :
-                  caregiverMetrics.parentWellbeing.stressLevel === 'moderate' ? 'text-amber-600' :
-                  'text-red-600'
+              <div className="text-center p-4 bg-[#F6FBFB] dark:bg-slate-900/40 rounded-lg">
+                <div className={`text-lg sm:text-xl font-semibold ${
+                  caregiverMetrics.parentWellbeing.stressLevel === 'low'
+                    ? 'text-[#2A7D99] dark:text-[#7BA7BC]'
+                    : 'text-amber-600'
                 }`}>
-                  {caregiverMetrics.parentWellbeing.stressLevel.charAt(0).toUpperCase() +
-                   caregiverMetrics.parentWellbeing.stressLevel.slice(1)}
+                  {caregiverMetrics.parentWellbeing.stressLevel === 'low'
+                    ? 'Mostly steady'
+                    : caregiverMetrics.parentWellbeing.stressLevel === 'moderate'
+                    ? 'Carrying a lot'
+                    : 'Running on low battery'}
                 </div>
-                <div className="text-sm text-[#5A6B7A]">Stress Level</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400">How you&apos;ve been</div>
+                <div className="text-sm text-[#8A9BA8] dark:text-slate-500 mt-0.5">
+                  From {caregiverMetrics.parentWellbeing.checkInCount} check-ins — not a score, just a reflection
+                </div>
                 {caregiverMetrics.parentWellbeing.stressTrend === 'improving' && (
                   <Badge className="mt-2 bg-green-100 text-green-700">
                     <TrendingDown className="w-3 h-3 mr-1" />
-                    Improving
+                    Feeling lighter lately
                   </Badge>
                 )}
               </div>
@@ -492,6 +534,16 @@ export function OutcomesTracking({
               <div className="text-sm text-[#8A9BA8] dark:text-slate-500 mt-0.5">Visits with your care team this period</div>
             </div>
           </div>
+          {caregiverMetrics.parentWellbeing.stressLevel === 'high' && (
+            <p className="mt-3 p-3 rounded-lg bg-[#EEF4F8] text-sm text-[#3A4A57] dark:bg-slate-900/40 dark:text-slate-300">
+              You&apos;ve been running on low battery lately — be kind to yourself. Small breaks count, and it&apos;s okay to let some things stay undone.
+            </p>
+          )}
+          {caregiverMetrics.parentWellbeing.stressLevel === 'moderate' && (
+            <p className="mt-3 p-3 rounded-lg bg-[#EEF4F8] text-sm text-[#3A4A57] dark:bg-slate-900/40 dark:text-slate-300">
+              You&apos;ve been carrying a lot. The fact that you keep showing up says everything.
+            </p>
+          )}
         </Card>
       </div>
     );

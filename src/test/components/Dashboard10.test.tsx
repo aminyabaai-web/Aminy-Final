@@ -148,9 +148,17 @@ vi.mock('../../components/ProactiveCheckIn', () => ({
     React.createElement('div', { 'data-testid': 'proactive-checkin', ...props }, 'ProactiveCheckIn'),
   useProactiveCheckIns: vi.fn(() => ({
     currentCheckIn: null,
+    showCheckIn: vi.fn(),
     dismissCheckIn: vi.fn(),
     triggerCheckIn: vi.fn(),
   })),
+  canOfferStressCheckIn: vi.fn(() => false),
+  recordStressCheckInOffered: vi.fn(),
+}));
+
+vi.mock('../../components/StressCheckIn', () => ({
+  StressCheckIn: ({ isOpen }: { isOpen: boolean }) =>
+    isOpen ? React.createElement('div', { 'data-testid': 'stress-checkin' }, 'StressCheckIn') : null,
 }));
 
 vi.mock('../../components/MorningMission', () => ({

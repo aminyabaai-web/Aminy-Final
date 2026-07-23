@@ -247,6 +247,11 @@ const WinsJournal = lazy(() =>
     default: m.WinsJournal,
   })),
 );
+const SpecialTime = lazy(() =>
+  import("./components/SpecialTime").then((m) => ({
+    default: m.SpecialTime,
+  })),
+);
 const ImpactMetricsDashboard = lazy(() =>
   import("./components/ImpactMetricsDashboard").then((m) => ({
     default: m.ImpactMetricsDashboard,
@@ -960,6 +965,7 @@ const LOADING_MESSAGES: Record<string, string> = {
   'analytics-charts': 'Crunching your data...',
   'outcomes-story': 'Writing your story...',
   'wins-journal': 'Gathering your wins...',
+  'special-time': 'Finding ten minutes of their world...',
   'impact-metrics': 'Compiling impact metrics...',
   onboarding: 'Getting things ready for you...',
 };
@@ -1137,7 +1143,8 @@ type AppScreen =
   | "resource-library" // BCBA-authored resource library — beats Answers Now's content
   | "aact-partner-setup" // Partner-org admin onboarding microsite (Cori at AACT)
   | "care-coordination" // Unified view across ABA/PT/OT/ST/MH + auth + site of care
-  | "just-diagnosed"; // Post-diagnosis onboarding flow — state-aware First 30 Days plan
+  | "just-diagnosed" // Post-diagnosis onboarding flow — state-aware First 30 Days plan
+  | "special-time"; // Daily 10-minute child-led play prompt — connection, not therapy
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -2911,7 +2918,7 @@ export default function App() {
                     "community", "profile", "benefits", "junior", "my-appointments",
                     "conversational-booking", "messages", "access-requests", "store",
                     "community-hub", "provider-analytics", "weekly-insights", "analytics-charts",
-                    "wins-journal", "impact-metrics",
+                    "wins-journal", "impact-metrics", "special-time",
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
                     "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
@@ -3646,6 +3653,18 @@ export default function App() {
                   <WinsJournal userId={userData.id ?? ''} />
                 </div>
               </div>
+            </Suspense>
+          );
+
+        case "special-time":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <SpecialTime
+                onBack={() => navigateToScreen("dashboard")}
+                childName={userData.childName || undefined}
+                childAge={userData.childAge || undefined}
+                userId={userData.id || undefined}
+              />
             </Suspense>
           );
 

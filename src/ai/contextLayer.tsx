@@ -38,6 +38,14 @@ export interface UserContext {
   weeklyOutcomes?: CheckInPoint[];
   outcomeBaseline?: BaselineSummary | null;
 
+  // Latest "how are YOU holding up?" parent check-in (stress_logs) — lets the
+  // AI adapt its tone to the parent's own day, not just the child's data.
+  parentCheckIn?: {
+    feeling: string; // e.g. "stretched thin"
+    note?: string; // optional one-liner the parent added
+    daysAgo: number; // 0 = today
+  };
+
   // Recent Activity
   lastJrSession?: {
     timestamp: Date;
@@ -118,7 +126,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
   try {
     // Run Supabase queries and KV fetch in parallel
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-    const [childResult, sessionResult, goalsResult, outcomesResult, baselineResult, kvResult] = await Promise.allSettled([
+    const [childResult, sessionResult, goalsResult, outcomesResult, baselineResult, parentCheckInResult, kvResult] = await Promise.allSettled([
       // Primary child profile
       supabase
         .from('children')
@@ -167,6 +175,16 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
         .limit(1)
         .maybeSingle(),
 
+      // Latest "how are YOU holding up?" parent check-in (last 7 days)
+      supabase
+        .from('stress_logs')
+        .select('stress_level, notes, created_at')
+        .eq('user_id', userId)
+        .gte('created_at', weekAgo)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+
       // KV-stored AI-generated context (calm cues, wins, etc.)
       fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/context/user/${userId}`,
@@ -186,11 +204,13 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
     const goals = goalsResult.status === 'fulfilled' ? goalsResult.value.data : null;
     const outcomeRows = outcomesResult.status === 'fulfilled' ? outcomesResult.value.data : null;
     const baselineRow = baselineResult.status === 'fulfilled' ? baselineResult.value.data : null;
+    const parentCheckInRow = parentCheckInResult.status === 'fulfilled' ? parentCheckInResult.value.data : null;
     const kvData = kvResult.status === 'fulfilled' ? kvResult.value : null;
     const kvContext = kvData?.context || {};
 
     const weeklyOutcomes = mapCheckInRows(outcomeRows || []).slice(-4);
     const outcomeBaseline = parseBaselineRow(baselineRow);
+    const parentCheckIn = mapParentCheckIn(parentCheckInRow);
 
     const sessionsCompleted = sessions?.length ?? 0;
     const activeGoalNames = goals?.map((g: { title: string }) => g.title).filter(Boolean) ?? [];
@@ -229,6 +249,9 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
       // Weekly outcomes trend (parent check-ins + baseline)
       weeklyOutcomes: weeklyOutcomes.length > 0 ? weeklyOutcomes : undefined,
       outcomeBaseline,
+
+      // Latest "how are YOU?" parent check-in
+      parentCheckIn,
 
       // From KV (AI-generated, persisted)
       lastCalmCue: kvContext.lastCalmCue,
@@ -406,6 +429,17 @@ export function buildAIContextString(context: UserContext): string {
     );
   }
 
+  // PARENT CHECK-IN — how the PARENT is holding up, so the AI's tone can meet
+  // them where they are. Not a clinical score; never guilt-trip about it.
+  if (context.parentCheckIn) {
+    const { feeling, note, daysAgo } = context.parentCheckIn;
+    const when = daysAgo === 0 ? 'today' : daysAgo === 1 ? 'yesterday' : `${daysAgo} days ago`;
+    const noteStr = note ? ` — "${note}"` : '';
+    parts.push(
+      `PARENT CHECK-IN (${when}): ${feeling}${noteStr}. Let this shape your tone: briefly acknowledge how THEY are doing before problem-solving. If they're stretched thin or running on empty, keep suggestions small and gentle and remind them they're doing enough. Never comment on check-in frequency or ask them to check in more.`
+    );
+  }
+
   // WEEKLY OUTCOMES — compact (≤600 chars), most-recent-first, real numbers the
   // AI can cite when asked "how is my child trending?"
   const outcomesBlock = formatOutcomesForAI(context.weeklyOutcomes || [], context.outcomeBaseline || null);
@@ -553,6 +587,53 @@ export function generateContextChips(pathname: string, context: UserContext): st
   }
 
   return chips.slice(0, 3);
+}
+
+/**
+ * Map the latest stress_logs row (or the localStorage mirror written by
+ * StressCheckIn when offline/unauthenticated) into the parentCheckIn context.
+ * Only check-ins from the last 7 days count — older feelings are stale.
+ */
+function mapParentCheckIn(
+  row: { stress_level?: number | null; notes?: string | null; created_at?: string | null } | null
+): UserContext['parentCheckIn'] {
+  const describe = (level: number): string => {
+    if (level <= 3) return 'doing okay';
+    if (level <= 5) return 'managing';
+    if (level <= 7) return 'stretched thin';
+    return 'running on empty';
+  };
+
+  let level: number | null = row?.stress_level ?? null;
+  let note: string | undefined = row?.notes?.trim() || undefined;
+  let at: string | null = row?.created_at ?? null;
+
+  // Fallback: local mirror (written on submit, even when the network fails)
+  if (level == null) {
+    try {
+      const raw = localStorage.getItem('aminy_parent_checkin_latest');
+      if (raw) {
+        const local = JSON.parse(raw) as { level?: number; note?: string; at?: string };
+        if (typeof local.level === 'number') {
+          level = local.level;
+          note = local.note?.trim() || undefined;
+          at = local.at ?? null;
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  if (level == null || !at) return undefined;
+  const daysAgo = Math.floor((Date.now() - new Date(at).getTime()) / (24 * 60 * 60 * 1000));
+  if (!Number.isFinite(daysAgo) || daysAgo < 0 || daysAgo > 7) return undefined;
+
+  return {
+    feeling: describe(level),
+    note: note ? note.slice(0, 140) : undefined,
+    daysAgo,
+  };
 }
 
 function getTimeAgo(date: Date): string {

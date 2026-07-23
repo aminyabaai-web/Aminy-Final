@@ -87,6 +87,16 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
     return unsubscribe;
   }, []);
 
+  // Signal for gentle-cadence features (e.g. the "how are YOU?" check-in):
+  // after a crisis-resources visit, hold off on proactive prompts for a day.
+  useEffect(() => {
+    try {
+      localStorage.setItem('aminy_crisis_resource_visit', String(Date.now()));
+    } catch {
+      // ignore
+    }
+  }, []);
+
   const filteredResources = searchQuery
     ? searchResources(searchQuery)
     : activeCategory === 'all'

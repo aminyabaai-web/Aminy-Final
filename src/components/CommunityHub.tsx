@@ -56,7 +56,8 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
 import { TierType } from '../lib/tier-utils';
-import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost, getComments as getSupabaseComments, addComment as addSupabaseComment, type CommunityComment } from '../lib/community-service';
+import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost, getComments as getSupabaseComments, addComment as addSupabaseComment, getBlockedUserIds, blockUser as blockUserService, unblockUser as unblockUserService, type CommunityComment } from '../lib/community-service';
+import { flagContent, type FlagCategory } from '../lib/moderation-service';
 import { checkAndAwardBadges } from '../lib/badge-service';
 import { supabase } from '../utils/supabase/client';
 import { isDemoMode } from '../lib/demo-seed';
@@ -121,6 +122,23 @@ interface LiveGroupSession {
 type PostCategory = 'wins' | 'questions' | 'tips' | 'support' | 'resources' | 'bcba-qa';
 type GroupCategory = 'diagnosis' | 'age-group' | 'topic' | 'local';
 type CommunityView = 'feed' | 'groups' | 'events' | 'bcba-qa';
+
+// Target of a report/block action — a post or a comment someone else wrote.
+interface ModerationTarget {
+  kind: 'post' | 'comment';
+  id: string;
+  authorId: string;
+  authorName: string;
+  content: string;
+}
+
+// User-facing report reasons, mapped to moderation_queue flag categories.
+const REPORT_REASONS: { id: string; label: string; description: string; category: FlagCategory }[] = [
+  { id: 'harmful', label: 'Harmful or unsafe', description: 'Bullying, dangerous advice, or upsetting content', category: 'inappropriate' },
+  { id: 'spam', label: 'Spam', description: 'Ads, scams, or repetitive self-promotion', category: 'spam' },
+  { id: 'private-info', label: 'Shares private information', description: 'Personal details about someone without consent', category: 'privacy' },
+  { id: 'other', label: 'Something else', description: 'Anything that does not feel right', category: 'other' },
+];
 
 interface CommunityHubProps {
   userId: string;
@@ -333,6 +351,21 @@ export function CommunityHub({
   const [othersTyping, setOthersTyping] = useState(false);
   // Upcoming BCBA group sessions for the "Live group sessions" strip.
   const [groupSessions, setGroupSessions] = useState<LiveGroupSession[]>([]);
+  // Report & block: overflow action sheet + report reason sheet + block list.
+  const [blockedIds, setBlockedIds] = useState<Set<string>>(new Set());
+  const [actionTarget, setActionTarget] = useState<ModerationTarget | null>(null);
+  const [reportTarget, setReportTarget] = useState<ModerationTarget | null>(null);
+  const [reportNote, setReportNote] = useState('');
+  const [reportSending, setReportSending] = useState(false);
+
+  // Hydrate the viewer's block list (localStorage + user_blocks table).
+  useEffect(() => {
+    let active = true;
+    getBlockedUserIds(userId).then(ids => {
+      if (active && ids.size > 0) setBlockedIds(ids);
+    }).catch(() => {});
+    return () => { active = false; };
+  }, [userId]);
 
   // Load posts from Supabase; seed MOCK_POSTS only in demo mode when empty
   useEffect(() => {
@@ -582,6 +615,7 @@ export function CommunityHub({
   // Filter posts
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
+      if (blockedIds.has(post.authorId)) return false;
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         const matchesSearch =
@@ -599,7 +633,70 @@ export function CommunityHub({
       if (!a.isPinned && b.isPinned) return 1;
       return b.createdAt.getTime() - a.createdAt.getTime();
     });
-  }, [posts, searchQuery, selectedCategory]);
+  }, [posts, searchQuery, selectedCategory, blockedIds]);
+
+  // Comments from blocked users are hidden for this viewer too.
+  const visibleComments = useMemo(
+    () => threadComments.filter(c => !blockedIds.has(c.userId)),
+    [threadComments, blockedIds]
+  );
+
+  // Block a user: instant local hide + persisted via community-service, with undo.
+  const handleBlockUser = useCallback((target: ModerationTarget) => {
+    const { authorId, authorName } = target;
+    setBlockedIds(prev => new Set(prev).add(authorId));
+    setActionTarget(null);
+    setReportTarget(null);
+    blockUserService(userId, authorId).catch(() => {});
+    toast.success(`You won't see posts or comments from ${authorName} anymore`, {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          setBlockedIds(prev => {
+            const next = new Set(prev);
+            next.delete(authorId);
+            return next;
+          });
+          unblockUserService(userId, authorId).catch(() => {});
+        },
+      },
+    });
+  }, [userId]);
+
+  // Submit a report → moderation_queue row via moderation-service.
+  // Demo/sample content (non-UUID ids) has no Supabase rows: acknowledge
+  // without a network write so the flow still completes in walkthroughs.
+  const handleSubmitReport = useCallback(async (reason: typeof REPORT_REASONS[number]) => {
+    if (!reportTarget || reportSending) return;
+    setReportSending(true);
+    try {
+      const isPersisted = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(reportTarget.id);
+      if (isPersisted) {
+        const note = reportNote.trim();
+        const result = await flagContent(
+          reportTarget.kind,
+          reportTarget.id,
+          reportTarget.content,
+          reportTarget.authorId,
+          reportTarget.authorName,
+          {
+            category: reason.category,
+            reason: note ? `${reason.label} — ${note}` : reason.label,
+            flaggedBy: userId || undefined,
+          }
+        );
+        if (!result.success) {
+          toast.error("Couldn't send the report — please try again");
+          return;
+        }
+      }
+      toast.success('Thanks — our team will review');
+      setReportTarget(null);
+      setReportNote('');
+    } finally {
+      setReportSending(false);
+    }
+  }, [reportTarget, reportSending, reportNote, userId]);
 
   // Handle like
   const handleLike = useCallback((postId: string) => {
@@ -882,6 +979,21 @@ export function CommunityHub({
           <Badge className={POST_CATEGORIES.find(c => c.id === post.category)?.color || ''}>
             {POST_CATEGORIES.find(c => c.id === post.category)?.name}
           </Badge>
+          {post.authorId !== userId && (
+            <button
+              onClick={() => setActionTarget({
+                kind: 'post',
+                id: post.id,
+                authorId: post.authorId,
+                authorName: post.authorName,
+                content: `${post.title}\n${post.content}`,
+              })}
+              className="p-1.5 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-700 shrink-0"
+              aria-label={`More options for post by ${post.authorName}`}
+            >
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -939,6 +1051,7 @@ export function CommunityHub({
             className={`flex items-center gap-1.5 text-sm ${
               post.isLiked ? 'text-red-500' : 'text-[#5A6B7A] hover:text-red-500'
             }`}
+            aria-label={post.isLiked ? `Unlike post (${post.likes} likes)` : `Like post (${post.likes} likes)`}
           >
             <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
             {post.likes}
@@ -970,6 +1083,7 @@ export function CommunityHub({
             className={`p-1.5 rounded-full hover:bg-[#EDF4F7] ${
               post.isBookmarked ? 'text-[#6B9080]' : 'text-slate-400'
             }`}
+            aria-label={post.isBookmarked ? 'Remove bookmark' : 'Bookmark post'}
           >
             <Bookmark className={`w-4 h-4 ${post.isBookmarked ? 'fill-current' : ''}`} />
           </button>
@@ -1453,17 +1567,17 @@ export function CommunityHub({
                 )}
                 <div className="border-t border-[#E8E4DF] dark:border-slate-700 pt-4">
                   <h3 className="text-sm font-medium text-[#3A4A57] dark:text-slate-200 mb-3">
-                    Comments {threadComments.length > 0 && `(${threadComments.length})`}
+                    Comments {visibleComments.length > 0 && `(${visibleComments.length})`}
                   </h3>
                   {threadLoading ? (
                     <p className="text-sm text-slate-400 text-center py-6">Loading comments…</p>
-                  ) : threadComments.length === 0 ? (
+                  ) : visibleComments.length === 0 ? (
                     <p className="text-sm text-slate-400 text-center py-6">
                       No comments yet. Be the first to reply.
                     </p>
                   ) : (
                     <div className="space-y-3">
-                      {threadComments.map((c) => (
+                      {visibleComments.map((c) => (
                         <div key={c.id} className="flex items-start gap-2.5">
                           <div className="w-8 h-8 rounded-full bg-[#E8E4DF] dark:bg-slate-700 flex items-center justify-center shrink-0">
                             <span className="text-sm font-medium text-[#5A6B7A]">{c.displayName.charAt(0)}</span>
@@ -1475,6 +1589,21 @@ export function CommunityHub({
                             </div>
                             <p className="text-sm text-[#5A6B7A] dark:text-slate-300 break-words">{c.body}</p>
                           </div>
+                          {c.userId !== userId && (
+                            <button
+                              onClick={() => setActionTarget({
+                                kind: 'comment',
+                                id: c.id,
+                                authorId: c.userId,
+                                authorName: c.displayName,
+                                content: c.body,
+                              })}
+                              className="p-1.5 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-700 shrink-0"
+                              aria-label={`More options for comment by ${c.displayName}`}
+                            >
+                              <MoreHorizontal className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -1514,6 +1643,137 @@ export function CommunityHub({
                 >
                   <Send className="w-4 h-4" />
                 </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Post/comment overflow action sheet — Report + Block */}
+      <AnimatePresence>
+        {actionTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-[60] flex items-end justify-center"
+            onClick={() => setActionTarget(null)}
+          >
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-label={actionTarget.kind === 'post' ? 'Post options' : 'Comment options'}
+            >
+              <h2 className="text-base font-semibold text-[#132F43] dark:text-white">
+                {actionTarget.kind === 'post' ? 'Post options' : 'Comment options'}
+              </h2>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">
+                These actions are private — no one is notified.
+              </p>
+              <button
+                onClick={() => { setReportTarget(actionTarget); setReportNote(''); setActionTarget(null); }}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[#EDF4F7] dark:hover:bg-slate-700 text-left"
+              >
+                <Flag className="w-5 h-5 text-[#5A6B7A] shrink-0" />
+                <span>
+                  <span className="block text-sm font-medium text-[#132F43] dark:text-white">
+                    Report {actionTarget.kind}
+                  </span>
+                  <span className="block text-sm text-[#5A6B7A] dark:text-slate-400">
+                    Let our team take a look
+                  </span>
+                </span>
+              </button>
+              <button
+                onClick={() => handleBlockUser(actionTarget)}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[#EDF4F7] dark:hover:bg-slate-700 text-left"
+              >
+                <Shield className="w-5 h-5 text-[#5A6B7A] shrink-0" />
+                <span>
+                  <span className="block text-sm font-medium text-[#132F43] dark:text-white">
+                    Block {actionTarget.authorName}
+                  </span>
+                  <span className="block text-sm text-[#5A6B7A] dark:text-slate-400">
+                    Hide their posts and comments from your feed
+                  </span>
+                </span>
+              </button>
+              <Button
+                variant="outline"
+                className="w-full mt-2"
+                onClick={() => setActionTarget(null)}
+              >
+                Cancel
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Report reason sheet — pick a reason to submit (optional note first) */}
+      <AnimatePresence>
+        {reportTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-[60] flex items-end justify-center"
+            onClick={() => { if (!reportSending) { setReportTarget(null); setReportNote(''); } }}
+          >
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-label={`Report this ${reportTarget.kind}`}
+            >
+              <div className="flex items-start justify-between gap-2 mb-1">
+                <h2 className="text-base font-semibold text-[#132F43] dark:text-white">
+                  Report this {reportTarget.kind}
+                </h2>
+                <button
+                  onClick={() => { setReportTarget(null); setReportNote(''); }}
+                  className="p-1 rounded-full text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700"
+                  aria-label="Close report"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">
+                Our team reviews every report. The author won't know it came from you.
+              </p>
+              <Input
+                placeholder="Anything we should know? (optional)"
+                value={reportNote}
+                onChange={(e) => setReportNote(e.target.value)}
+                className="mb-3"
+                aria-label="Optional note for the moderation team"
+              />
+              <div className="space-y-2">
+                {REPORT_REASONS.map((reason) => (
+                  <button
+                    key={reason.id}
+                    onClick={() => handleSubmitReport(reason)}
+                    disabled={reportSending}
+                    className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl border border-[#E8E4DF] dark:border-slate-700 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 text-left disabled:opacity-50"
+                  >
+                    <span>
+                      <span className="block text-sm font-medium text-[#132F43] dark:text-white">
+                        {reason.label}
+                      </span>
+                      <span className="block text-sm text-[#5A6B7A] dark:text-slate-400">
+                        {reason.description}
+                      </span>
+                    </span>
+                    <Flag className="w-4 h-4 text-slate-400 shrink-0" />
+                  </button>
+                ))}
               </div>
             </motion.div>
           </motion.div>

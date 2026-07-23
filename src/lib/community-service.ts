@@ -291,6 +291,72 @@ export async function addComment(
   }
 }
 
+// ── Blocks ───────────────────────────────────────────────────────────
+// Viewer-side block list. localStorage is the source of truth for instant,
+// offline-safe filtering; the `user_blocks` table (migration
+// 20260719000000_user_blocks.sql) syncs it across devices best-effort.
+
+const BLOCKED_USERS_KEY = 'aminy-blocked-users';
+const isUuid = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(id);
+
+function readLocalBlocks(): string[] {
+  try {
+    const raw = localStorage.getItem(BLOCKED_USERS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalBlocks(ids: string[]) {
+  try {
+    localStorage.setItem(BLOCKED_USERS_KEY, JSON.stringify([...new Set(ids)]));
+  } catch { /* storage full or blocked — in-session state still applies */ }
+}
+
+export async function getBlockedUserIds(userId: string): Promise<Set<string>> {
+  const blocked = new Set(readLocalBlocks());
+  if (userId && isUuid(userId)) {
+    try {
+      const { data } = await supabase
+        .from('user_blocks')
+        .select('blocked_id')
+        .eq('blocker_id', userId);
+      for (const row of data || []) blocked.add(row.blocked_id);
+      writeLocalBlocks([...blocked]);
+    } catch {
+      // Table not deployed yet or offline — localStorage list still applies.
+    }
+  }
+  return blocked;
+}
+
+export async function blockUser(blockerId: string, blockedId: string): Promise<void> {
+  writeLocalBlocks([...readLocalBlocks(), blockedId]);
+  if (blockerId && isUuid(blockerId) && isUuid(blockedId)) {
+    try {
+      await supabase.from('user_blocks').upsert(
+        { blocker_id: blockerId, blocked_id: blockedId },
+        { onConflict: 'blocker_id,blocked_id' }
+      );
+    } catch { /* best-effort sync — local block already in effect */ }
+  }
+}
+
+export async function unblockUser(blockerId: string, blockedId: string): Promise<void> {
+  writeLocalBlocks(readLocalBlocks().filter(id => id !== blockedId));
+  if (blockerId && isUuid(blockerId) && isUuid(blockedId)) {
+    try {
+      await supabase
+        .from('user_blocks')
+        .delete()
+        .eq('blocker_id', blockerId)
+        .eq('blocked_id', blockedId);
+    } catch { /* best-effort */ }
+  }
+}
+
 // ── Bookmarks ────────────────────────────────────────────────────────
 
 export async function bookmarkPost(userId: string, postId: string): Promise<boolean> {

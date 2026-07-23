@@ -4,30 +4,28 @@
 // See LICENSE file for details.
 
 /**
- * Stress Check-In Component
- * Daily stress tracking for measurable parent wellness outcomes
+ * Parent Check-In ("How are you holding up?")
  *
- * Features:
- * - Morning/evening check-ins
- * - 1-10 scale with visual representation
- * - Trend visualization over time
- * - Contextual encouragement
+ * A friend asking, not a screener. Four tap options + an optional one-line
+ * note, done in under ten seconds, skippable forever without guilt.
+ *
+ * NOT a clinical instrument — PHQ/GAD/CaregiverBurdenScale stay unwired
+ * (owner decision, clinical-advisor gate). This is the gentle loop only.
+ *
+ * Persists to `stress_logs` (RLS: user reads/writes own rows) so the AI
+ * context layer and the parent-wellbeing aggregates can feel the answer.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
-import { Badge } from './ui/badge';
 import {
   X,
   Heart,
-  TrendingUp,
-  TrendingDown,
-  Minus,
   Sun,
-  Moon,
-  Sparkles,
-  Calendar
+  CloudSun,
+  CloudRain,
+  BatteryLow,
 } from 'lucide-react';
 import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner';
@@ -39,268 +37,210 @@ interface StressCheckInProps {
   onComplete?: (stressLevel: number) => void;
 }
 
-interface StressLog {
-  id: string;
-  stress_level: number;
-  context: 'morning' | 'evening';
-  created_at: string;
-  notes?: string;
+/** localStorage mirror so the AI can feel the latest answer immediately
+ *  (and offline / before the Supabase row is readable). */
+export const PARENT_CHECKIN_LATEST_KEY = 'aminy_parent_checkin_latest';
+/** "Please stop asking" — honored forever by the proactive cadence. */
+export const PARENT_CHECKIN_OPTOUT_KEY = 'aminy_parent_checkin_optout';
+
+interface CheckInOption {
+  label: string;
+  sub: string;
+  level: number; // maps onto stress_logs.stress_level (1-10)
+  icon: React.ElementType;
+}
+
+const CHECKIN_OPTIONS: CheckInOption[] = [
+  { label: 'Doing okay', sub: 'Steady enough today', level: 2, icon: Sun },
+  { label: 'Managing', sub: 'Busy, but holding it together', level: 4, icon: CloudSun },
+  { label: 'Stretched thin', sub: 'Today is asking a lot of you', level: 7, icon: CloudRain },
+  { label: 'Running on empty', sub: 'Not much left in the tank', level: 9, icon: BatteryLow },
+];
+
+/** Word the AI/aggregates use for a stored 1-10 level. */
+export function describeCheckInLevel(level: number): string {
+  if (level <= 3) return 'doing okay';
+  if (level <= 5) return 'managing';
+  if (level <= 7) return 'stretched thin';
+  return 'running on empty';
 }
 
 export function StressCheckIn({
   isOpen,
   onClose,
   context,
-  onComplete
+  onComplete,
 }: StressCheckInProps) {
   const [stressLevel, setStressLevel] = useState<number | null>(null);
+  const [note, setNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [recentLogs, setRecentLogs] = useState<StressLog[]>([]);
-  const [showTrend, setShowTrend] = useState(false);
 
-  // Load recent stress logs
-  useEffect(() => {
-    if (isOpen) {
-      loadRecentLogs();
-    }
-  }, [isOpen]);
+  // Display wording follows the clock; `context` stays the stored DB value.
+  const timeWord = new Date().getHours() >= 17 ? 'tonight' : 'today';
 
-  const loadRecentLogs = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('stress_logs')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(14); // Last 7 days * 2 (morning/evening)
-
-      if (data && !error) {
-        setRecentLogs(data);
-      }
-    } catch (error) {
-      console.error('Error loading stress logs:', error);
-    }
+  const getEncouragementMessage = (level: number): string => {
+    if (level <= 3) return 'Glad to hear it. Steady days count double around here.';
+    if (level <= 5) return 'Holding it together is real work. Noted, gently.';
+    if (level <= 7) return "That's a lot to carry. I'll keep things light today.";
+    return "Thank you for being honest. You don't have to refill the tank alone.";
   };
 
   const handleSubmit = async () => {
     if (stressLevel === null) return;
 
     setIsSubmitting(true);
+    const trimmedNote = note.trim().slice(0, 200);
+
+    // Mirror locally first — the AI should feel this even if the network doesn't.
+    try {
+      localStorage.setItem(
+        PARENT_CHECKIN_LATEST_KEY,
+        JSON.stringify({
+          level: stressLevel,
+          feeling: describeCheckInLevel(stressLevel),
+          note: trimmedNote || undefined,
+          at: new Date().toISOString(),
+        })
+      );
+    } catch {
+      // localStorage unavailable — fine
+    }
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
-      const { error } = await supabase
-        .from('stress_logs')
-        .insert({
+      if (user) {
+        const { error } = await supabase.from('stress_logs').insert({
           user_id: user.id,
           stress_level: stressLevel,
-          context: context
+          context: context,
+          notes: trimmedNote || null,
         });
-
-      if (error) throw error;
-
+        if (error) throw error;
+      }
       toast.success(getEncouragementMessage(stressLevel));
       onComplete?.(stressLevel);
       onClose();
     } catch (error) {
-      console.error('Error saving stress log:', error);
-      toast.error('Could not save. Please try again.');
+      console.error('Error saving check-in:', error);
+      // The local mirror already has it — never make the parent retry a feeling.
+      toast.success(getEncouragementMessage(stressLevel));
+      onComplete?.(stressLevel);
+      onClose();
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const getEncouragementMessage = (level: number): string => {
-    if (level <= 3) {
-      return "Wonderful! Keep nurturing that calm. 🌟";
-    } else if (level <= 5) {
-      return "You're doing great. Every day is a new opportunity. 💪";
-    } else if (level <= 7) {
-      return "I see you're carrying a lot. Remember, you're not alone. 💙";
-    } else {
-      return "Today is hard, and that's okay. Let's take it one moment at a time. 🤗";
+  const handleOptOut = () => {
+    try {
+      localStorage.setItem(PARENT_CHECKIN_OPTOUT_KEY, 'true');
+    } catch {
+      // ignore
     }
-  };
-
-  const getStressDescription = (level: number): string => {
-    if (level <= 2) return "Very calm";
-    if (level <= 4) return "Manageable";
-    if (level <= 6) return "Somewhat stressed";
-    if (level <= 8) return "Quite stressed";
-    return "Overwhelmed";
-  };
-
-  const getStressColor = (level: number): string => {
-    if (level <= 3) return "bg-green-500";
-    if (level <= 5) return "bg-yellow-500";
-    if (level <= 7) return "bg-orange-500";
-    return "bg-red-500";
-  };
-
-  const calculateTrend = (): 'improving' | 'stable' | 'worsening' | null => {
-    if (recentLogs.length < 4) return null;
-
-    const recentAvg = recentLogs.slice(0, 4).reduce((sum, log) => sum + log.stress_level, 0) / 4;
-    const olderAvg = recentLogs.slice(4, 8).reduce((sum, log) => sum + log.stress_level, 0) / Math.min(4, recentLogs.length - 4);
-
-    if (recentAvg < olderAvg - 0.5) return 'improving';
-    if (recentAvg > olderAvg + 0.5) return 'worsening';
-    return 'stable';
-  };
-
-  const getAverageStress = (): number => {
-    if (recentLogs.length === 0) return 0;
-    return recentLogs.reduce((sum, log) => sum + log.stress_level, 0) / recentLogs.length;
+    toast.success("Okay — I won't ask again. I'm always in chat if you want to talk.");
+    onClose();
   };
 
   if (!isOpen) return null;
-
-  const trend = calculateTrend();
-  const average = getAverageStress();
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <Card className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4">
         {/* Header */}
-        <div className={`p-6 ${context === 'morning' ? 'bg-gradient-to-r from-amber-100 to-orange-100' : 'bg-gradient-to-r from-indigo-100 to-purple-100'}`}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {context === 'morning' ? (
-                <Sun className="w-6 h-6 text-amber-600" />
-              ) : (
-                <Moon className="w-6 h-6 text-[#6B9080]" />
-              )}
-              <div>
-                <h2 className="text-lg font-semibold text-[#132F43]">
-                  {context === 'morning' ? 'Good Morning' : 'Evening Reflection'}
-                </h2>
-                <p className="text-sm text-[#5A6B7A]">
-                  {context === 'morning' ? 'How are you feeling today?' : 'How was your day?'}
-                </p>
-              </div>
+        <div className="p-5 bg-[#F6FBFB] border-b border-[#E8E4DF]">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-semibold text-[#132F43]">
+                How are you holding up {timeWord}?
+              </h2>
+              <p className="text-sm text-[#5A6B7A] mt-1">
+                Just you, for a second — not the to-do list. One tap is plenty.
+              </p>
             </div>
-            <Button variant="ghost" size="sm" onClick={onClose}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              aria-label="Close check-in"
+              className="flex-shrink-0"
+            >
               <X className="w-5 h-5" />
             </Button>
           </div>
         </div>
 
-        {/* Stress Scale */}
-        <div className="p-4 sm:p-5 md:p-6">
-          <p className="text-center text-[#5A6B7A] mb-4 sm:mb-6">
-            On a scale of 1-10, how stressed are you feeling?
-          </p>
-
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
-              <button
-                key={level}
-                onClick={() => setStressLevel(level)}
-                className={`
-                  w-9 h-9 rounded-full font-medium text-sm transition-all
-                  ${stressLevel === level
-                    ? `${getStressColor(level)} text-white scale-110 shadow-lg`
-                    : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
-                  }
-                `}
-              >
-                {level}
-              </button>
-            ))}
+        {/* Tap options */}
+        <div className="p-4 sm:p-5">
+          <div className="space-y-2 mb-4" role="radiogroup" aria-label="How are you holding up?">
+            {CHECKIN_OPTIONS.map((option) => {
+              const Icon = option.icon;
+              const selected = stressLevel === option.level;
+              return (
+                <button
+                  key={option.label}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setStressLevel(option.level)}
+                  className={`parent-checkin-option ${selected ? 'is-selected' : ''}`}
+                >
+                  <Icon className="w-5 h-5 checkin-option-icon" aria-hidden="true" />
+                  <span className="flex-1">
+                    <span className="block font-medium">{option.label}</span>
+                    <span className="block text-sm text-[#5A6B7A]">{option.sub}</span>
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
-          {stressLevel !== null && (
-            <div className="text-center mb-4 sm:mb-6 animate-in fade-in-50">
-              <Badge className={`${getStressColor(stressLevel)} text-white`}>
-                {getStressDescription(stressLevel)}
-              </Badge>
-            </div>
-          )}
+          {/* Optional one-line note */}
+          <input
+            type="text"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            maxLength={200}
+            placeholder={'Add a line if you want — "rough school morning"'}
+            aria-label="Optional note"
+            className="parent-checkin-note mb-4"
+          />
 
-          {/* Scale Labels */}
-          <div className="flex justify-between text-sm text-[#5A6B7A] mb-4 sm:mb-6">
-            <span>Calm & peaceful</span>
-            <span>Overwhelmed</span>
-          </div>
-
-          {/* Trend Summary */}
-          {recentLogs.length > 0 && (
-            <button
-              onClick={() => setShowTrend(!showTrend)}
-              className="w-full p-3 bg-[#F6FBFB] rounded-lg hover:bg-[#EDF4F7] transition-colors mb-4"
+          {/* Actions */}
+          <div className="flex gap-2">
+            <Button
+              onClick={handleSubmit}
+              disabled={stressLevel === null || isSubmitting}
+              className="flex-1 bg-[#2A7D99] hover:bg-[#376E80] text-white gap-2 min-h-[44px]"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-[#5A6B7A]">Your recent trend</span>
-                <div className="flex items-center gap-2">
-                  {trend === 'improving' && (
-                    <>
-                      <TrendingDown className="w-4 h-4 text-green-600" />
-                      <span className="text-sm font-medium text-green-600">Improving</span>
-                    </>
-                  )}
-                  {trend === 'worsening' && (
-                    <>
-                      <TrendingUp className="w-4 h-4 text-red-600" />
-                      <span className="text-sm font-medium text-red-600">Higher stress</span>
-                    </>
-                  )}
-                  {trend === 'stable' && (
-                    <>
-                      <Minus className="w-4 h-4 text-[#5A6B7A]" />
-                      <span className="text-sm font-medium text-[#5A6B7A]">Stable</span>
-                    </>
-                  )}
-                  {trend === null && (
-                    <span className="text-sm text-[#5A6B7A]">Need more data</span>
-                  )}
-                </div>
-              </div>
+              <Heart className="w-4 h-4" aria-hidden="true" />
+              {isSubmitting ? 'One sec...' : 'Share with Aminy'}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={onClose}
+              className="text-[#5A6B7A] min-h-[44px]"
+            >
+              Not today
+            </Button>
+          </div>
 
-              {showTrend && (
-                <div className="mt-3 pt-3 border-t border-[#E8E4DF]">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#5A6B7A]">7-day average:</span>
-                    <span className="font-medium text-[#3A4A57]">{average.toFixed(1)}/10</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm mt-1">
-                    <span className="text-[#5A6B7A]">Check-ins this week:</span>
-                    <span className="font-medium text-[#3A4A57]">{Math.min(recentLogs.length, 14)}</span>
-                  </div>
-                </div>
-              )}
-            </button>
-          )}
-
-          {/* Submit Button */}
-          <Button
-            onClick={handleSubmit}
-            disabled={stressLevel === null || isSubmitting}
-            className="w-full bg-accent hover:bg-accent/90 gap-2"
-          >
-            {isSubmitting ? (
-              'Saving...'
-            ) : (
-              <>
-                <Heart className="w-4 h-4" />
-                Log How I'm Feeling
-              </>
-            )}
-          </Button>
-
-          {/* Encouragement */}
+          {/* Gentle line when they're carrying a lot */}
           {stressLevel !== null && stressLevel >= 7 && (
             <div className="mt-4 p-3 bg-[#EEF4F8] rounded-lg">
-              <p className="text-sm text-[#4A6478] flex items-start gap-2">
-                <Sparkles className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                Remember: Asking for help is strength, not weakness. Would you like to talk to Aminy about what's on your mind?
+              <p className="text-sm text-[#3A4A57]">
+                Hard days are allowed. If you want to talk anything through, I&apos;m right here — no fixing required.
               </p>
             </div>
           )}
+
+          {/* Skippable forever, no guilt */}
+          <button
+            type="button"
+            onClick={handleOptOut}
+            className="mt-3 w-full text-center text-xs text-[#8A9BA8] underline underline-offset-2 min-h-[44px]"
+          >
+            Prefer I didn&apos;t ask? Tap here and I&apos;ll stop.
+          </button>
         </div>
       </Card>
     </div>
@@ -309,13 +249,15 @@ export function StressCheckIn({
 
 /**
  * Stress Check-In Trigger Hook
- * Determines when to show check-in prompts
+ * Determines when to show check-in prompts (time-window + once per
+ * context per day). The proactive cadence in ProactiveCheckIn.tsx is the
+ * primary surfacing rail; this hook remains for direct use.
  */
 export function useStressCheckIn() {
   const [shouldShowMorning, setShouldShowMorning] = useState(false);
   const [shouldShowEvening, setShouldShowEvening] = useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const checkTiming = async () => {
       const now = new Date();
       const hour = now.getHours();
@@ -328,6 +270,8 @@ export function useStressCheckIn() {
       if (!isMorningWindow && !isEveningWindow) return;
 
       try {
+        if (localStorage.getItem(PARENT_CHECKIN_OPTOUT_KEY) === 'true') return;
+
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
@@ -335,7 +279,7 @@ export function useStressCheckIn() {
         const context = isMorningWindow ? 'morning' : 'evening';
 
         // Check if already logged today for this context
-        const { data, error } = await supabase
+        const { data } = await supabase
           .from('stress_logs')
           .select('id')
           .eq('user_id', user.id)
@@ -351,7 +295,7 @@ export function useStressCheckIn() {
           }
         }
       } catch (error) {
-        console.error('Error checking stress log status:', error);
+        console.error('Error checking check-in status:', error);
       }
     };
 
@@ -362,7 +306,7 @@ export function useStressCheckIn() {
     shouldShowMorning,
     shouldShowEvening,
     dismissMorning: () => setShouldShowMorning(false),
-    dismissEvening: () => setShouldShowEvening(false)
+    dismissEvening: () => setShouldShowEvening(false),
   };
 }
 

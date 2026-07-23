@@ -86,6 +86,13 @@ const ACTIONS_KEY = 'aminy_streak_actions_today';
 
 export const STREAK_MILESTONES: StreakMilestone[] = [
   {
+    days: 1,
+    name: 'Day One',
+    emoji: '🌱',
+    description: 'You showed up today — that is how every rhythm begins.',
+    bonusType: 'celebration',
+  },
+  {
     days: 3,
     name: 'Getting Started',
     emoji: '🌱',
@@ -127,7 +134,32 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
     description: '100 days! You are in the top 1% of dedicated parents.',
     bonusType: 'celebration',
   },
+  {
+    days: 365,
+    name: 'A Full Year',
+    emoji: '🎉',
+    description: 'A whole year of showing up for your family.',
+    bonusType: 'celebration',
+  },
 ];
+
+/**
+ * Find the highest celebration-worthy milestone the streak has crossed that
+ * has not been celebrated yet. Badge-type milestones never pop a modal from
+ * here — they surface passively in the milestones list instead.
+ */
+function findUncelebratedMilestone(
+  streak: number,
+  celebrated: number[]
+): StreakMilestone | null {
+  const crossed = STREAK_MILESTONES.filter(
+    (m) =>
+      m.bonusType === 'celebration' &&
+      streak >= m.days &&
+      !celebrated.includes(m.days)
+  );
+  return crossed.length > 0 ? crossed[crossed.length - 1] : null;
+}
 
 // ── Local persistence helpers ─────────────────────────────────────────
 
@@ -244,7 +276,19 @@ export function useStreakTracker(userId: string | null): UseStreakTrackerReturn 
         }
       }
 
-      if (!cancelled) setLoading(false);
+      if (!cancelled) {
+        // Celebration wiring: if the current streak has already crossed a
+        // milestone that was never celebrated (e.g. streak synced from the
+        // cloud, or seeded locally), surface it once. Dismissal persists to
+        // localStorage so each milestone celebrates exactly once.
+        const finalState = localStateRef.current;
+        const milestone = findUncelebratedMilestone(
+          finalState.current,
+          finalState.celebratedMilestones
+        );
+        if (milestone) setPendingMilestone(milestone);
+        setLoading(false);
+      }
     };
 
     init();
@@ -331,10 +375,20 @@ export function useStreakTracker(userId: string | null): UseStreakTrackerReturn 
   const dismissMilestone = useCallback(() => {
     if (!pendingMilestone) return;
 
-    const updated = [
-      ...localStateRef.current.celebratedMilestones,
-      pendingMilestone.days,
-    ];
+    // Mark every milestone the streak has already passed as celebrated, so a
+    // long-running streak never queues a backlog of stale celebration modals.
+    const streakNow = Math.max(
+      localStateRef.current.current,
+      pendingMilestone.days
+    );
+    const updated = Array.from(
+      new Set([
+        ...localStateRef.current.celebratedMilestones,
+        ...STREAK_MILESTONES.filter((m) => m.days <= streakNow).map(
+          (m) => m.days
+        ),
+      ])
+    );
     localStateRef.current = {
       ...localStateRef.current,
       celebratedMilestones: updated,

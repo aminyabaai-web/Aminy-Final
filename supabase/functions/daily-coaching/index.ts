@@ -164,7 +164,37 @@ async function detectBehaviorPatterns(userId: string): Promise<BehaviorPattern |
   return null;
 }
 
-async function generateTip(user: UserRow, pattern: BehaviorPattern | null): Promise<string | null> {
+// Latest "how are YOU holding up?" parent check-in (stress_logs, last 48h).
+// Service-role client bypasses RLS, so the table is server-readable here.
+async function fetchParentCheckIn(userId: string): Promise<string | null> {
+  try {
+    const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+    const { data } = await supabase
+      .from('stress_logs')
+      .select('stress_level, notes, created_at')
+      .eq('user_id', userId)
+      .gte('created_at', twoDaysAgo)
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    const row = data?.[0];
+    if (!row || typeof row.stress_level !== 'number') return null;
+
+    const feeling =
+      row.stress_level <= 3 ? 'doing okay' :
+      row.stress_level <= 5 ? 'managing' :
+      row.stress_level <= 7 ? 'stretched thin' :
+      'running on empty';
+    const note = typeof row.notes === 'string' && row.notes.trim()
+      ? ` — "${row.notes.trim().slice(0, 120)}"`
+      : '';
+    return `${feeling}${note}`;
+  } catch {
+    return null;
+  }
+}
+
+async function generateTip(user: UserRow, pattern: BehaviorPattern | null, parentCheckIn: string | null = null): Promise<string | null> {
   if (!ANTHROPIC_KEY) return null;
 
   const childDesc = [
@@ -186,9 +216,13 @@ async function generateTip(user: UserRow, pattern: BehaviorPattern | null): Prom
     ? `\nIMPORTANT — a real pattern was detected from this family's logs this week: ${pattern.summary} Address this pattern specifically. Do NOT give generic advice — speak directly to this pattern and what to do about it.`
     : '';
 
+  const checkInSection = parentCheckIn
+    ? `\nThe parent recently checked in about their OWN state: ${parentCheckIn}. Let that shape your tone — if they're stretched thin or running on empty, make the tip smaller and kinder, and acknowledge them as a person in a few words first. Never comment on how often they check in.`
+    : '';
+
   const prompt = `You are Aminy, a warm and knowledgeable ABA parenting coach.
 ${getDayContext()}
-The parent is supporting ${childDesc}. ${challengesText} ${recentContext}${patternSection}
+The parent is supporting ${childDesc}. ${challengesText} ${recentContext}${patternSection}${checkInSection}
 
 Write ONE practical, specific tip for today. Requirements:
 - 1-2 sentences max. No greeting, no sign-off.
@@ -272,8 +306,11 @@ async function runDailyCoaching(): Promise<{ sent: number; skipped: number; erro
     const batch = users.slice(i, i + BATCH);
     await Promise.all(batch.map(async (user: UserRow) => {
       try {
-        const pattern = await detectBehaviorPatterns(user.user_id).catch(() => null);
-        const tip = (await generateTip(user, pattern)) ?? getFallbackTip(user.user_id);
+        const [pattern, parentCheckIn] = await Promise.all([
+          detectBehaviorPatterns(user.user_id).catch(() => null),
+          fetchParentCheckIn(user.user_id),
+        ]);
+        const tip = (await generateTip(user, pattern, parentCheckIn)) ?? getFallbackTip(user.user_id);
         const parentName = user.parent_name?.split(' ')[0] || 'there';
         const title = pattern?.notificationTitle ?? `Good morning, ${parentName} 👋`;
 
@@ -376,8 +413,11 @@ async function runDirectQuery(stats: { sent: number; skipped: number; errors: nu
           recent_behavior: null,
         };
 
-        const pattern = await detectBehaviorPatterns(user.user_id).catch(() => null);
-        const tip = (await generateTip(user, pattern)) ?? getFallbackTip(user.user_id);
+        const [pattern, parentCheckIn] = await Promise.all([
+          detectBehaviorPatterns(user.user_id).catch(() => null),
+          fetchParentCheckIn(user.user_id),
+        ]);
+        const tip = (await generateTip(user, pattern, parentCheckIn)) ?? getFallbackTip(user.user_id);
         const parentName = (user.parent_name?.split(' ')[0]) || 'there';
         const title = pattern?.notificationTitle ?? `Good morning, ${parentName} 👋`;
 

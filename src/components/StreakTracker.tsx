@@ -3,8 +3,8 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useMemo } from 'react';
-import { Flame, Calendar, TrendingUp, AlertTriangle, Clock } from 'lucide-react';
+import React from 'react';
+import { Flame, TrendingUp, Sparkles } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 
@@ -15,14 +15,6 @@ interface StreakTrackerProps {
   lastCheckIn?: string; // ISO date string of last check-in
   onViewDetails?: () => void;
   onQuickCheckIn?: () => void;
-}
-
-// Calculate hours until midnight
-function getHoursUntilMidnight(): number {
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0);
-  return Math.floor((midnight.getTime() - now.getTime()) / (1000 * 60 * 60));
 }
 
 // Check if user has checked in today
@@ -45,22 +37,9 @@ export function StreakTracker({
   onViewDetails,
   onQuickCheckIn
 }: StreakTrackerProps) {
-  // Calculate streak warning state
-  const streakWarning = useMemo(() => {
-    if (isPaused || currentStreak === 0) return null;
-    if (hasCheckedInToday(lastCheckIn)) return null;
-
-    const hoursLeft = getHoursUntilMidnight();
-
-    if (hoursLeft <= 2) {
-      return { level: 'critical', hoursLeft, message: 'Your streak expires soon!' };
-    } else if (hoursLeft <= 6) {
-      return { level: 'warning', hoursLeft, message: 'Don\'t forget to check in' };
-    } else if (hoursLeft <= 12) {
-      return { level: 'gentle', hoursLeft, message: 'Check in when you\'re ready' };
-    }
-    return null;
-  }, [currentStreak, isPaused, lastCheckIn]);
+  // No countdowns, no expiry pressure — at most one soft, optional nudge.
+  const checkedInToday = hasCheckedInToday(lastCheckIn);
+  const showGentleNudge = !isPaused && currentStreak > 0 && !checkedInToday;
 
   return (
     <Card className="p-3 sm:p-4">
@@ -123,78 +102,40 @@ export function StreakTracker({
         })}
       </div>
 
-      {/* Streak Warning Banner */}
-      {streakWarning && (
-        <div
-          className={`p-3 rounded-lg mb-3 flex items-center justify-between ${
-            streakWarning.level === 'critical'
-              ? 'bg-red-50 border border-red-200'
-              : streakWarning.level === 'warning'
-              ? 'bg-amber-50 border border-amber-200'
-              : 'bg-[#EEF4F8] border border-[#C8DDE8]'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            {streakWarning.level === 'critical' ? (
-              <AlertTriangle className="w-4 h-4 text-red-600 animate-pulse" />
-            ) : (
-              <Clock className="w-4 h-4 text-amber-600" />
-            )}
-            <div>
-              <p
-                className={`text-sm font-medium ${
-                  streakWarning.level === 'critical'
-                    ? 'text-red-700'
-                    : streakWarning.level === 'warning'
-                    ? 'text-amber-700'
-                    : 'text-blue-700'
-                }`}
-              >
-                {streakWarning.message}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {streakWarning.hoursLeft}h left today
-              </p>
-            </div>
-          </div>
-          {onQuickCheckIn && (
-            <button
-              onClick={onQuickCheckIn}
-              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
-                streakWarning.level === 'critical'
-                  ? 'bg-red-600 text-white hover:bg-red-700'
-                  : 'bg-amber-600 text-white hover:bg-amber-700'
-              }`}
-            >
-              Check in
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* Encouraging Message */}
+      {/* Encouraging Message — never a countdown, never red */}
       {isPaused ? (
         <div className="p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
           <p className="text-sm text-blue-700">
-            Taking a breather today. I'll keep things light.
+            Life happens — your streak is safe. I'll keep things light.
           </p>
         </div>
-      ) : hasCheckedInToday(lastCheckIn) ? (
+      ) : checkedInToday ? (
         <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
           <p className="text-sm text-green-700">
             You kept at it this week—small steps count.
           </p>
         </div>
-      ) : currentStreak > 0 && !streakWarning ? (
-        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-          <p className="text-sm text-green-700">
-            Great progress! Keep the momentum going.
-          </p>
+      ) : showGentleNudge ? (
+        <div className="p-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#2A7D99] flex-shrink-0" aria-hidden="true" />
+            <p className="text-sm text-[#3A4A57]">
+              A tiny moment today keeps your rhythm going.
+            </p>
+          </div>
+          {onQuickCheckIn && (
+            <button
+              onClick={onQuickCheckIn}
+              className="px-3 py-1.5 text-sm font-medium rounded-lg bg-[#2A7D99] text-white transition-colors flex-shrink-0"
+            >
+              Check in
+            </button>
+          )}
         </div>
       ) : (
         <div className="p-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg">
           <p className="text-sm text-[#5A6B7A]">
-            Start your streak today with a quick check-in.
+            Whenever you're ready — one small check-in starts your rhythm.
           </p>
         </div>
       )}
