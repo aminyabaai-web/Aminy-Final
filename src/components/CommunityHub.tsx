@@ -1665,7 +1665,6 @@ export function CommunityHub({
               exit={{ y: 40, opacity: 0 }}
               className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
               onClick={(e) => e.stopPropagation()}
-              role="dialog"
               aria-label={actionTarget.kind === 'post' ? 'Post options' : 'Comment options'}
             >
               <h2 className="text-base font-semibold text-[#132F43] dark:text-white">
@@ -1730,7 +1729,6 @@ export function CommunityHub({
               exit={{ y: 40, opacity: 0 }}
               className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
               onClick={(e) => e.stopPropagation()}
-              role="dialog"
               aria-label={`Report this ${reportTarget.kind}`}
             >
               <div className="flex items-start justify-between gap-2 mb-1">

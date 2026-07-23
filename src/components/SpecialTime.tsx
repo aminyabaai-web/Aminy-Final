@@ -144,6 +144,9 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
   const [note, setNote] = useState(todaysMoment?.note ?? '');
   const [savedFeeling, setSavedFeeling] = useState<Feeling | null>(todaysMoment?.feeling ?? null);
   const [savedNote, setSavedNote] = useState(todaysMoment?.note ?? '');
+  // True only once the moment has actually landed in the Wins Journal — the
+  // saved-state copy must never overclaim if the wins endpoint is unreachable.
+  const [winSynced, setWinSynced] = useState(todaysMoment?.winSynced === true);
 
   useEffect(() => {
     if (timerState !== 'running') return;
@@ -250,6 +253,7 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
         const ok = await syncToWins(record);
         if (ok) {
           writeJson(MOMENTS_KEY, [...moments, { ...record, winSynced: true }].slice(-90));
+          setWinSynced(true);
         }
       }
     }
@@ -517,7 +521,9 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
 
           {isSaved && savedFeeling !== 'not-today' && (
             <p className="text-sm text-[#5A6B7A] dark:text-slate-400 text-center mt-3">
-              It's in your Wins Journal now, with all the other good ones.
+              {winSynced
+                ? "It's in your Wins Journal now, with all the other good ones."
+                : 'Saved on this device — these little moments add up.'}
             </p>
           )}
         </section>
