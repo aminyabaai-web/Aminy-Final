@@ -2879,6 +2879,7 @@ export default function App() {
                 userData={{
                   parentName: userData.parentName,
                   childName: userData.childName,
+                  childAge: userData.childAge,
                 }}
                 userTier={effectiveUserTier}
                 userRole={userData.role || 'parent'}

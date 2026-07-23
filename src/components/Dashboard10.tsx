@@ -178,6 +178,7 @@ interface Dashboard10Props {
   userData: {
     parentName: string;
     childName: string;
+    childAge?: number;
     childId?: string;
     activeChildId?: string;
     pilotEligible?: boolean;
@@ -543,8 +544,12 @@ export function Dashboard10({
   const parentFirstName = userData.parentName?.trim();
 
   // Special Time — today's child-led play idea (read-only peek; the screen
-  // records the pick). Same deterministic idea the special-time screen opens.
-  const specialTimeIdea = useMemo(() => peekTodaysIdea(ageBandForAge(child.age)), [child.age]);
+  // records the pick). Prefer the App-level childAge so the teaser matches the
+  // special-time screen exactly (child.age falls back to 5 pre-profile-load).
+  const specialTimeIdea = useMemo(
+    () => peekTodaysIdea(ageBandForAge(userData.childAge ?? child.age)),
+    [userData.childAge, child.age]
+  );
 
   // SAFETY: Ensure upcomingEvents is always an array
   const safeUpcomingEvents = Array.isArray(dashboardData.upcomingEvents) ? dashboardData.upcomingEvents : [];
