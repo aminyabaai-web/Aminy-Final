@@ -2615,7 +2615,11 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                       />
                       <button
                         onClick={() => setAttachedImages(prev => prev.filter((_, i) => i !== idx))}
-                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-slate-800 text-white flex items-center justify-center"
+                        className="absolute rounded-full bg-slate-800 text-white flex items-center justify-center"
+                        // Inline position + size: `-top-1.5`/`-right-1.5` are NOT in
+                        // the precompiled CSS, and the mobile 44px tap-target rule
+                        // would otherwise balloon this badge over the whole thumb.
+                        style={{ top: '-7px', right: '-7px', width: '22px', height: '22px', minWidth: '22px', minHeight: '22px', boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }}
                         aria-label={`Remove attachment ${img.name}`}
                       >
                         <X className="w-3 h-3" />
