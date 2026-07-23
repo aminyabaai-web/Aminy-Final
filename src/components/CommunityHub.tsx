@@ -979,21 +979,6 @@ export function CommunityHub({
           <Badge className={POST_CATEGORIES.find(c => c.id === post.category)?.color || ''}>
             {POST_CATEGORIES.find(c => c.id === post.category)?.name}
           </Badge>
-          {post.authorId !== userId && (
-            <button
-              onClick={() => setActionTarget({
-                kind: 'post',
-                id: post.id,
-                authorId: post.authorId,
-                authorName: post.authorName,
-                content: `${post.title}\n${post.content}`,
-              })}
-              className="p-1.5 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-700 shrink-0"
-              aria-label={`More options for post by ${post.authorName}`}
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-          )}
         </div>
       </div>
 
@@ -1087,6 +1072,21 @@ export function CommunityHub({
           >
             <Bookmark className={`w-4 h-4 ${post.isBookmarked ? 'fill-current' : ''}`} />
           </button>
+          {post.authorId !== userId && (
+            <button
+              onClick={() => setActionTarget({
+                kind: 'post',
+                id: post.id,
+                authorId: post.authorId,
+                authorName: post.authorName,
+                content: `${post.title}\n${post.content}`,
+              })}
+              className="p-1.5 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-700"
+              aria-label={`More options for post by ${post.authorName}`}
+            >
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
     </Card>

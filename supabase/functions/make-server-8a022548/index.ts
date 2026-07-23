@@ -60,6 +60,10 @@ import {
   type TierType,
 } from "./auth-middleware.ts";
 import { handleAuthSendEmail } from "./auth-email-routes.ts";
+// Wins / conversation / notifications-subscribe / analytics / emotion /
+// privacy sub-routes. This mount was lost in an earlier refactor, silently
+// 404ing all 22 endpoints (incl. WinsJournal load/save) in production.
+import newRoutes from "./new-routes.tsx";
 
 const app = new Hono();
 
@@ -104,6 +108,10 @@ app.use(
 app.get("/make-server-8a022548/health", (c) => {
   return c.json({ status: "ok" });
 });
+
+// Mount the wins/conversation/notifications/analytics/emotion/privacy
+// sub-router under the same function prefix as every inline route above.
+app.route("/make-server-8a022548", newRoutes);
 
 // ============================================================================
 // AI PROVIDER UTILITIES - Support both OpenAI and Anthropic (Claude)
