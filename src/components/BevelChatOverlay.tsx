@@ -2410,8 +2410,12 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                                 key={ii}
                                 src={url}
                                 alt={`Attached ${ii + 1} of ${msg.imageUrls!.length}`}
+                                // Explicit dimensions defeat index.css's attr-less
+                                // img CLS min-height (100px) — CSS below still wins.
+                                width={160}
+                                height={110}
                                 className="rounded-lg object-cover"
-                                style={{ width: 'calc(50% - 2px)', maxHeight: '120px' }}
+                                style={{ width: 'calc(50% - 2px)', height: '110px' }}
                               />
                             ))}
                           </div>
@@ -2597,12 +2601,16 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
             >
               {/* Image preview strip — up to 4 images, per-item remove */}
               {attachedImages.length > 0 && (
-                <div className="mb-2 flex items-center gap-2 px-1 overflow-x-auto scrollbar-hide">
+                <div className="mb-2 flex items-center gap-2 px-1 overflow-x-auto scrollbar-hide" style={{ paddingTop: '8px', paddingRight: '8px' }}>
                   {attachedImages.map((img, idx) => (
                     <div key={`${img.name}-${idx}`} className="relative shrink-0">
                       <img
                         src={img.dataUrl}
                         alt={`Attachment preview: ${img.name}`}
+                        // Explicit dimensions — index.css gives attr-less imgs a
+                        // 100px CLS min-height that would override h-14.
+                        width={56}
+                        height={56}
                         className="w-14 h-14 rounded-xl object-cover border border-[#E8E4DF]"
                       />
                       <button

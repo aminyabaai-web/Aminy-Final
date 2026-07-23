@@ -727,8 +727,9 @@ function buildRelationshipBlock(context: UserContext): string {
 
   if (lines.length === 0) return '';
 
+  const pairLabel = context.childName ? `parent-${context.childName}` : 'parent-child';
   return [
-    `RELATIONSHIP (the parent-${name} dyad — use this to strengthen their connection; frame ideas as gifts, never as tasks or therapy):`,
+    `RELATIONSHIP (this ${pairLabel} pair — use this to strengthen their connection; frame ideas as gifts, never as tasks or therapy):`,
     ...lines.slice(0, 13),
     '- Suggest child-led, no-agenda moments that fit these signals. Never score or clinicalize them.',
   ].join('\n');
