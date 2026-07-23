@@ -19,6 +19,28 @@
 --     where blocker != auth.uid(), so the check also needs SECURITY DEFINER.
 --   * Connection rows are visible to the two parties only.
 
+-- ── family_connect_profiles ──────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS family_connect_profiles (
+  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  opted_in BOOLEAN NOT NULL DEFAULT true,
+  -- First name only — the client enforces this on save; never a full name.
+  display_name TEXT NOT NULL,
+  -- Location is state-level only, by design. Never city/zip/coordinates.
+  state TEXT,
+  -- Age band like '4-6' — never an exact age or date of birth.
+  child_age_band TEXT,
+  focus_areas TEXT[] NOT NULL DEFAULT '{}',
+  interests TEXT[] NOT NULL DEFAULT '{}',
+  bio_line TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_family_connect_profiles_opted_in
+  ON family_connect_profiles(opted_in) WHERE opted_in;
+
+ALTER TABLE family_connect_profiles ENABLE ROW LEVEL SECURITY;
+
 -- ── Helper: is this user opted in to Family Connect? ─────────────────────────
 -- SECURITY DEFINER to avoid RLS self-recursion on family_connect_profiles.
 -- Hardened: only answers for the calling user (policies only ever ask about
@@ -59,27 +81,6 @@ REVOKE EXECUTE ON FUNCTION family_connect_blocked_either_way(UUID, UUID) FROM PU
 GRANT EXECUTE ON FUNCTION family_connect_opted_in(UUID) TO authenticated;
 GRANT EXECUTE ON FUNCTION family_connect_blocked_either_way(UUID, UUID) TO authenticated;
 
--- ── family_connect_profiles ──────────────────────────────────────────────────
-CREATE TABLE IF NOT EXISTS family_connect_profiles (
-  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  opted_in BOOLEAN NOT NULL DEFAULT true,
-  -- First name only — the client enforces this on save; never a full name.
-  display_name TEXT NOT NULL,
-  -- Location is state-level only, by design. Never city/zip/coordinates.
-  state TEXT,
-  -- Age band like '4-6' — never an exact age or date of birth.
-  child_age_band TEXT,
-  focus_areas TEXT[] NOT NULL DEFAULT '{}',
-  interests TEXT[] NOT NULL DEFAULT '{}',
-  bio_line TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_family_connect_profiles_opted_in
-  ON family_connect_profiles(opted_in) WHERE opted_in;
-
-ALTER TABLE family_connect_profiles ENABLE ROW LEVEL SECURITY;
 
 -- Readable by the owner, and by OTHER opted-in users (mutual visibility:
 -- you must be discoverable to discover), unless a block exists either way.

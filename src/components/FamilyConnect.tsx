@@ -976,7 +976,6 @@ export function FamilyConnect({
               exit={{ y: 40, opacity: 0 }}
               className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
               onClick={e => e.stopPropagation()}
-              role="dialog"
               aria-label={`Say hello to ${helloTarget.displayName}`}
             >
               <div className="flex items-start justify-between gap-2 mb-1">
@@ -1029,7 +1028,6 @@ export function FamilyConnect({
               exit={{ y: 40, opacity: 0 }}
               className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
               onClick={e => e.stopPropagation()}
-              role="dialog"
               aria-label={`Options for ${actionTarget.name}`}
             >
               <button
@@ -1087,7 +1085,6 @@ export function FamilyConnect({
               exit={{ y: 40, opacity: 0 }}
               className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
               onClick={e => e.stopPropagation()}
-              role="dialog"
               aria-label="Report this profile"
             >
               <div className="flex items-start justify-between gap-2 mb-1">
