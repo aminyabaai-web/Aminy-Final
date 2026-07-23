@@ -13,7 +13,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Users, Calendar, Clock, DollarSign, Plus, X, CheckCircle,
-  AlertCircle, Trash2, Edit2, Eye, ChevronDown, ChevronUp, Zap
+  AlertCircle, Trash2, Edit2, Eye, ChevronDown, ChevronUp, Zap,
+  ShieldCheck, Blocks, PawPrint, TrainFront, Palette, Music,
+  Bone, Puzzle, Leaf, Rocket, type LucideIcon,
 } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -22,6 +24,35 @@ import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { toast } from 'sonner';
 import { supabase } from '../../utils/supabase/client';
+import {
+  FAMILY_HANGOUT_CATEGORY,
+  HANGOUT_MAX_FAMILIES,
+  HANGOUT_MIN_FAMILIES,
+  HANGOUT_DURATION_MINUTES,
+  HANGOUT_DEFAULT_PRICE_DOLLARS,
+  HANGOUT_MIN_PRICE_DOLLARS,
+  HANGOUT_INTERESTS,
+  HANGOUT_GROUND_RULES,
+  HANGOUT_SAFETY_BADGE,
+  getHangoutInterest,
+  encodeHangoutDescription,
+  buildHangoutTopic,
+  buildHangoutDescriptionTemplate,
+  isFamilyHangout,
+} from '../../lib/family-hangouts';
+
+/** Lucide icon per hangout interest (provider surface = Lucide, never emoji). */
+const HANGOUT_INTEREST_ICONS: Record<string, LucideIcon> = {
+  building: Blocks,
+  animals: PawPrint,
+  trains: TrainFront,
+  drawing: Palette,
+  music: Music,
+  dinosaurs: Bone,
+  games: Puzzle,
+  nature: Leaf,
+  space: Rocket,
+};
 
 const TOPIC_CATEGORIES = [
   { id: 'meltdowns', label: 'Meltdowns & Big Emotions', emoji: '🌊' },
@@ -88,6 +119,53 @@ export function GroupSessionCreator({
   // Cohorts: multi-week BCBA-moderated programs (community cold-start play)
   const [format, setFormat] = useState<'single' | 'cohort'>('single');
   const [sessionCount, setSessionCount] = useState(1);
+  // Family Hangouts: interest-themed kids' hangouts on the same rails —
+  // facilitated, parents present, small group. Kind rides topic_category.
+  const [sessionKind, setSessionKind] = useState<'clinical' | 'hangout'>('clinical');
+  const [hangoutInterest, setHangoutInterest] = useState(HANGOUT_INTERESTS[0].id);
+
+  const applyHangoutInterest = (interestId: string) => {
+    setHangoutInterest(interestId);
+    const interest = getHangoutInterest(interestId);
+    if (interest) {
+      // Prefill is a starting point — the facilitator can edit both fields.
+      setTopic(buildHangoutTopic(interest));
+      setDescription(buildHangoutDescriptionTemplate(interest));
+    }
+  };
+
+  const selectHangoutTemplate = () => {
+    setSessionKind('hangout');
+    setFormat('single');
+    setSessionCount(1);
+    setDurationMinutes(HANGOUT_DURATION_MINUTES);
+    setMaxFamilies(HANGOUT_MAX_FAMILIES);
+    setMinFamilies(HANGOUT_MIN_FAMILIES);
+    setPricePerFamily(HANGOUT_DEFAULT_PRICE_DOLLARS);
+    setCategory('');
+    applyHangoutInterest(hangoutInterest);
+  };
+
+  const selectClinicalKind = (nextFormat: 'single' | 'cohort') => {
+    if (sessionKind === 'hangout') {
+      // Leaving the hangout template — clear its prefilled copy
+      setTopic('');
+      setDescription('');
+    }
+    setSessionKind('clinical');
+    setFormat(nextFormat);
+    setDurationMinutes(60);
+    setMinFamilies(DEFAULT_MIN_FAMILIES);
+    if (nextFormat === 'cohort') {
+      setSessionCount(6);
+      setMaxFamilies(10);
+      setPricePerFamily(199);
+    } else {
+      setSessionCount(1);
+      setMaxFamilies(DEFAULT_MAX_FAMILIES);
+      setPricePerFamily(50);
+    }
+  };
 
   const providerEarnsPerSession = Math.round(pricePerFamily * (1 - PLATFORM_FEE_PCT)) * maxFamilies;
   const guaranteedMin = Math.round(pricePerFamily * (1 - PLATFORM_FEE_PCT)) * minFamilies;
@@ -114,6 +192,10 @@ export function GroupSessionCreator({
       toast.error('Minimum families cannot exceed maximum families.');
       return;
     }
+    if (sessionKind === 'hangout' && maxFamilies > HANGOUT_MAX_FAMILIES) {
+      toast.error(`Family Hangouts stay small — up to ${HANGOUT_MAX_FAMILIES} families.`);
+      return;
+    }
     setIsSaving(true);
     try {
       const sessionDatetime = new Date(`${sessionDate}T${sessionTime}`).toISOString();
@@ -125,8 +207,10 @@ export function GroupSessionCreator({
         provider_credentials: providerCredentials || '',
         provider_photo_url: providerPhotoUrl || null,
         topic: topic.trim(),
-        topic_category: category || null,
-        description: description.trim() || null,
+        topic_category: sessionKind === 'hangout' ? FAMILY_HANGOUT_CATEGORY : (category || null),
+        description: sessionKind === 'hangout'
+          ? encodeHangoutDescription(hangoutInterest, description)
+          : (description.trim() || null),
         session_date: sessionDatetime,
         duration_minutes: durationMinutes,
         price_per_family_cents: pricePerFamily * 100,
@@ -171,6 +255,7 @@ export function GroupSessionCreator({
     setSessionDate(''); setSessionTime('');
     setDurationMinutes(60); setPricePerFamily(50);
     setFormat('single'); setSessionCount(1);
+    setSessionKind('clinical'); setHangoutInterest(HANGOUT_INTERESTS[0].id);
     setMaxFamilies(DEFAULT_MAX_FAMILIES); setMinFamilies(DEFAULT_MIN_FAMILIES);
   };
 
@@ -233,9 +318,10 @@ export function GroupSessionCreator({
               <label className="text-sm font-medium text-[#132F43] dark:text-white mb-2 block">Format</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
-                  onClick={() => { setFormat('single'); setSessionCount(1); }}
+                  onClick={() => selectClinicalKind('single')}
+                  aria-pressed={sessionKind === 'clinical' && format === 'single'}
                   className="text-left px-3 py-2.5 rounded-xl border transition-all"
-                  style={format === 'single'
+                  style={sessionKind === 'clinical' && format === 'single'
                     ? { background: '#2A7D9920', borderColor: '#2A7D99' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
@@ -243,14 +329,31 @@ export function GroupSessionCreator({
                   <p className="text-sm text-[#5A6B7A]">One-off office hours, up to 4 families</p>
                 </button>
                 <button
-                  onClick={() => { setFormat('cohort'); setSessionCount(6); setMaxFamilies(10); setPricePerFamily(199); }}
+                  onClick={() => selectClinicalKind('cohort')}
+                  aria-pressed={sessionKind === 'clinical' && format === 'cohort'}
                   className="text-left px-3 py-2.5 rounded-xl border transition-all"
-                  style={format === 'cohort'
+                  style={sessionKind === 'clinical' && format === 'cohort'
                     ? { background: '#2A7D9920', borderColor: '#2A7D99' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
                   <p className="text-sm font-semibold text-[#132F43]">Cohort program</p>
                   <p className="text-sm text-[#5A6B7A]">Weekly group, 8–12 families, you moderate</p>
+                </button>
+                <button
+                  onClick={selectHangoutTemplate}
+                  aria-pressed={sessionKind === 'hangout'}
+                  className="col-span-2 text-left px-3 py-2.5 rounded-xl border transition-all"
+                  style={sessionKind === 'hangout'
+                    ? { background: '#2A7D9920', borderColor: '#2A7D99' }
+                    : { background: 'white', borderColor: '#E8E4DF' }}
+                >
+                  <p className="text-sm font-semibold text-[#132F43] flex items-center gap-1.5">
+                    <ShieldCheck className="h-4 w-4 text-[#2A7D99]" aria-hidden="true" />
+                    Family Hangout
+                  </p>
+                  <p className="text-sm text-[#5A6B7A]">
+                    30-min kids' hangout around a shared interest — you facilitate, parents stay present, up to {HANGOUT_MAX_FAMILIES} families
+                  </p>
                 </button>
               </div>
               {format === 'cohort' && (
@@ -282,7 +385,57 @@ export function GroupSessionCreator({
               />
             </div>
 
+            {/* Hangout interest theme picker (replaces clinical categories) */}
+            {sessionKind === 'hangout' && (
+              <div>
+                <label className="text-sm font-medium text-[#132F43] dark:text-white mb-2 block">
+                  Interest theme
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {HANGOUT_INTERESTS.map(interest => {
+                    const InterestIcon = HANGOUT_INTEREST_ICONS[interest.id] ?? Puzzle;
+                    const active = hangoutInterest === interest.id;
+                    return (
+                      <button
+                        key={interest.id}
+                        onClick={() => applyHangoutInterest(interest.id)}
+                        aria-pressed={active}
+                        aria-label={`Interest theme: ${interest.label}`}
+                        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-all"
+                        style={active
+                          ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
+                          : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
+                      >
+                        <InterestIcon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                        {interest.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="text-sm text-[#5A6B7A] mt-2">
+                  Picking a theme prefills the topic and description — edit anything.
+                </p>
+                <div className="mt-3 p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF]">
+                  <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-1.5">
+                    Ground rules on every listing
+                  </p>
+                  <ul className="space-y-1">
+                    {HANGOUT_GROUND_RULES.map(rule => (
+                      <li key={rule} className="flex items-start gap-1.5 text-sm text-[#3A4A57]">
+                        <CheckCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-[#2A7D99]" aria-hidden="true" />
+                        {rule}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-sm text-[#5A6B7A] mt-2">
+                    Families see "{HANGOUT_SAFETY_BADGE}" on the card. Booking is always the parent's action.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Category chips */}
+            {sessionKind === 'clinical' && (
             <div>
               <label className="text-sm font-medium text-[#132F43] dark:text-white mb-2 block">Category</label>
               <div className="flex flex-wrap gap-2">
@@ -300,11 +453,14 @@ export function GroupSessionCreator({
                 ))}
               </div>
             </div>
+            )}
 
             {/* Description */}
             <div>
               <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">
-                What will families learn? (shown in marketplace)
+                {sessionKind === 'hangout'
+                  ? "What's the hangout like? (shown to families)"
+                  : 'What will families learn? (shown in marketplace)'}
               </label>
               <Textarea
                 value={description}
@@ -345,10 +501,10 @@ export function GroupSessionCreator({
                 <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">Price/family ($)</label>
                 <Input
                   type="number"
-                  min={25}
+                  min={sessionKind === 'hangout' ? HANGOUT_MIN_PRICE_DOLLARS : 25}
                   max={150}
                   value={pricePerFamily}
-                  onChange={e => setPricePerFamily(parseInt(e.target.value) || 50)}
+                  onChange={e => setPricePerFamily(parseInt(e.target.value) || (sessionKind === 'hangout' ? HANGOUT_DEFAULT_PRICE_DOLLARS : 50))}
                 />
               </div>
               <div>
@@ -356,9 +512,12 @@ export function GroupSessionCreator({
                 <Input
                   type="number"
                   min={2}
-                  max={8}
+                  max={sessionKind === 'hangout' ? HANGOUT_MAX_FAMILIES : 8}
                   value={maxFamilies}
-                  onChange={e => setMaxFamilies(parseInt(e.target.value) || 4)}
+                  onChange={e => {
+                    const raw = parseInt(e.target.value) || (sessionKind === 'hangout' ? HANGOUT_MAX_FAMILIES : 4);
+                    setMaxFamilies(sessionKind === 'hangout' ? Math.min(raw, HANGOUT_MAX_FAMILIES) : raw);
+                  }}
                 />
               </div>
               <div>
@@ -469,7 +628,13 @@ function GroupSessionCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             {categoryInfo && <span className="text-lg">{categoryInfo.emoji}</span>}
+            {isFamilyHangout(session) && (
+              <ShieldCheck className="h-4 w-4 shrink-0 text-[#2A7D99]" aria-label="Family Hangout" />
+            )}
             <p className="font-semibold text-[#132F43] dark:text-white truncate">{session.topic}</p>
+            {isFamilyHangout(session) && (
+              <Badge className="bg-[#2A7D99]/10 text-[#2A7D99] shrink-0">Hangout</Badge>
+            )}
             <Badge className={
               session.status === 'open' ? 'bg-emerald-100 text-emerald-700' :
               session.status === 'confirmed' ? 'bg-blue-100 text-blue-700' :

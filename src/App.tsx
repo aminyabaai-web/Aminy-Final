@@ -621,6 +621,11 @@ const CommunityHub = lazy(() =>
     default: m.CommunityHub,
   })),
 );
+const FamilyConnect = lazy(() =>
+  import("./components/FamilyConnect").then((m) => ({
+    default: m.FamilyConnect,
+  })),
+);
 const B2BPartnerPortal = lazy(() =>
   import("./components/B2BPartnerPortal").then((m) => ({
     default: m.B2BPartnerPortal,
@@ -973,6 +978,7 @@ const LOADING_MESSAGES: Record<string, string> = {
   'special-time': 'Finding ten minutes of their world...',
   progress: 'Gathering how far you’ve come...',
   'impact-metrics': 'Compiling impact metrics...',
+  'family-connect': 'Finding families like yours...',
   onboarding: 'Getting things ready for you...',
 };
 
@@ -1089,6 +1095,7 @@ type AppScreen =
   | "impact-metrics" // Admin/investor impact metrics dashboard
   | "store" // Resource store/marketplace
   | "community-hub" // Parent community hub
+  | "family-connect" // Parent-mediated family matching — "families who get it"
   | "provider-analytics" // Provider analytics dashboard
   | "evv-dashboard" // EVV (Electronic Visit Verification) for Medicaid compliance
   | "claims-dashboard" // Costs & Coverage for parents
@@ -2925,7 +2932,7 @@ export default function App() {
                     "settings", "calm-tools", "incident-log", "care-plan", "resources",
                     "community", "profile", "benefits", "junior", "my-appointments",
                     "conversational-booking", "messages", "access-requests", "store",
-                    "community-hub", "provider-analytics", "weekly-insights", "analytics-charts",
+                    "community-hub", "family-connect", "provider-analytics", "weekly-insights", "analytics-charts",
                     "wins-journal", "impact-metrics", "special-time", "progress",
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
@@ -3735,6 +3742,20 @@ export default function App() {
                 userName={userData.parentName || 'Parent'}
                 userId={userData.userId || ''}
                 onUpgrade={() => navigateToScreen("paywall")}
+                onNavigate={(s) => navigateToScreen(s as AppScreen)}
+              />
+            </Suspense>
+          );
+
+        case "family-connect":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <FamilyConnect
+                userId={userData.userId || userData.id || ''}
+                userName={userData.parentName || undefined}
+                userState={userData.state || undefined}
+                childAge={userData.childAge || undefined}
+                onBack={() => navigateToScreen("community-hub")}
                 onNavigate={(s) => navigateToScreen(s as AppScreen)}
               />
             </Suspense>

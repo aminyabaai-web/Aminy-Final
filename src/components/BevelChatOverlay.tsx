@@ -722,7 +722,7 @@ export function BevelChatOverlay({
         .replace(/\n[\s\S]*$/, '')
         .trim();
       if (!title) return;
-      title = title.split(/\s+/).slice(0, 6).join(' ').slice(0, 60);
+      title = title.split(/\s+/).slice(0, 6).join(' ').replace(/[.,;:!]+$/, '').slice(0, 60);
       convTitlesRef.current[convId] = title;
       // Update the drawer list + local session record if it exists already.
       setChatSessions(prev => prev.map(s => (s.id === convId ? { ...s, title } : s)));
