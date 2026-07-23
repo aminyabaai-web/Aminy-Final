@@ -9,15 +9,13 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
+import { FocusTrap } from './FocusTrap';
 import {
   Flame,
   Trophy,
   Star,
-  Heart,
   Sparkles,
-  PartyPopper,
-  Calendar,
   TrendingUp,
   X,
 } from 'lucide-react';
@@ -36,36 +34,45 @@ interface StreakCelebrationProps {
 
 const milestoneMessages = {
   first: {
-    title: "You're officially on a streak! 🔥",
-    subtitle: "Day 2 - You came back! That's huge.",
-    message: "Consistency is the secret sauce. You're building something beautiful.",
+    title: "Day one — you showed up 🌱",
+    subtitle: "The first step is the biggest one",
+    message: "Showing up today is the whole win. Small steps, big calm — you're building something beautiful.",
     emoji: '🌱',
   },
   week: {
-    title: "One week strong! 🎯",
+    title: "One week strong 🌟",
     subtitle: "7 days of showing up",
-    message: "A full week! You're proving that you're committed to this journey. Keep it going!",
+    message: "A full week of small moments, one day at a time. That kind of consistency is what real change is made of.",
     emoji: '🌟',
   },
   month: {
-    title: "30 days! You're amazing! 🏆",
-    subtitle: "A whole month of dedication",
-    message: "One month of consistent engagement. You're building lasting habits that will make a real difference.",
+    title: "30 days — you're amazing 🏆",
+    subtitle: "A whole month of showing up",
+    message: "One gentle month, day by day. You're building habits that will make a real difference for your family.",
     emoji: '🎖️',
   },
   hundred: {
-    title: "100 DAYS! Legend status! 👑",
-    subtitle: "Triple digits!",
-    message: "100 days. You're not just a user, you're a champion. This dedication will change everything.",
+    title: "100 days! 👑",
+    subtitle: "Triple digits of showing up",
+    message: "100 days of showing up for your family. That kind of dedication changes everything.",
     emoji: '💎',
   },
   year: {
-    title: "365 days! Incredible! 🎊",
+    title: "365 days — incredible 🎊",
     subtitle: "A full year of growth",
-    message: "A whole year of consistent engagement. You've built something truly special. We're honored to be part of your journey.",
+    message: "A whole year of showing up, one day at a time. You've built something truly special, and we're honored to be part of it.",
     emoji: '🏅',
   },
 };
+
+/** Confetti is decoration — never fire it when the user asks for less motion. */
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return true;
+  return (
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    document.documentElement.classList.contains('reduced-motion')
+  );
+}
 
 export function StreakCelebration({
   streakDays,
@@ -81,12 +88,13 @@ export function StreakCelebration({
       setShowConfetti(true);
       triggerHaptic('success');
 
-      // Fire confetti for milestones
-      if (typeof window !== 'undefined' && confetti) {
+      // Fire confetti for milestones (skipped under prefers-reduced-motion)
+      if (typeof window !== 'undefined' && confetti && !prefersReducedMotion()) {
         const duration = milestone === 'hundred' || milestone === 'year' ? 3000 : 1500;
         const end = Date.now() + duration;
 
-        const colors = ['#2A7D99', '#90BE6D', '#F9C74F', '#F8961E', '#F94144'];
+        // Brand teal + earned amber/green — no reds (celebration, not alarm)
+        const colors = ['#2A7D99', '#6AA9BC', '#90BE6D', '#F6A623', '#F9C74F'];
 
         (function frame() {
           confetti({
@@ -125,40 +133,46 @@ export function StreakCelebration({
 
   const StreakIcon = getStreakIcon();
 
-  // Get streak color
-  const getStreakColor = () => {
-    if (streakDays >= 100) return 'from-yellow-400 to-orange-500';
-    if (streakDays >= 30) return 'from-purple-400 to-pink-500';
-    if (streakDays >= 7) return 'from-accent to-teal-400';
-    return 'from-orange-400 to-red-500';
-  };
+  // Header gradient — teal is the everyday accent; warm amber is reserved
+  // for the big earned milestones (30/100/365 days). Inline styles because
+  // Tailwind here is precompiled (arbitrary gradient classes may not exist).
+  const headerGradient =
+    streakDays >= 30
+      ? 'linear-gradient(135deg, #F6A623, #E07A5F)'
+      : 'linear-gradient(135deg, #2A7D99, #4795AE)';
+
+  // NOTE: plain conditional render (no AnimatePresence exit) — the app-wide
+  // WAAPI opacity workaround can keep exit animations from ever completing,
+  // which would leave the backdrop stuck on screen after dismissal.
+  if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+    <FocusTrap active onEscape={onClose}>
+      {/* role="dialog" lives on the backdrop — the global modal CSS pins
+          [role="dialog"] to fixed inset-0, matching this element. */}
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={milestoneData ? milestoneData.title : `${streakDays} day streak`}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
           onClick={onClose}
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: 'spring', damping: 20 }}
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden"
           >
             {/* Header with gradient */}
-            <div className={cn(
-              "relative p-8 text-center text-white bg-gradient-to-br",
-              getStreakColor()
-            )}>
+            <div
+              className="relative p-8 text-center text-white"
+              style={{ background: headerGradient }}
+            >
               {/* Close button */}
               <button
                 onClick={onClose}
+                aria-label="Close celebration"
                 className="absolute top-3 right-3 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -227,7 +241,7 @@ export function StreakCelebration({
                     transition={{ delay: 0.5 }}
                     className="text-muted-foreground mb-4"
                   >
-                    You're making great progress with {childName}. Every day counts!
+                    You're making great progress with {childName}. Small steps count.
                   </motion.p>
                 </>
               )}
@@ -270,9 +284,8 @@ export function StreakCelebration({
               </motion.div>
             </div>
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </div>
+    </FocusTrap>
   );
 }
 

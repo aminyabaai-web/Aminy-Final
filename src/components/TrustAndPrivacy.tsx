@@ -17,7 +17,8 @@ import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 import { toast } from 'sonner';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { projectId } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 interface PrivacySettings {
   enhancedPrivacyMode: boolean; // HIPAA-Lite
@@ -51,11 +52,19 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
 
   async function loadPrivacySettings() {
     try {
+      // Server derives the user from the session JWT — anon key gets a 401.
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        // Not signed in: keep the privacy-first defaults already in state.
+        setLoading(false);
+        return;
+      }
       const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/privacy/settings?userId=${userId}`,
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/privacy/settings`,
         {
           headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
         }
       );
@@ -72,11 +81,14 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
 
   async function loadAuditLogs() {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return; // Not signed in — no server-side audit log to show.
       const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/privacy/audit-log?userId=${userId}`,
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/privacy/audit-log`,
         {
           headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
         }
       );
@@ -95,15 +107,22 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
     setSettings(newSettings);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error('Please sign in to update settings');
+        setSettings(settings); // Revert
+        return;
+      }
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/privacy/update`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, settings: newSettings }),
+          body: JSON.stringify({ settings: newSettings }),
         }
       );
 
@@ -127,16 +146,22 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
   async function exportUserData() {
     try {
       toast.info('Preparing your data export...');
-      
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error('Please sign in to export your data');
+        return;
+      }
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/privacy/export`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId }),
         }
       );
 
@@ -163,15 +188,21 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
 
   async function deleteUserData() {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error('Please sign in to delete your data');
+        return;
+      }
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/privacy/delete`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId }),
         }
       );
 

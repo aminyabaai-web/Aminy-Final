@@ -29,6 +29,7 @@ export const RESOURCE_CATEGORIES = [
   { id: 'all', label: 'All', emoji: '✨' },
   { id: 'meltdowns', label: 'Meltdowns', emoji: '🌊' },
   { id: 'sleep', label: 'Sleep', emoji: '😴' },
+  { id: 'connection', label: 'Connection', emoji: '💛' },
   { id: 'school', label: 'School & IEP plans', emoji: '🏫' },
   { id: 'transitions', label: 'Transitions', emoji: '🔄' },
   { id: 'feeding', label: 'Feeding', emoji: '🍴' },
@@ -1149,6 +1150,330 @@ These are signals to get support — not evidence of a bad sibling relationship.
     relatedQuestions: ['How do I explain autism to my other kids?', 'My other child says it is not fair — how do I respond?'],
     relatedGroupTopics: ['family', 'support'],
   },
+
+  // ── CONNECTION ────────────────────────────────────────────────────────────
+  // The "enter their world" track: child-led play, joy, adjustment, repair.
+  // Deliberately non-clinical. All free — connection is never paywalled.
+  {
+    id: 'enter-their-world',
+    title: 'Enter Their World',
+    subtitle: 'The single most powerful thing you can do costs nothing and takes ten minutes',
+    category: 'connection',
+    tags: ['play', 'connection', 'child-led', 'bonding', 'joining'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Get down on the floor. That's the whole first step.
+
+Most of the day, we're asking our kids to come into our world — our schedules, our words, our rules about what a spoon is for. Entering their world flips it: for a little while, you go to where they already are, and you stay there without trying to change anything.
+
+**What it looks like**
+Your child is lining up cars. You sit down nearby — close, not looming — and you line up a few cars too. Not better. Not "look, mine make a road!" Just alongside. Your child is spinning a lid. You find a lid and spin it. They're flipping through the same book for the hundredth time. You settle in next to them and look at the pages they look at.
+
+That's it. No agenda hiding underneath.
+
+**The hard part: not directing**
+The urge to add something is enormous. To ask a question, sneak in a color name, tilt the play toward something that looks more productive. Every one of those moves — however loving — sends the same quiet message: *what you're doing isn't quite right yet.*
+
+When you join without steering, the message flips: *what you're doing is interesting. You are interesting. I want to be where you are.* Kids feel that difference long before they can name it.
+
+**What to do instead of directing**
+• Copy what they're doing, a step behind them
+• Say what you see, sparingly: "The blue one's next." Then quiet again.
+• Let silences sit. Shared silence is still shared.
+• If they hand you something, take it. If they take it back, let it go.
+• If they move away, don't chase. Being available beats being close.
+
+**How you'll know it's working**
+Not on day one. But somewhere in the first week or two, most parents see a glance — the child checks where you are, or pauses so you can take your turn, or brings the game to you. That glance is the beginning of something you cannot get by asking for it.
+
+**Why it matters more for our kids**
+A child who spends hours a week being taught, prompted, and corrected — however kindly — needs at least one relationship where nothing is being fixed. You're the best candidate. Therapists rotate. You're the constant.
+
+**Start tonight**
+Ten minutes. Phone in another room. Sit down where they are and do what they do. If it feels awkward, you're doing it right — it gets less awkward, and then it becomes the part of the day you both wait for.`,
+    relatedQuestions: ['How do I play with my child when he ignores me?', 'She only wants to do the same thing over and over — should I join or redirect?'],
+    relatedGroupTopics: ['family', 'support'],
+  },
+  {
+    id: 'ten-minutes-special-time',
+    title: 'Ten Minutes That Change Everything',
+    subtitle: 'A daily pocket of time where your child is in charge and nothing is being worked on',
+    category: 'connection',
+    tags: ['special time', 'play', 'routine', 'connection', 'child-led'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Families who do this consistently describe the same thing: fewer battles, easier bedtimes, a child who seeks them out more. The practice is almost embarrassingly simple. Ten minutes a day that belong entirely to your child.
+
+**The rules (there are only five)**
+1. **They pick.** Whatever they choose — cars, water, the same video game level — is the right choice, as long as it's safe.
+2. **You follow.** Join in, copy, hand things over when asked. No steering, no upgrading the game.
+3. **No questions, no teaching, no correcting.** For ten minutes, nothing is a lesson.
+4. **No phone.** They can tell when half of you is elsewhere. Ten fully-present minutes beat an hour of divided ones.
+5. **It always happens.** This is the one that changes everything — see below.
+
+**Never take it away**
+Whatever the day held — the hitting, the refusal, the field trip that fell apart — special time still happens. The moment it becomes something a child can lose, it stops being proof that your love is unconditional and becomes one more thing to earn. Consequences can live elsewhere in the day. This slot is untouchable.
+
+**Small is the point**
+Ten minutes sounds too little to matter. It isn't. What builds trust isn't the size of the window — it's the certainty of it. A child who knows that every day contains ten minutes where they are enough, exactly as they are, carries that certainty into the other 23 hours and 50 minutes.
+
+**Name it and keep the ritual**
+Give it a name — "our time," "floor time with Dad," whatever fits your family. Announce the start and the end the same way every day. A predictable beginning and ending makes the middle feel safe, and makes the end survivable.
+
+**If your child ignores you at first**
+Stay. Sit nearby, play in parallel, narrate a little ("the tower's getting tall"), and let them come to you on their timeline. Being reliably present without demands is the whole intervention. Some kids take days to test whether you really mean it. Pass the test.
+
+**If you miss a day**
+Say so, simply, and do it the next day. "We missed our time yesterday. Tonight for sure." Repair beats perfection — here and everywhere.
+
+**What parents notice**
+The first change usually isn't in the child. It's in you: ten minutes a day of enjoying your child — not managing, not coaching, just enjoying — quietly refills something the rest of the week drains. That refill is not a luxury. It's what the hard days run on.`,
+    relatedQuestions: ['What is special time and how do I start?', 'Should special time still happen after a bad day?'],
+    relatedGroupTopics: ['family', 'routines'],
+  },
+  {
+    id: 'play-doesnt-look-like-play',
+    title: 'When Play Doesn\'t Look Like Play',
+    subtitle: 'Lining up toys, spinning wheels, repeating scripts — it counts, and it\'s an invitation',
+    category: 'connection',
+    tags: ['play', 'stimming', 'scripts', 'lining up', 'acceptance', 'connection'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Somewhere there's a picture in your head of what play should look like — tea parties, pretend kitchens, two kids sharing a story. And then there's your actual child: forty cars in a perfect line, a wheel spun close to the eyes, the same movie scene recited beat for beat.
+
+Here's the reframe that changes everything: that IS play. Real play, doing real work.
+
+**What "unusual" play is actually doing**
+• **Lining things up** builds order in a world that often feels random. Watch the precision — that's a mind arranging chaos into something it can trust.
+• **Spinning, flipping, watching things move** is sensory joy. The visual system is getting exactly the input it's asking for. Adults do versions of this too; we call it a fireplace or ocean waves.
+• **Repeating the same scene or script** is mastery and comfort at once. Knowing every beat of the story means, for once, nothing is unpredictable.
+• **Doing it again and again** is how all children learn — ours just repeat longer and deeper. Repetition isn't stuck. It's thorough.
+
+**The trap of "appropriate play"**
+Parents are often told to redirect this play toward something more typical. Be careful with that advice. A child steered away from their play learns their instincts are wrong — and the play usually continues anyway, just privately, minus you. The goal isn't to replace their play with better play. It's to be welcome inside the play that already exists.
+
+**How to get invited in**
+1. Watch first. Really watch — what exactly is the delicious part? The click of cars touching? The moment the wheel blurs?
+2. Join at the edge. Add a car to the end of the line, gently. Spin your own lid nearby.
+3. If they undo your contribution, that's feedback, not rejection. Watch more, try smaller.
+4. After you're welcome — days, maybe weeks — you can add one tiny variation and see if it's accepted. If not, back to joining. Their game, their rules.
+
+**About the grief hiding in this**
+Many parents carry quiet sadness about the play they imagined — the catch in the yard, the pretend restaurant. That sadness is allowed; you don't have to pretend it away. But keep looking at what's actually in front of you. A child deep in the thing they love, who lets you sit inside it with them, is not a lesser version of play. It's intimacy on their terms — and their terms are the ones that count.
+
+**One thing to write down**
+Tonight, note the thing your child played and the moment they seemed most lit up. That list — their genuine loves — is worth more to your relationship than any toy the catalog says is right for their age.`,
+    relatedQuestions: ['Is lining up toys something I should stop?', 'My son only quotes movies, is that talking?'],
+    relatedGroupTopics: ['family', 'sensory'],
+  },
+  {
+    id: 'following-their-lead',
+    title: 'Following Their Lead',
+    subtitle: 'Narrate, don\'t interrogate — the quiet shift that gets kids talking and connecting',
+    category: 'connection',
+    tags: ['child-led', 'communication', 'narration', 'questions', 'connection'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Count your questions for one hour tonight. Most of us are stunned. "What color is that? Where does the cow go? Can you say ball?" We ask because we love them and want to hear them. But to a child, every question is a small exam — and a child who's mostly examined starts tuning out the examiner.
+
+**Why questions backfire**
+A question demands an answer. For a child who finds language hard, that demand lands like pressure — and pressure is the enemy of connection AND of communication. Kids talk most, and connect most, when nothing is required of them.
+
+**The alternative: be the narrator**
+Instead of quizzing, describe. Like a sports announcer with a very small audience:
+
+• They push the train: *"The train's going under the bridge."*
+• They dump the blocks: *"Boom. All of them at once."*
+• They pause and look at something: *"You found the fan."*
+
+No question mark anywhere. You're proving you're paying attention, handing them words that match exactly what they're doing at the exact moment they care about it — and asking nothing back. That's when words tend to come.
+
+**Follow the eyes, not the plan**
+Their attention is the map. If you brought the farm puzzle but they're watching the curtain move, the curtain is the activity now. Talk about the curtain. Attention you follow builds connection; attention you fight for builds resistance.
+
+**Wait longer than feels normal**
+After you say something — or after anything interesting happens — count five slow seconds in your head. It will feel endless. Our kids often need that long to organize a response, and most of us fill the gap before they get their turn. The pause is where their half of the conversation lives.
+
+**Copy them**
+Imitation is the oldest conversation there is. They tap the table twice; you tap the table twice. They hum a note; you hum it back. Many children who ignore words snap to attention when their own actions echo back at them — you've started a back-and-forth with no language needed. Back-and-forth is the whole foundation. Words ride on top of it later.
+
+**Keep a few questions — the real ones**
+This isn't a ban. "Do you want the red cup or the blue one?" is a real question with a real payoff for them. What you're cutting is the pop quiz — questions you already know the answer to, asked to make language happen. Trade those for narration and waiting, and give it two weeks.
+
+**The exhale**
+Here's the gift hiding in this approach: it's easier. Narrating is lighter than performing enthusiasm and engineering teaching moments. You get to just be with your child, saying true things about what's happening. That's enough. It was always enough.`,
+    relatedQuestions: ['How do I get my nonverbal daughter to engage with me?', 'Should I keep asking him to label things?'],
+    relatedGroupTopics: ['communication', 'family'],
+  },
+  {
+    id: 'the-joy-is-allowed',
+    title: 'The Joy Is Allowed',
+    subtitle: 'Permission to simply enjoy your child — not just work on them',
+    category: 'connection',
+    tags: ['joy', 'parenting', 'guilt', 'connection', 'wellbeing'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Somewhere between the diagnosis and the third waitlist, a quiet shift happens to many parents: every hour with their child becomes a working hour. Meals become feeding practice. Bath time becomes sensory tolerance. The drive to school becomes flashcards. You didn't choose this — the system handed you a job title, and you took it because you love them.
+
+This guide is here to say the thing nobody says in an intake meeting: you are allowed to just enjoy your child. Not as a reward for finishing the home program. As a standing right.
+
+**Where the guilt comes from**
+The math feels brutal: experts say early intervention matters, the waitlists ate a year, so every unstructured hour can feel like an hour stolen from their future. Under that math, sitting on the couch giggling at nothing looks like slacking.
+
+The math is wrong in one important place: the relationship IS the intervention that carries all the others. Every strategy any therapist will ever hand you works better inside a warm, trusting relationship — and none of them can build that relationship for you. Delight is not time off from helping your child. It's the ground floor of it.
+
+**What working-on-them all the time costs**
+A child can tell when every interaction has a goal buried in it. Some start bracing when a parent approaches — not because the parent is harsh, but because the parent has become the person who always wants something. That's a terrible trade for any amount of skill practice. And for you: a parent who is always the therapist gets to be the parent almost never. That's a grief of its own, and it burns people out.
+
+**Reclaiming it**
+1. **Ring-fence goal-free time.** Some part of every day where nothing is being worked on — no data in your head, no target behind the game. If it helps, tell yourself the honest truth: this is the connection part of the plan.
+2. **Keep a delight list.** The laugh they do at the dog. The way they say that one word. Three items a week, written down. You're training your own attention back toward what's already wonderful.
+3. **Let them catch you enjoying them.** Kids clock how adults look at them. Being visibly delighted in — not evaluated — is something children drink in for life.
+4. **Say no to something.** If the schedule has crowded out every soft hour of the week, the schedule is too full — and you're allowed to say so to the professionals. A good team will hear it.
+
+**The honest version**
+Some seasons are heavy, and joy shows up in flickers, not floods. That's okay. You don't have to feel joyful on command. Just leave the door open — protect the time where joy would happen, and let it find you there. It tends to.`,
+    relatedQuestions: ['I feel guilty when we are not doing therapy activities', 'How much home practice is enough?'],
+    relatedGroupTopics: ['support', 'self-care'],
+  },
+  {
+    id: 'loving-the-child-in-front-of-you',
+    title: 'Loving the Child in Front of You',
+    subtitle: 'On grief that comes in waves, feelings that contradict each other, and how to hold both',
+    category: 'connection',
+    tags: ['diagnosis', 'grief', 'acceptance', 'adjustment', 'self-compassion', 'new diagnosis'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Before your child was born, you met another child: the imagined one. Every parent has one. The diagnosis didn't take your real child from you — they're right there, same laugh, same warm weight on your shoulder. But it may have taken the imagined one. And losing an imagined child is a real loss, even while the real one thrives in front of you.
+
+If you've been grieving and hating yourself for it — this page is for you.
+
+**It comes in waves, not stages**
+You may have heard grief described as stages you pass through and finish. Adjustment to a diagnosis doesn't work that way. It comes in waves: long calm stretches, then a birthday party where the other five-year-olds are doing something yours isn't, and the water is suddenly over your head again. A wave two years in doesn't mean you've failed to accept your child. It means you're a parent with a heart, standing near the ocean. Waves pass. They always have so far.
+
+**You can feel two true things at once**
+The parents who do best learn to stop choosing between their feelings:
+
+• Fierce love for exactly who your child is — AND sadness about paths that may look different
+• Relief at finally having a name for it — AND fear of what the name means
+• Gratitude for the help arriving — AND anger that you have to fight this hard for it
+• Hope — AND exhaustion, on the same afternoon
+
+None of these cancel the others. "Both-and" is not a contradiction; it's the actual shape of loving a child through something hard. You never have to pick one to be a good parent.
+
+**What the feelings are not**
+Grief is not rejection of your child. Fear is not lack of faith in them. A hard cry in the car is not damage done to anyone. Feelings are weather, not verdicts. The only version of this that hurts kids is the version that never gets tended — the grief that goes underground and comes out as pressure on them to be someone else.
+
+**Be as kind to yourself as you'd be to a friend**
+If your closest friend told you she'd been crying since her son's diagnosis, you wouldn't say "you should be over this." You'd say "of course you're grieving — look at everything you're carrying." You deserve the sentence you'd give her. Say it to yourself, out loud if you have to.
+
+**When to reach for more support**
+Waves should pass. Reach out to a professional if the low doesn't lift for weeks, if you've stopped eating or sleeping, if you feel numb toward everyone, or if you're having thoughts of harming yourself. If it's that last one: call or text 988 right now — the line is there at 3pm and 3am alike, and using it is an act of strength. For heavy-but-not-emergency days, Aminy's crisis resources screen lists parent warmlines, and a counselor who knows disability parenting is worth their weight in gold.
+
+**The child in front of you**
+They aren't a diminished version of anyone. They're the whole, original person you get to know — and the parents a few years ahead will tell you the same thing, almost word for word: the imagined child fades, and one ordinary afternoon you realize you can't picture loving anyone else.`,
+    relatedQuestions: ['Is it normal to grieve after a diagnosis?', 'I love my son but I keep crying — what is wrong with me?'],
+    relatedGroupTopics: ['new-diagnosis', 'support'],
+  },
+  {
+    id: 'laughter-counts',
+    title: 'Laughter Counts as Therapy Too',
+    subtitle: 'Widening what "progress" means until your actual life fits inside it',
+    category: 'connection',
+    tags: ['progress', 'connection', 'wins', 'joy', 'reframe'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `A parent once put it this way: "He laughed so hard at bubbles that he fell over, and my first thought was — that's not one of his goals." That sentence is what this guide is about.
+
+When your child has a team and a plan, "progress" quietly narrows to what's on the plan: words counted, steps mastered, minutes tolerated. Those matter. But a definition of progress that has no room for falling-over laughter is too small for a human childhood — and too small for you.
+
+**What also counts**
+Keep the goal charts. And alongside them, notice:
+
+• They laughed with you — not near you, WITH you, eyes finding yours mid-laugh
+• They brought you the thing they love, just to show you
+• They tolerated you joining their game, then saved you a spot in it
+• They came to you when they were hurt — you're the safe place
+• A meltdown ended faster because your presence helped
+• They tried something new while holding your hand
+• The whole family got through a restaurant meal, or didn't and laughed about it later
+
+None of these fit neatly in a progress report. All of them are the point of everything in the progress report.
+
+**Why connection IS progress — not a break from it**
+Everything on the formal plan travels over the relationship. Children learn most from people they feel safe with, imitate people they delight in, and try hard things next to people who feel like home base. When the connection between you deepens, every skill on every list gets easier to reach. Laughing together isn't the reward after the work. It's load-bearing.
+
+**Watch what you water**
+There's a trap in tracking only problems: your attention goes where your logging goes, and a week of dutifully recorded incidents can convince you the week was nothing but incidents. It wasn't. Log the hard moments — that record genuinely helps your team help you. And log the other side with equal seriousness. In Aminy, that's what the wins log is for: the bubble laugh belongs in the record next to everything else, because it IS everything else's foundation.
+
+**A practice for this week**
+Each night, name one moment of connection from the day. Say it out loud to someone, or write one line. Some nights it will be tiny — "he leaned on me during the video." Count it. Tiny is how all of this compounds.
+
+**For the discouraged weeks**
+When the formal numbers stall — and they will sometimes, that's how development works — the connection column keeps you honest about what's still growing. Plateaus on paper are rarely plateaus in the child. A stuck month in which your child started saving you a seat is not a stuck month at all.`,
+    relatedQuestions: ['Progress feels so slow — how do I know anything is working?', 'What should I be tracking besides behaviors?'],
+    relatedGroupTopics: ['family', 'support'],
+  },
+  {
+    id: 'repair-after-hard-moments',
+    title: 'Repair After Hard Moments',
+    subtitle: 'You yelled. It got ugly. Here\'s how you find your way back to each other',
+    category: 'connection',
+    tags: ['repair', 'guilt', 'meltdowns', 'shouting', 'reconnection', 'rupture'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `The meltdown lasted forty minutes and you handled the first thirty-five beautifully. Then you shouted. Now they're asleep and you're replaying it, convinced you've done real damage.
+
+Start here: what harms a relationship is not rupture. Every close relationship on earth ruptures — parents lose it, kids rage, doors slam. What matters, more than almost anything else you do, is what happens next. Repair is the skill. And repair is learnable.
+
+**First, repair with yourself**
+You cannot reconnect with your child while you're at war with yourself. So before anything else: you are a person who was pushed past their limit, not a monster. Your child having a hard brain-day and you having a hard human-moment can be true at the same time. Take the breath. Drink the water. THEN go back in.
+
+**Repair is smaller than you think**
+It isn't a formal talk. Especially for our kids — many of whom have had their fill of words by then — repair usually looks like:
+
+1. **Come back calm.** Your regulated body walking into the room, soft face, slow movements, is the first message: the storm is over and I'm still yours.
+2. **Get low and be quiet.** Sit nearby. Offer presence before language. Let them close the gap when ready — thirty seconds or thirty minutes, both fine.
+3. **Keep the words tiny.** "That was hard. I'm sorry I yelled. I love you. We're okay." Four short sentences is a complete repair. Don't re-litigate the incident, don't extract a lesson right now.
+4. **Do a together-thing.** Share a snack, a blanket, one page of a book, the game they love. Doing beats discussing — for many children, side-by-side IS the apology accepted.
+
+For a child with little or no spoken language, skip step 3 almost entirely. Repair travels fine through tone, closeness, and routine. They read your body far better than your sentences.
+
+**Apologizing isn't losing authority**
+Some of us were raised to believe parents don't apologize. But "I'm sorry I yelled" costs no authority at all — it models exactly the skill you most want your child to have: making things right after big feelings. A child who watches you repair learns that mistakes are fixable and love survives anger. There is no worksheet that can teach that. Only you can.
+
+**When the guilt won't let go**
+One bad moment does not undo a thousand good ones — connection is built like sediment, layer on layer, and it is thicker than any single day. But if you're losing it often, and the guilt is turning into dread of your own child, that's not a character verdict. It's a signal that YOUR tank is empty. The burnout guide in this library is the honest next read, and support for you counts as support for them.
+
+**The long game**
+Rupture and repair, hundreds of times over a childhood, is how a child learns that relationships bend without breaking. You are not failing at some smooth ideal. You are teaching, on the hardest days, the most durable lesson there is: we always find our way back.`,
+    relatedQuestions: ['I screamed at my son during a meltdown and feel horrible', 'How do I reconnect with my daughter after a hard day?'],
+    relatedGroupTopics: ['meltdowns', 'support', 'self-care'],
+  },
 ];
 
 export function getResourcesByCategory(category: string): Resource[] {
@@ -1182,9 +1507,14 @@ export function getRecommendedResources(
 
   const scored = RESOURCES.map(r => ({
     resource: r,
+    // Connection gets a gentle +1 nudge: with no behavior signals it floats to
+    // the top ("enter their world" is the right first read for a new family),
+    // but any real signal match (category hit = +3) always outranks it — the
+    // track stays discoverable without being forced first.
     score: (relevant.has(r.category) ? 3 : 0) +
            r.tags.filter(t => [...relevant].some(rel => t.includes(rel))).length +
-           (r.isPremium ? 0 : 1)
+           (r.isPremium ? 0 : 1) +
+           (r.category === 'connection' ? 1 : 0)
   }));
 
   return scored

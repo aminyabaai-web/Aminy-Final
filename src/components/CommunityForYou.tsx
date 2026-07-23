@@ -117,18 +117,19 @@ interface CommunityGroupRow {
   next_meeting?: string;
 }
 
+// Matches the LIVE community_events schema (verified 2026-07-23): the column
+// is `date` (NOT `event_date` — the old query silently never returned rows),
+// hosts live in `host_name`, and capacity in `capacity` (both added by
+// migration 20260723090000_community_events_parent_hosting.sql).
 interface CommunityEventRow {
   id: string;
   title: string;
-  host?: string;
-  host_credentials?: string;
-  event_date: string;
-  duration?: number;
-  attendee_count?: number;
-  max_attendees?: number;
-  event_type?: VirtualEvent['type'];
-  topics?: string[];
-  is_registered?: boolean;
+  host_name?: string | null;
+  date: string;
+  attendee_count?: number | null;
+  capacity?: number | null;
+  is_virtual?: boolean | null;
+  status?: string | null;
 }
 
 interface ParentSpotlightRow {
@@ -260,33 +261,32 @@ export function CommunityForYou({
           })));
         }
 
-        // Fetch upcoming events
+        // Fetch upcoming events. Live column is `date` (not `event_date`);
+        // cancelled events are filtered client-side so this also works before
+        // the hosting migration adds the status column.
         const { data: eventsData, error: eventsErr } = await supabase
           .from('community_events')
           .select('*')
-          .gte('event_date', new Date().toISOString())
-          .order('event_date', { ascending: true })
+          .gte('date', new Date().toISOString())
+          .order('date', { ascending: true })
           .limit(10);
         if (!eventsErr && eventsData && eventsData.length > 0) {
-          const mappedEvents = (eventsData as CommunityEventRow[]).map((e) => ({
-            id: e.id,
-            title: e.title,
-            host: e.host || 'Aminy Team',
-            hostCredentials: e.host_credentials,
-            date: new Date(e.event_date),
-            duration: e.duration || 60,
-            attendees: e.attendee_count || 0,
-            maxAttendees: e.max_attendees,
-            type: e.event_type || 'webinar',
-            topics: e.topics || [],
-            isRegistered: e.is_registered ?? false,
-          }));
+          const mappedEvents = (eventsData as CommunityEventRow[])
+            .filter((e) => e.status !== 'cancelled')
+            .map((e) => ({
+              id: e.id,
+              title: e.title,
+              host: e.host_name || 'Aminy Team',
+              hostCredentials: undefined as string | undefined,
+              date: new Date(e.date),
+              duration: 60,
+              attendees: e.attendee_count || 0,
+              maxAttendees: e.capacity ?? undefined,
+              type: (e.is_virtual ? 'webinar' : 'support-group') as VirtualEvent['type'],
+              topics: [] as string[],
+              isRegistered: false,
+            }));
           setLiveEvents(mappedEvents);
-          // Hydrate registration state from each event's own flag (real ids),
-          // never a hardcoded id that may not exist in the live data set.
-          setRegisteredEvents(
-            new Set(mappedEvents.filter((e) => e.isRegistered).map((e) => e.id))
-          );
         }
 
         // Fetch parent spotlights

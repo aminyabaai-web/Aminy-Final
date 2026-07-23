@@ -130,8 +130,45 @@ const isPipeRow = (s: string): boolean => {
 
 const isBlockSpecial = (s: string): boolean => {
   const t = s.trim();
-  return /^#{1,3}\s+/.test(t) || /^[-*]\s+/.test(t) || /^\d+\.\s+/.test(t) || isPipeRow(t);
+  return /^#{1,3}\s+/.test(t) || /^[-*]\s+/.test(t) || /^\d+\.\s+/.test(t) || isPipeRow(t) || t.startsWith('```');
 };
+
+// ─── Fenced code block card ──────────────────────────────────────────────────
+// Renders ``` blocks as a dark monospace card with a per-block copy button.
+// Deliberately no syntax-highlight dependency (bundle discipline) — a clean
+// mono card covers the AI's occasional code/config/CSV answers.
+
+function CodeBlock({ code, lang }: { code: string; lang?: string }) {
+  const [copied, setCopied] = React.useState(false);
+  const copy = () => {
+    try {
+      navigator.clipboard?.writeText(code).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      }).catch(() => {});
+    } catch { /* clipboard unavailable — no-op */ }
+  };
+  return (
+    <div style={{ margin: '10px 0', borderRadius: '12px', overflow: 'hidden', border: '1px solid #1e293b', background: '#0f172a', maxWidth: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 10px', background: '#1e293b' }}>
+        <span style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
+          {lang || 'code'}
+        </span>
+        <button
+          type="button"
+          onClick={copy}
+          aria-label="Copy code to clipboard"
+          style={{ fontSize: '11px', fontWeight: 600, color: copied ? '#43AA8B' : '#cbd5e1', background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px 6px', fontFamily: 'inherit' }}
+        >
+          {copied ? 'Copied' : 'Copy'}
+        </button>
+      </div>
+      <pre style={{ margin: 0, padding: '10px 12px', overflowX: 'auto', fontSize: '12.5px', lineHeight: 1.55, color: '#e2e8f0', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', whiteSpace: 'pre' }}>
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
 
 export function renderRichMarkdown(raw: string): React.ReactNode {
   const lines = (raw || '').replace(/\r\n/g, '\n').split('\n');
@@ -144,6 +181,20 @@ export function renderRichMarkdown(raw: string): React.ReactNode {
     const trimmed = line.trim();
 
     if (trimmed === '') { i++; continue; }
+
+    // ── Fenced code block (```lang … ```) ──
+    if (trimmed.startsWith('```')) {
+      const lang = trimmed.slice(3).trim();
+      i++; // consume opening fence
+      const codeLines: string[] = [];
+      while (i < lines.length && !lines[i].trim().startsWith('```')) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      if (i < lines.length) i++; // consume closing fence (tolerate unterminated)
+      blocks.push(<CodeBlock key={`b${key++}`} code={codeLines.join('\n')} lang={lang || undefined} />);
+      continue;
+    }
 
     // ── Table ── a pipe row immediately followed by a |---|---| separator
     if (isPipeRow(line) && i + 1 < lines.length && isTableSeparator(lines[i + 1])) {

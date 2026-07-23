@@ -14,7 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/
 import { Slider } from './ui/slider';
 import { Button } from './ui/button';
 import { toast } from 'sonner';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { projectId } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 interface EmotionEntry {
   week: string;
@@ -48,11 +49,19 @@ export function EmotionTracker({ userId }: { userId: string }) {
   async function loadEmotionHistory() {
     setLoading(true);
     try {
+      // Server derives the user from the session JWT — anon key gets a 401.
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        // Not signed in: nothing server-side to load — show the empty tracker.
+        setLoading(false);
+        return;
+      }
       const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/emotion/history?userId=${userId}`,
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/emotion/history`,
         {
           headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
         }
       );
@@ -77,15 +86,22 @@ export function EmotionTracker({ userId }: { userId: string }) {
         timestamp: new Date().toISOString(),
       };
 
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        toast.error('Please sign in to save your check-in');
+        return;
+      }
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/emotion/save`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId, entry }),
+          body: JSON.stringify({ entry }),
         }
       );
 

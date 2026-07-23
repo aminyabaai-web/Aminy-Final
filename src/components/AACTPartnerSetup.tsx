@@ -14,12 +14,18 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Copy, Check, Upload, Users, Building2, ExternalLink, AlertCircle, Loader2 } from 'lucide-react';
+import { Copy, Check, Upload, Users, Building2, ExternalLink, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { PARTNER_CONFIGS, type PartnerOrgId } from '../lib/partner-org';
 import { PLATFORM_FEE_RATES } from '../lib/stripe-connect';
 import { ScreenHeader } from './ui/ScreenHeader';
+import {
+  AACT_SEED_EVENTS,
+  AACT_SEED_POSTS,
+  isVillageSeeded,
+  seedAactVillage,
+} from '../content/village-seed-aact';
 
 /** Proper-noun display labels for the system-of-record enum. */
 const SYSTEM_OF_RECORD_LABELS: Record<string, string> = {
@@ -53,6 +59,8 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
   const [csvText, setCsvText] = useState('');
   const [showCsvInput, setShowCsvInput] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  // Community seeding state: 'checking' → 'ready' | 'seeded'; 'seeding' while running.
+  const [seedState, setSeedState] = useState<'checking' | 'ready' | 'seeding' | 'seeded'>('checking');
 
   const inviteBase = (() => {
     const envUrl = (import.meta.env.VITE_APP_URL as string | undefined)?.trim();
@@ -66,6 +74,52 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
   useEffect(() => {
     loadProviders();
   }, [partnerOrg]);
+
+  // Check whether the community has already been seeded (marker post / local flag).
+  useEffect(() => {
+    let active = true;
+    isVillageSeeded()
+      .then(seeded => { if (active) setSeedState(seeded ? 'seeded' : 'ready'); })
+      .catch(() => { if (active) setSeedState('ready'); });
+    return () => { active = false; };
+  }, []);
+
+  async function seedCommunity() {
+    if (seedState === 'seeding' || seedState === 'seeded') return;
+    setSeedState('seeding');
+    try {
+      const { data } = await supabase.auth.getUser();
+      const adminId = data?.user?.id;
+      if (!adminId) {
+        toast.error('Sign in as the partner admin to seed the community');
+        setSeedState('ready');
+        return;
+      }
+      const result = await seedAactVillage(adminId);
+      if (result.alreadySeeded) {
+        toast.info('Community already seeded — nothing to do');
+        setSeedState('seeded');
+        return;
+      }
+      if (result.postsCreated === 0 && result.eventsCreated === 0) {
+        // Honest failure: nothing landed (offline, RLS, or migration not applied yet).
+        toast.error("Seeding didn't complete — check your connection and try again");
+        setSeedState('ready');
+        return;
+      }
+      const summary = `Seeded ${result.postsCreated} starter posts and ${result.eventsCreated} events`;
+      if (result.errors > 0) {
+        toast.warning(`${summary} — ${result.errors} item${result.errors === 1 ? '' : 's'} didn't post`);
+        setSeedState(result.postsCreated > 0 ? 'seeded' : 'ready');
+      } else {
+        toast.success(summary);
+        setSeedState('seeded');
+      }
+    } catch {
+      toast.error("Seeding didn't complete — please try again");
+      setSeedState('ready');
+    }
+  }
 
   async function loadProviders() {
     setIsLoading(true);
@@ -194,6 +248,40 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
           <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>{config.evvSystem ? `${config.evvSystem.toUpperCase()} EVV compliance built-in` : 'No EVV needed'}</span></li>
           <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>Aminy AI assistant for documentation, supervision, and clinical decision support</span></li>
         </ul>
+      </div>
+
+      {/* Seed the community — first-village density (partner-admin action) */}
+      <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4">
+        <div className="flex items-center gap-2 mb-1">
+          <Sparkles className="w-4 h-4 text-[#6B9080]" />
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Seed the Community</p>
+        </div>
+        <p className="text-sm text-[#3A4A57] mt-1">
+          Give your families a warm room to walk into: {AACT_SEED_POSTS.length} starter
+          discussion threads and {AACT_SEED_EVENTS.length} Phoenix-metro meetups
+          (park mornings, parent coffee, library hour, and two virtual circles).
+        </p>
+        <p className="text-sm text-[#5A6B7A] mt-2">
+          Everything is openly authored by the Aminy × {config.displayName} team — events
+          are partner-hosted to start, and parents can host their own from day one.
+          Runs once; safe to tap twice.
+        </p>
+        {seedState === 'seeded' ? (
+          <div className="mt-3 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#6B9080]/10 border border-[#6B9080]/20">
+            <Check className="w-4 h-4 text-[#6B9080] shrink-0" />
+            <p className="text-sm font-semibold text-[#6B9080]">Community seeded — starter posts and events are live</p>
+          </div>
+        ) : (
+          <button
+            onClick={seedCommunity}
+            disabled={seedState === 'seeding' || seedState === 'checking'}
+            className="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold disabled:opacity-50"
+            style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}
+          >
+            {seedState === 'seeding' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+            {seedState === 'checking' ? 'Checking…' : seedState === 'seeding' ? 'Seeding…' : 'Seed starter posts & events'}
+          </button>
+        )}
       </div>
 
       {/* Bulk import */}

@@ -40,6 +40,7 @@ vi.mock('../../utils/supabase/client', () => ({
     })),
     auth: {
       getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
+      getSession: vi.fn().mockResolvedValue({ data: { session: null }, error: null }),
     },
   },
 }));
@@ -186,27 +187,34 @@ vi.mock('lucide-react', () => {
     'Check', 'User', 'Loader2', 'FileText', 'Calendar', 'Pill', 'Bell', 'Monitor',
     'TrendingUp', 'BarChart2', 'BookOpen', 'Folder', 'Copy', 'ThumbsUp', 'ThumbsDown',
     'Heart', 'Trophy', 'Microscope', 'Handshake', 'Camera',
+    'Pencil', 'Pin', 'PinOff', 'Search', 'Square', 'SquarePen',
   ];
   return Object.fromEntries(iconNames.map(n => [n, icon(n)]));
 });
 
-// ── Mock vault-storage (chat document attachments) ──
+// ── Mock vault-storage (chat document attachments + vault picker) ──
 const mockUploadVaultFile = vi.fn().mockResolvedValue({ success: true, fileId: 'doc-1' });
 const mockProcessVaultDocument = vi.fn().mockResolvedValue({ success: true, chunks: 3 });
+const mockListVaultDocuments = vi.fn().mockResolvedValue({ documents: [] });
 vi.mock('../../lib/vault-storage', () => ({
   uploadVaultFile: (...args: unknown[]) => mockUploadVaultFile(...args),
   processVaultDocument: (...args: unknown[]) => mockProcessVaultDocument(...args),
   markVaultDocumentProcessed: vi.fn().mockResolvedValue(undefined),
+  listVaultDocuments: (...args: unknown[]) => mockListVaultDocuments(...args),
 }));
 
 // ── Mock conversation-persistence (cross-device history roaming) ──
 const mockSaveConversation = vi.fn().mockResolvedValue(true);
 const mockLoadConversation = vi.fn().mockResolvedValue(null);
 const mockLoadConversationSummaries = vi.fn().mockResolvedValue([]);
+const mockDeleteConversation = vi.fn().mockResolvedValue(true);
+const mockRenameConversation = vi.fn().mockResolvedValue(true);
 vi.mock('../../lib/conversation-persistence', () => ({
   saveConversation: (...args: unknown[]) => mockSaveConversation(...args),
   loadConversation: (...args: unknown[]) => mockLoadConversation(...args),
   loadConversationSummaries: (...args: unknown[]) => mockLoadConversationSummaries(...args),
+  deleteConversation: (...args: unknown[]) => mockDeleteConversation(...args),
+  renameConversation: (...args: unknown[]) => mockRenameConversation(...args),
 }));
 
 import { BevelChatOverlay } from '../../components/BevelChatOverlay';
@@ -521,7 +529,7 @@ describe('BevelChatOverlay', () => {
     expect(inputs.some(i => i.accept.includes('pdf'))).toBe(true);
   });
 
-  it('uploads a selected PDF to the vault and shows an acknowledgment', async () => {
+  it('holds a selected PDF as a pre-send chip, then uploads on send with an acknowledgment', async () => {
     renderOpen();
     // Let the async proactive opening message settle first (it replaces the
     // message list); attaching before that would race with the ack append.
@@ -534,6 +542,15 @@ describe('BevelChatOverlay', () => {
     const file = new File(['%PDF-1.4 test'], 'iep-report.pdf', { type: 'application/pdf' });
     fireEvent.change(pdfInput, { target: { files: [file] } });
 
+    // Pre-send chip: filename shown + removable, but NOT uploaded yet
+    await waitFor(() => {
+      expect(screen.getByText('iep-report.pdf')).toBeInTheDocument();
+    });
+    expect(screen.getByRole('button', { name: 'Remove document' })).toBeInTheDocument();
+    expect(mockUploadVaultFile).not.toHaveBeenCalled();
+
+    // Sending (doc-only) uploads to the vault and shows the acknowledgment
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
     await waitFor(() => {
       expect(mockUploadVaultFile).toHaveBeenCalled();
     });

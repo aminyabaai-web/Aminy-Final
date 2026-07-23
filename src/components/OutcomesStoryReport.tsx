@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { projectId } from '../utils/supabase/info';
 import { isDemoMode } from '../lib/demo-seed';
 import {
   fetchOutcomeTrend,
@@ -278,13 +278,18 @@ export function OutcomesStoryReport({ childName, childId: _childId, onNavigate }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function loadWinsCount(userId: string): Promise<number> {
+  async function loadWinsCount(_userId: string): Promise<number> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
     try {
+      // /wins/load derives the user from the session JWT (anon key gets a
+      // 401). Best-effort as before: no session → no wins count.
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return 0;
       const resp = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/load?userId=${encodeURIComponent(userId)}`,
-        { headers: { Authorization: `Bearer ${publicAnonKey}` }, signal: controller.signal },
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/load`,
+        { headers: { Authorization: `Bearer ${token}` }, signal: controller.signal },
       );
       if (!resp.ok) return 0;
       const data = await resp.json();

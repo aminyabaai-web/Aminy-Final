@@ -4,23 +4,23 @@
 // See LICENSE file for details.
 
 /**
- * EaseParentView — Parent overlay for Ease (Junior) experience
+ * EaseParentView — Parent window into the Ease (Junior) experience
  *
- * What Tappy completely lacks — CAREGIVER CONTEXT:
- * 1. "Parent View" toggle: shows everything child sees PLUS:
- *    - Which therapeutic goal each activity addresses
- *    - How many minutes child has been in Ease today
- *    - Therapist notes on what to observe
+ * Connection-first caregiver context (deliberately NOT a therapy dashboard):
+ * 1. "Ease insights" toggle shows:
+ *    - What the child loves about each activity + how to join in
+ *    - How many minutes the child has been in Ease today
+ *    - A warm observation prompt ("What made them smile?")
  *    - Quick log: "I noticed..." text field saved to session notes
  * 2. After child uses any Ease tool: prompt "How did that go?" (1-tap: great/ok/rough)
- * 3. Weekly "Ease Report": which tools used most, total time, parent ratings
+ * 3. Weekly report: which tools they returned to, total time, parent ratings
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Eye, EyeOff, ClipboardList, Clock, Target, MessageSquare, ChevronDown, ChevronUp,
-  BarChart3, ThumbsUp, Minus, ThumbsDown, Star, CheckCircle, X, Brain, Heart
+  Eye, EyeOff, Clock, MessageSquare, ChevronDown, ChevronUp,
+  BarChart3, ThumbsUp, Minus, ThumbsDown, CheckCircle, X, Heart, Sparkles, Users
 } from 'lucide-react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -52,54 +52,59 @@ export interface EaseParentViewProps {
 }
 
 // ============================================
-// THERAPEUTIC GOAL MAP
+// ACTIVITY CONNECTION MAP
 // ============================================
+// Connection-lite framing, not a therapy lens. Field identifiers are kept
+// for compatibility with earlier session data/consumers:
+//   goal           → "What they love about this"
+//   whatToObserve  → "Try joining in"
+//   therapistTip   → "Worth noticing" (a warm observation prompt)
 
 const GOAL_MAP: Record<string, { goal: string; whatToObserve: string; therapistTip: string }> = {
   'calm-corner': {
-    goal: 'Self-regulation: recognizing & managing emotional states',
-    whatToObserve: 'How quickly does child calm? Do they choose this independently?',
-    therapistTip: 'Praise the act of seeking help: "Great job coming to calm corner when you felt [emotion]."',
+    goal: 'A cozy spot to land when feelings get big — a place that is all theirs.',
+    whatToObserve: 'Sit nearby and breathe slowly together. Calm company says more than words.',
+    therapistTip: 'What helped them settle today? What made them smile once the storm passed?',
   },
   'breathing': {
-    goal: 'Autonomic nervous system regulation via diaphragmatic breathing',
-    whatToObserve: 'Is child following the breath cue? Are shoulders relaxing?',
-    therapistTip: 'Model breathing alongside child. Narrate: "I breathe in slowly... I breathe out slowly."',
+    goal: 'The slow rhythm and gentle visuals feel soothing — like blowing bubbles in slow motion.',
+    whatToObserve: 'Breathe along with them, out loud and a little dramatic. Kids love when grown-ups play too.',
+    therapistTip: 'Did their shoulders drop? What did they want to do right after?',
   },
   'bubble-wrap': {
-    goal: 'Sensory input: tactile feedback, fine motor calming',
-    whatToObserve: 'Does child remain regulated? Does repetitive motion help focus?',
-    therapistTip: 'Allow sensory breaks before transitions or demanding tasks.',
+    goal: 'Popping things is deeply satisfying — little bursts that feel great under busy fingers.',
+    whatToObserve: 'Grab a corner and pop along. Take turns, race, or find rhythms together.',
+    therapistTip: 'What made them laugh? Which pops got the biggest reaction?',
   },
   'pop-it': {
-    goal: 'Sensory regulation: tactile fidget for focus + calming',
-    whatToObserve: 'Does fidget use decrease anxiety behaviors (hand-wringing, rocking)?',
-    therapistTip: 'Allow fidget during structured tasks — it may improve attention, not distract.',
+    goal: 'Something to keep hands happy — the textures and clicks are their own kind of fun.',
+    whatToObserve: 'Ask them to show you their favorite pattern — being the expert feels great.',
+    therapistTip: 'When do they reach for it? What were they enjoying most?',
   },
   'transition': {
-    goal: 'Executive function: flexible thinking, routine adherence',
-    whatToObserve: 'Did child need extra warnings? Was physical transition smooth?',
-    therapistTip: 'Increase warning time if needed. Pair verbal with visual timer.',
+    goal: 'Knowing what comes next feels safe — the countdown makes change less of a surprise.',
+    whatToObserve: 'Turn the countdown into a mini game: "Can we hop to the door before the timer?"',
+    therapistTip: 'What made the switch easier today? Did anything spark a giggle on the way?',
   },
   'rewards': {
-    goal: 'Motivation & reinforcement: positive behavior support via token economy',
-    whatToObserve: 'Is child motivated by the reward goal? Is the star cost appropriate?',
-    therapistTip: 'Set goals jointly with child. Celebrate progress toward reward, not just achievement.',
+    goal: 'Watching stars add up toward something they picked — progress they can see and feel proud of.',
+    whatToObserve: 'Celebrate the stars out loud together. Let them tell you what they are saving for.',
+    therapistTip: 'What are they most excited to earn? What story did they tell about today\'s stars?',
   },
   'daily-mission': {
-    goal: 'Daily living: habit formation, intrinsic motivation, self-monitoring',
-    whatToObserve: 'Does child initiate missions independently? Do they track their own progress?',
-    therapistTip: 'Discuss mission at start of day: "What will you work on today?" Check in at end.',
+    goal: 'A little quest that is all theirs — kids love checking things off their own list.',
+    whatToObserve: 'Ask "what\'s your mission today?" and cheer the attempt, not just the finish.',
+    therapistTip: 'What part did they want to tell you about? What lit them up?',
   },
   'fidget': {
-    goal: 'Sensory + attention: motor outlet for hyperactivity, calming input',
-    whatToObserve: 'Duration of focused use, whether it precedes or follows dysregulation',
-    therapistTip: 'Track whether fidget helps child return to learning tasks more quickly.',
+    goal: 'Busy hands, happy brain — spinning and squishing just feels good.',
+    whatToObserve: 'Try it yourself and compare favorites. A shared fidget moment is a tiny connection.',
+    therapistTip: 'Which one do they keep coming back to? What mood follows?',
   },
   default: {
-    goal: 'Therapeutic engagement through play-based learning',
-    whatToObserve: 'Child engagement level, affect, and duration of focus',
-    therapistTip: 'Note what activities your child gravitates toward — these are often regulation tools.',
+    goal: 'Play they chose themselves — following what they love is the fastest way into their world.',
+    whatToObserve: 'Join in on their terms: copy what they do, let them lead, keep it light.',
+    therapistTip: 'What made them smile today? What would they want to show you?',
   },
 };
 
@@ -177,7 +182,8 @@ export function updateLastSessionRating(rating: SessionRating, note: string = ''
 const MOOD_CHECKIN_KEY = 'aminy-ease-checkin';
 
 // MoodJournal's MOOD_FACES scale: 5=Great, 4=Good, 3=Okay, 2=Not great, 1=Tough.
-const MOOD_EMOJI: Record<number, string> = { 5: '😄', 4: '🙂', 3: '😐', 2: '😟', 1: '😢' };
+// Text labels (not emoji) — this is a parent surface.
+const MOOD_LABELS: Record<number, string> = { 5: 'Great', 4: 'Good', 3: 'Okay', 2: 'Not great', 1: 'Tough' };
 
 interface StoredMoodEntry { date: string; mood: number }
 
@@ -248,7 +254,7 @@ function MoodTrendChart({ childName }: { childName: string }) {
                   axisLine={false}
                   tickLine={false}
                   width={28}
-                  tickFormatter={(v: number) => MOOD_EMOJI[v] ?? String(v)}
+                  tickFormatter={(v: number) => String(v)}
                 />
                 <Tooltip
                   contentStyle={{
@@ -260,7 +266,7 @@ function MoodTrendChart({ childName }: { childName: string }) {
                   }}
                   formatter={(value) => {
                     const n = Number(value);
-                    return [`${MOOD_EMOJI[n] ?? ''} ${n}/5`, 'Mood'] as [string, string];
+                    return [`${MOOD_LABELS[n] ?? ''} (${n}/5)`, 'Mood'] as [string, string];
                   }}
                 />
                 <Line
@@ -316,8 +322,8 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
   return (
     <div className="space-y-3">
       <h3 className="font-bold text-[#132F43] text-sm flex items-center gap-2">
-        <BarChart3 className="w-4 h-4 text-indigo-500" />
-        Weekly Ease Report
+        <BarChart3 className="w-4 h-4 text-[#2A7D99]" />
+        This week in Ease
       </h3>
 
       {weekSessions.length === 0 ? (
@@ -326,17 +332,17 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
         <>
           {/* Summary stats */}
           <div className="grid grid-cols-3 gap-2">
-            <div className="bg-indigo-50 rounded-xl p-3 text-center">
+            <div className="bg-[#EDF4F7] rounded-xl p-3 text-center">
               <p className="text-sm text-[#5A6B7A]">Sessions</p>
-              <p className="text-xl font-black text-indigo-700">{weekSessions.length}</p>
+              <p className="text-xl font-black text-[#132F43]">{weekSessions.length}</p>
             </div>
-            <div className="bg-[#6B9080]/10 rounded-xl p-3 text-center">
+            <div className="bg-[#EDF4F7] rounded-xl p-3 text-center">
               <p className="text-sm text-[#5A6B7A]">Total time</p>
-              <p className="text-xl font-black text-[#6B9080]">{totalMinutes}m</p>
+              <p className="text-xl font-black text-[#2A7D99]">{totalMinutes}m</p>
             </div>
-            <div className="bg-amber-50 rounded-xl p-3 text-center">
+            <div className="bg-[#EDF4F7] rounded-xl p-3 text-center">
               <p className="text-sm text-[#5A6B7A]">Avg/day</p>
-              <p className="text-xl font-black text-amber-700">{Math.round(totalMinutes / 7)}m</p>
+              <p className="text-xl font-black text-[#132F43]">{Math.round(totalMinutes / 7)}m</p>
             </div>
           </div>
 
@@ -367,11 +373,11 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
           {/* Top tools */}
           {topTools.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-[#5A6B7A] mb-2">Most used tools</p>
+              <p className="text-sm font-semibold text-[#5A6B7A] mb-2">What they kept coming back to</p>
               <div className="space-y-1.5">
                 {topTools.map(([tool, data]) => (
                   <div key={tool} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2 shadow-sm">
-                    <span className="text-xl">{data.emoji}</span>
+                    <Sparkles className="w-4 h-4 text-[#2A7D99] shrink-0" />
                     <span className="text-sm font-medium text-[#3A4A57] flex-1 capitalize">{tool}</span>
                     <span className="text-sm text-[#8A9BA8]">{data.count}x · {data.minutes}m</span>
                   </div>
@@ -487,7 +493,6 @@ export function EaseParentView({
   isParentView,
   onToggleParentView,
   lastToolUsed,
-  lastToolEmoji = '🎮',
   onRateSession,
 }: EaseParentViewProps) {
   const [sessions] = useState<EaseSessionEntry[]>(loadSessions);
@@ -496,7 +501,10 @@ export function EaseParentView({
   const [noteText, setNoteText] = useState('');
   const [noteSaved, setNoteSaved] = useState(false);
 
-  const goalInfo = lastToolUsed ? getGoalInfo(lastToolUsed) : getGoalInfo('default');
+  // Fall back to the most recent logged session when no explicit tool is passed
+  // (e.g. when mounted from the Grown-up settings screen).
+  const effectiveLastTool = lastToolUsed ?? sessions[0]?.tool;
+  const goalInfo = effectiveLastTool ? getGoalInfo(effectiveLastTool) : getGoalInfo('default');
 
   const handleSaveNote = useCallback(() => {
     if (!noteText.trim()) return;
@@ -519,15 +527,14 @@ export function EaseParentView({
         onClick={() => { onToggleParentView(); playTap(); haptic(20); }}
         className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold shadow-md transition-all"
         style={{
-          background: isParentView
-            ? 'linear-gradient(135deg, #6366F1, #8B5CF6)'
-            : 'rgba(255,255,255,0.8)',
+          background: isParentView ? '#2A7D99' : 'rgba(255,255,255,0.8)',
           color: isParentView ? 'white' : '#4B5563',
           border: isParentView ? 'none' : '1px solid rgba(0,0,0,0.1)',
         }}
+        aria-expanded={isParentView}
       >
         {isParentView ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-        {isParentView ? 'Parent View On' : 'Parent View'}
+        {isParentView ? 'Hide Ease insights' : 'Show Ease insights'}
       </motion.button>
 
       {/* Parent View Panel */}
@@ -538,29 +545,29 @@ export function EaseParentView({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="mt-3 rounded-3xl overflow-hidden shadow-xl"
-            style={{ background: 'white', border: '1px solid rgba(99,102,241,0.2)' }}
+            style={{ background: 'white', border: '1px solid rgba(42,125,153,0.2)' }}
           >
             {/* Header */}
             <div className="px-4 pt-4 pb-3"
-              style={{ background: 'linear-gradient(135deg, #EEF2FF, #F5F3FF)' }}>
+              style={{ background: 'linear-gradient(135deg, #F6FBFB, #EDF4F7)' }}>
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-black text-indigo-900 text-base">{childName}'s Ease Session</h3>
-                  <p className="text-sm text-indigo-500">Parent View — Therapeutic Context</p>
+                  <h3 className="font-black text-[#132F43] text-base">{childName}'s Ease time</h3>
+                  <p className="text-sm text-[#2A7D99]">A window into their world</p>
                 </div>
                 <div className="flex items-center gap-1 bg-white rounded-full px-3 py-1.5 shadow-sm">
-                  <Clock className="w-3.5 h-3.5 text-indigo-400" />
-                  <span className="text-sm font-bold text-indigo-700">{todayMinutes}m today</span>
+                  <Clock className="w-3.5 h-3.5 text-[#2A7D99]" />
+                  <span className="text-sm font-bold text-[#2A7D99]">{todayMinutes}m today</span>
                 </div>
               </div>
 
               {/* Current tool info */}
-              {lastToolUsed && (
+              {effectiveLastTool && (
                 <div className="mt-3 flex items-center gap-2 bg-white/60 rounded-2xl px-3 py-2">
-                  <span className="text-2xl">{lastToolEmoji}</span>
+                  <Sparkles className="w-5 h-5 text-[#2A7D99] shrink-0" />
                   <div>
-                    <p className="text-sm font-bold text-[#3A4A57] capitalize">{lastToolUsed}</p>
-                    <p className="text-sm text-[#8A9BA8]">Last used</p>
+                    <p className="text-sm font-bold text-[#3A4A57] capitalize">{effectiveLastTool}</p>
+                    <p className="text-sm text-[#8A9BA8]">Last played</p>
                   </div>
                 </div>
               )}
@@ -574,14 +581,14 @@ export function EaseParentView({
             {/* Sections */}
             <div className="divide-y divide-gray-100">
 
-              {/* Therapeutic goals */}
+              {/* Inside this activity — connection framing, not therapy */}
               <button
                 onClick={() => toggleSection('goals')}
                 className="w-full px-4 py-3 flex items-center justify-between text-left"
               >
                 <div className="flex items-center gap-2">
-                  <Target className="w-4 h-4 text-indigo-500" />
-                  <span className="text-sm font-semibold text-[#3A4A57]">Therapeutic Goal</span>
+                  <Heart className="w-4 h-4 text-[#2A7D99]" />
+                  <span className="text-sm font-semibold text-[#3A4A57]">Inside this activity</span>
                 </div>
                 {activeSection === 'goals' ? <ChevronUp className="w-4 h-4 text-[#8A9BA8]" /> : <ChevronDown className="w-4 h-4 text-[#8A9BA8]" />}
               </button>
@@ -594,26 +601,26 @@ export function EaseParentView({
                     className="overflow-hidden"
                   >
                     <div className="px-4 pb-4 space-y-3">
-                      <div className="bg-indigo-50 rounded-2xl p-3">
+                      <div className="bg-[#EDF4F7] rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
-                          <Brain className="w-4 h-4 text-indigo-500 mt-0.5 flex-shrink-0" />
-                          <p className="text-sm font-bold text-indigo-800">Goal</p>
+                          <Heart className="w-4 h-4 text-[#2A7D99] mt-0.5 flex-shrink-0" />
+                          <p className="text-sm font-bold text-[#132F43]">What they love about this</p>
                         </div>
-                        <p className="text-sm text-indigo-700 ml-6">{goalInfo.goal}</p>
+                        <p className="text-sm text-[#3A4A57] ml-6">{goalInfo.goal}</p>
                       </div>
-                      <div className="bg-[#6B9080]/10 rounded-2xl p-3">
+                      <div className="bg-[#EDF4F7] rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
-                          <Eye className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
-                          <p className="text-sm font-bold text-[#6B9080]">What to observe</p>
+                          <Users className="w-4 h-4 text-[#2A7D99] mt-0.5 flex-shrink-0" />
+                          <p className="text-sm font-bold text-[#132F43]">Try joining in</p>
                         </div>
-                        <p className="text-sm text-[#6B9080] ml-6">{goalInfo.whatToObserve}</p>
+                        <p className="text-sm text-[#3A4A57] ml-6">{goalInfo.whatToObserve}</p>
                       </div>
-                      <div className="bg-amber-50 rounded-2xl p-3">
+                      <div className="bg-[#EDF4F7] rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
-                          <Heart className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                          <p className="text-sm font-bold text-amber-800">Therapist tip</p>
+                          <Eye className="w-4 h-4 text-[#2A7D99] mt-0.5 flex-shrink-0" />
+                          <p className="text-sm font-bold text-[#132F43]">Worth noticing</p>
                         </div>
-                        <p className="text-sm text-amber-700 ml-6">{goalInfo.therapistTip}</p>
+                        <p className="text-sm text-[#3A4A57] ml-6">{goalInfo.therapistTip}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -626,7 +633,7 @@ export function EaseParentView({
                 className="w-full px-4 py-3 flex items-center justify-between text-left"
               >
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-purple-500" />
+                  <MessageSquare className="w-4 h-4 text-[#2A7D99]" />
                   <span className="text-sm font-semibold text-[#3A4A57]">I noticed...</span>
                 </div>
                 {activeSection === 'notes' ? <ChevronUp className="w-4 h-4 text-[#8A9BA8]" /> : <ChevronDown className="w-4 h-4 text-[#8A9BA8]" />}
@@ -643,17 +650,18 @@ export function EaseParentView({
                       <textarea
                         value={noteText}
                         onChange={e => setNoteText(e.target.value)}
-                        placeholder={`What did you observe during ${childName}'s session?`}
+                        placeholder={`What made ${childName} smile today?`}
                         rows={3}
-                        className="w-full text-sm p-3 rounded-2xl border border-[#E8E4DF] focus:outline-none focus:border-indigo-300 resize-none"
+                        className="w-full text-sm p-3 rounded-2xl border border-[#E8E4DF] focus:outline-none resize-none"
+                        aria-label="Observation note"
                       />
                       <motion.button
                         whileTap={{ scale: 0.96 }}
                         onClick={handleSaveNote}
                         className="mt-2 w-full py-2.5 rounded-xl font-semibold text-sm text-white shadow-md"
-                        style={{ background: noteSaved ? '#10B981' : 'linear-gradient(135deg, #6366F1, #8B5CF6)' }}
+                        style={{ background: noteSaved ? '#10B981' : '#2A7D99' }}
                       >
-                        {noteSaved ? '✓ Saved!' : 'Save Note'}
+                        {noteSaved ? 'Saved' : 'Save note'}
                       </motion.button>
                     </div>
                   </motion.div>
@@ -666,8 +674,8 @@ export function EaseParentView({
                 className="w-full px-4 py-3 flex items-center justify-between text-left"
               >
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="w-4 h-4 text-emerald-500" />
-                  <span className="text-sm font-semibold text-[#3A4A57]">Weekly Report</span>
+                  <BarChart3 className="w-4 h-4 text-[#2A7D99]" />
+                  <span className="text-sm font-semibold text-[#3A4A57]">Weekly report</span>
                 </div>
                 {activeSection === 'report' ? <ChevronUp className="w-4 h-4 text-[#8A9BA8]" /> : <ChevronDown className="w-4 h-4 text-[#8A9BA8]" />}
               </button>

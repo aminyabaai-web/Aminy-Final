@@ -5,8 +5,36 @@
 
 import { Hono } from "npm:hono";
 import * as kv from "./kv_store.tsx";
+import { verifyAuth } from "./auth-middleware.ts";
 
-const routes = new Hono();
+const routes = new Hono<{ Variables: { authUserId: string } }>();
+
+// ============================================================================
+// AUTH MIDDLEWARE — every route below requires a real Supabase user JWT.
+// Handlers MUST use c.get('authUserId') and never trust a client-supplied
+// userId (query or body) — that was a classic IDOR on PHI-adjacent data.
+// ============================================================================
+
+/** Paths (relative to the function prefix) callable with the public anon key. */
+const PUBLIC_PATHS = [
+  "/notifications/vapid-key",
+  "/analytics/track",
+  "/analytics/module-usage",
+];
+
+routes.use("*", async (c, next) => {
+  if (PUBLIC_PATHS.some((p) => c.req.path.endsWith(p))) {
+    return next();
+  }
+
+  const auth = await verifyAuth(c.req.header("Authorization") ?? null);
+  if (!auth.authenticated || !auth.user) {
+    return c.json({ error: "Sign in required" }, 401);
+  }
+
+  c.set("authUserId", auth.user.userId);
+  await next();
+});
 
 // ============================================================================
 // CONVERSATION & AI CHAT ROUTES
@@ -15,8 +43,12 @@ const routes = new Hono();
 // Load conversation history
 routes.post("/conversation/load", async (c) => {
   try {
-    const { userId, threadKey } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    // Thread key is derived from the AUTHENTICATED user — honoring a
+    // client-supplied threadKey would let any signed-in user read another
+    // user's conversation.
+    const threadKey = `user_${userId}_thread`;
+
     const messages = await kv.get(threadKey) || [];
     
     return c.json({ messages });
@@ -29,8 +61,11 @@ routes.post("/conversation/load", async (c) => {
 // Save conversation message
 routes.post("/conversation/save", async (c) => {
   try {
-    const { userId, threadKey, message } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    const { message } = await c.req.json();
+    // Same derivation as /conversation/load — never trust a client threadKey.
+    const threadKey = `user_${userId}_thread`;
+
     const messages = await kv.get(threadKey) || [];
     messages.push(message);
     
@@ -189,8 +224,9 @@ routes.post("/ai/summarize", async (c) => {
 // Subscribe to push notifications
 routes.post("/notifications/subscribe", async (c) => {
   try {
-    const { userId, subscription } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    const { subscription } = await c.req.json();
+
     await kv.set(`notification:subscription:${userId}`, subscription);
     
     return c.json({ success: true });
@@ -216,8 +252,8 @@ routes.get("/notifications/vapid-key", async (c) => {
 // Generate weekly digest
 routes.post("/notifications/weekly-digest", async (c) => {
   try {
-    const { userId } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+
     // Fetch weekly stats
     const stats = await kv.get(`user:${userId}:weekly_stats`) || {};
     
@@ -272,7 +308,7 @@ routes.post("/analytics/module-usage", async (c) => {
 // Get analytics summary
 routes.get("/analytics/summary", async (c) => {
   try {
-    const userId = c.req.query('userId');
+    const userId = c.get("authUserId");
     const timeRange = c.req.query('timeRange') || '7d';
     
     // Fetch data (simplified - in production use proper queries)
@@ -331,8 +367,8 @@ routes.get("/analytics/cohort/export", async (c) => {
 // Get emotion history
 routes.get("/emotion/history", async (c) => {
   try {
-    const userId = c.req.query('userId');
-    
+    const userId = c.get("authUserId");
+
     const history = await kv.get(`emotion:history:${userId}`) || [];
     const insights = await kv.get(`emotion:insights:${userId}`) || [];
     
@@ -346,8 +382,9 @@ routes.get("/emotion/history", async (c) => {
 // Save weekly feeling
 routes.post("/emotion/save", async (c) => {
   try {
-    const { userId, entry } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    const { entry } = await c.req.json();
+
     const history = await kv.get(`emotion:history:${userId}`) || [];
     history.push(entry);
     
@@ -372,8 +409,8 @@ routes.post("/emotion/save", async (c) => {
 // Load wins
 routes.get("/wins/load", async (c) => {
   try {
-    const userId = c.req.query('userId');
-    
+    const userId = c.get("authUserId");
+
     const moments = await kv.get(`wins:moments:${userId}`) || [];
     const weeklySummary = await kv.get(`wins:weekly:${userId}`) || null;
     
@@ -387,8 +424,13 @@ routes.get("/wins/load", async (c) => {
 // Save calm moment
 routes.post("/wins/save", async (c) => {
   try {
-    const { userId, moment } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    const { moment } = await c.req.json();
+
+    // Stamp ownership server-side — ignore whatever userId the client put
+    // inside the moment payload.
+    moment.userId = userId;
+
     const moments = await kv.get(`wins:moments:${userId}`) || [];
     moments.unshift(moment);
     
@@ -409,8 +451,9 @@ routes.post("/wins/save", async (c) => {
 // Share weekly summary
 routes.post("/wins/share", async (c) => {
   try {
-    const { userId, summary, target } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    const { summary, target } = await c.req.json();
+
     // In production, send email or notification
     
     return c.json({ success: true });
@@ -423,8 +466,9 @@ routes.post("/wins/share", async (c) => {
 // Export weekly summary as PDF
 routes.post("/wins/export", async (c) => {
   try {
-    const { userId, summary } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    const { summary } = await c.req.json();
+
     // Generate simple PDF
     const pdfContent = `Wins Summary: ${summary.week}\n\n${summary.generatedSummary}`;
     
@@ -447,8 +491,8 @@ routes.post("/wins/export", async (c) => {
 // Get privacy settings
 routes.get("/privacy/settings", async (c) => {
   try {
-    const userId = c.req.query('userId');
-    
+    const userId = c.get("authUserId");
+
     const settings = await kv.get(`privacy:settings:${userId}`) || {
       enhancedPrivacyMode: false,
       allowModelTraining: false,
@@ -466,8 +510,9 @@ routes.get("/privacy/settings", async (c) => {
 // Update privacy settings
 routes.post("/privacy/update", async (c) => {
   try {
-    const { userId, settings } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+    const { settings } = await c.req.json();
+
     await kv.set(`privacy:settings:${userId}`, settings);
     
     return c.json({ success: true });
@@ -480,8 +525,8 @@ routes.post("/privacy/update", async (c) => {
 // Get audit log
 routes.get("/privacy/audit-log", async (c) => {
   try {
-    const userId = c.req.query('userId');
-    
+    const userId = c.get("authUserId");
+
     const logs = await kv.get(`privacy:audit:${userId}`) || [];
     
     return c.json({ logs });
@@ -494,8 +539,8 @@ routes.get("/privacy/audit-log", async (c) => {
 // Export user data
 routes.post("/privacy/export", async (c) => {
   try {
-    const { userId } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+
     // Gather all user data
     const userData = {
       userId,
@@ -516,8 +561,8 @@ routes.post("/privacy/export", async (c) => {
 // Delete user data
 routes.post("/privacy/delete", async (c) => {
   try {
-    const { userId } = await c.req.json();
-    
+    const userId = c.get("authUserId");
+
     // Delete all user data keys
     const keysToDelete = [
       `user:${userId}:profile`,

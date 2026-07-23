@@ -12,6 +12,8 @@ import {
   Users, Calendar, Clock, DollarSign, Star, Sparkles,
   BookOpen, ChevronRight, Search, Filter, Loader2, CheckCircle,
   ArrowLeft, Waves, Moon, School, RefreshCw, Utensils, Hand, MessageCircle,
+  ShieldCheck, HeartHandshake, Blocks, PawPrint, TrainFront, Palette,
+  Music, Bone, Puzzle, Leaf, Rocket,
   type LucideIcon,
 } from 'lucide-react';
 import { Card } from './ui/card';
@@ -20,6 +22,30 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
+import {
+  FAMILY_HANGOUT_CATEGORY,
+  HANGOUT_GROUND_RULES,
+  HANGOUT_SAFETY_BADGE,
+  HANGOUT_INTERESTS,
+  getHangoutInterest,
+  decodeHangoutDescription,
+  isFamilyHangout,
+  getHangoutInterestVotes,
+  toggleHangoutInterestVote,
+} from '../lib/family-hangouts';
+
+/** Lucide icon per hangout interest (parent surface = Lucide, never emoji). */
+const HANGOUT_INTEREST_ICONS: Record<string, LucideIcon> = {
+  building: Blocks,
+  animals: PawPrint,
+  trains: TrainFront,
+  drawing: Palette,
+  music: Music,
+  dinosaurs: Bone,
+  games: Puzzle,
+  nature: Leaf,
+  space: Rocket,
+};
 
 // Lucide icons (not emoji) per design system — emoji are reserved for the Ease kids' surface.
 const TOPIC_CATEGORIES: { id: string; label: string; icon: LucideIcon }[] = [
@@ -75,6 +101,10 @@ export function GroupSessionDiscovery({
   const [searchQuery, setSearchQuery] = useState('');
   const [bookingSession, setBookingSession] = useState<GroupSession | null>(null);
   const [isBooking, setIsBooking] = useState(false);
+  // 'training' = clinical group sessions (existing); 'hangouts' = Family Hangouts —
+  // small facilitated kids' hangouts on the same rails, parents present.
+  const [view, setView] = useState<'training' | 'hangouts'>('training');
+  const [interestVotes, setInterestVotes] = useState<string[]>(() => getHangoutInterestVotes());
 
   const loadSessions = useCallback(async () => {
     setIsLoading(true);
@@ -86,8 +116,13 @@ export function GroupSessionDiscovery({
       .order('session_date', { ascending: true })
       .limit(50);
 
-    if (selectedCategory !== 'all') {
+    if (view === 'hangouts') {
+      query = query.eq('topic_category', FAMILY_HANGOUT_CATEGORY);
+    } else if (selectedCategory !== 'all') {
       query = query.eq('topic_category', selectedCategory);
+    } else {
+      // "All topics" in the training tab must not surface hangouts
+      query = query.or(`topic_category.is.null,topic_category.neq.${FAMILY_HANGOUT_CATEGORY}`);
     }
 
     const { data } = await query;
@@ -104,7 +139,11 @@ export function GroupSessionDiscovery({
 
     setSessions(results);
     setIsLoading(false);
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, view]);
+
+  const handleInterestVote = (interestId: string) => {
+    setInterestVotes(toggleHangoutInterestVote(interestId));
+  };
 
   useEffect(() => {
     const timer = setTimeout(loadSessions, 250);
@@ -168,11 +207,41 @@ export function GroupSessionDiscovery({
               </button>
             )}
             <div className="min-w-0">
-              <h1 className="text-xl font-bold text-[#132F43]">Group BCBA Sessions</h1>
+              <h1 className="text-xl font-bold text-[#132F43]">
+                {view === 'hangouts' ? 'Family Hangouts' : 'Group BCBA Sessions'}
+              </h1>
               <p className="text-sm text-[#5A6B7A]">
-                Expert-led parent training with up to 4 families · $50/family · cash pay
+                {view === 'hangouts'
+                  ? 'Small, facilitated hangouts for kids who share a love — you stay close by'
+                  : 'Expert-led parent training with up to 4 families · $50/family · cash pay'}
               </p>
             </div>
+          </div>
+
+          {/* View switch: clinical training vs Family Hangouts */}
+          <div className="mb-3 grid grid-cols-2 gap-2" role="group" aria-label="Session type">
+            <button
+              onClick={() => setView('training')}
+              aria-pressed={view === 'training'}
+              className="flex items-center justify-center gap-1.5 text-sm px-3 py-2 rounded-xl border transition-all"
+              style={view === 'training'
+                ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
+                : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
+            >
+              <BookOpen className="h-4 w-4 shrink-0" aria-hidden="true" />
+              Group training
+            </button>
+            <button
+              onClick={() => setView('hangouts')}
+              aria-pressed={view === 'hangouts'}
+              className="flex items-center justify-center gap-1.5 text-sm px-3 py-2 rounded-xl border transition-all"
+              style={view === 'hangouts'
+                ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
+                : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
+            >
+              <HeartHandshake className="h-4 w-4 shrink-0" aria-hidden="true" />
+              Family Hangouts
+            </button>
           </div>
 
           {/* Search */}
@@ -181,44 +250,70 @@ export function GroupSessionDiscovery({
             <Input
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search topics or BCBAs"
+              placeholder={view === 'hangouts' ? 'Search hangouts' : 'Search topics or BCBAs'}
               className="pl-9 bg-[#F6FBFB] border-[#E8E4DF]"
             />
           </div>
 
-          {/* Category chips */}
-          <div className="flex gap-2 overflow-x-auto pb-1 pr-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
-            {TOPIC_CATEGORIES.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border whitespace-nowrap transition-all shrink-0"
-                style={selectedCategory === cat.id
-                  ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
-                  : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
-              >
-                <cat.icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />{cat.label}
-              </button>
-            ))}
-          </div>
+          {/* Category chips (clinical training only) */}
+          {view === 'training' && (
+            <div className="flex gap-2 overflow-x-auto pb-1 pr-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+              {TOPIC_CATEGORIES.map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border whitespace-nowrap transition-all shrink-0"
+                  style={selectedCategory === cat.id
+                    ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
+                    : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
+                >
+                  <cat.icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />{cat.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-4">
         {/* Why group sessions callout */}
-        <Card className="p-4 mb-4 bg-white border-[#E8E4DF]">
-          <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg shrink-0" style={{ background: 'rgba(42, 125, 153, 0.10)' }}>
-              <Sparkles className="w-4 h-4 text-[#2A7D99]" />
+        {view === 'training' ? (
+          <Card className="p-4 mb-4 bg-white border-[#E8E4DF]">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg shrink-0" style={{ background: 'rgba(42, 125, 153, 0.10)' }}>
+                <Sparkles className="w-4 h-4 text-[#2A7D99]" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[#132F43]">Why families love group sessions</p>
+                <p className="text-sm text-[#5A6B7A] mt-0.5">
+                  Same BCBA expertise as 1:1 at 60% less cost. Small groups (max 4 families) mean your questions get answered, and hearing from other parents going through similar challenges is genuinely helpful.
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-semibold text-[#132F43]">Why families love group sessions</p>
-              <p className="text-sm text-[#5A6B7A] mt-0.5">
-                Same BCBA expertise as 1:1 at 60% less cost. Small groups (max 4 families) mean your questions get answered, and hearing from other parents going through similar challenges is genuinely helpful.
-              </p>
+          </Card>
+        ) : (
+          <Card className="p-4 mb-4 bg-white border-[#E8E4DF]">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg shrink-0" style={{ background: 'rgba(42, 125, 153, 0.10)' }}>
+                <HeartHandshake className="w-4 h-4 text-[#2A7D99]" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#132F43]">What a hangout is like</p>
+                <p className="text-sm text-[#5A6B7A] mt-0.5">
+                  30 relaxed minutes on video with a few other families, built around something your child already loves.
+                </p>
+                <ul className="mt-2 space-y-1">
+                  {HANGOUT_GROUND_RULES.map(rule => (
+                    <li key={rule} className="flex items-start gap-1.5 text-sm text-[#3A4A57]">
+                      <CheckCircle className="h-3.5 w-3.5 mt-0.5 shrink-0 text-[#2A7D99]" aria-hidden="true" />
+                      {rule}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        )}
 
         {/* Sessions grid */}
         {isLoading ? (
@@ -237,6 +332,47 @@ export function GroupSessionDiscovery({
             ))}
           </div>
         ) : sessions.length === 0 ? (
+          view === 'hangouts' ? (
+            <Card className="p-6 text-center border-dashed border-[#E8E4DF]">
+              <HeartHandshake className="w-10 h-10 text-slate-300 mx-auto mb-3" aria-hidden="true" />
+              <p className="text-[#132F43] font-medium mb-1">
+                {searchQuery ? 'No hangouts match that search' : 'Hangouts are forming'}
+              </p>
+              <p className="text-sm text-[#5A6B7A]">
+                {searchQuery
+                  ? 'Try a different word — or tell us what your child loves below.'
+                  : 'Tell us what your child loves — it helps facilitators plan the first ones.'}
+              </p>
+              <div className="mt-4 flex flex-wrap justify-center gap-2" role="group" aria-label="What your child loves">
+                {HANGOUT_INTERESTS.map(interest => {
+                  const InterestIcon = HANGOUT_INTEREST_ICONS[interest.id] ?? Puzzle;
+                  const voted = interestVotes.includes(interest.id);
+                  return (
+                    <button
+                      key={interest.id}
+                      onClick={() => handleInterestVote(interest.id)}
+                      aria-pressed={voted}
+                      aria-label={`My child loves ${interest.kidPhrase}`}
+                      className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-all"
+                      style={voted
+                        ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
+                        : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
+                    >
+                      {voted
+                        ? <CheckCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                        : <InterestIcon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
+                      {interest.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-sm text-[#5A6B7A] mt-4">
+                {interestVotes.length > 0
+                  ? 'Noted. This shapes what gets scheduled — real hangouts will show up right here.'
+                  : 'Picking a few doesn’t book anything — it just helps us plan.'}
+              </p>
+            </Card>
+          ) : (
           <Card className="p-10 text-center border-dashed border-[#E8E4DF]">
             <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-3" />
             <p className="text-[#132F43] font-medium mb-1">No sessions found</p>
@@ -256,9 +392,18 @@ export function GroupSessionDiscovery({
               </Button>
             )}
           </Card>
+          )
         ) : (
           <div className="space-y-3">
             {sessions.map(session => (
+              view === 'hangouts' ? (
+                <FamilyHangoutCard
+                  key={session.id}
+                  session={session}
+                  onBook={() => setBookingSession(session)}
+                  spotsLeft={spotsLeft(session)}
+                />
+              ) : (
               <GroupSessionListCard
                 key={session.id}
                 session={session}
@@ -266,6 +411,7 @@ export function GroupSessionDiscovery({
                 spotsLabel={spotsLabel(session)}
                 spotsLeft={spotsLeft(session)}
               />
+              )
             ))}
           </div>
         )}
@@ -279,12 +425,22 @@ export function GroupSessionDiscovery({
             <p className="text-sm text-[#5A6B7A] mb-4">
               {new Date(bookingSession.session_date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })} at{' '}
               {new Date(bookingSession.session_date).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
-              {' '}· with {bookingSession.provider_name}, {bookingSession.provider_credentials}
+              {' '}· with {bookingSession.provider_name}
+              {bookingSession.provider_credentials ? `, ${bookingSession.provider_credentials}` : ''}
             </p>
+
+            {isFamilyHangout(bookingSession) && (
+              <div className="p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF] mb-3 flex items-start gap-2">
+                <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-[#2A7D99]" aria-hidden="true" />
+                <p className="text-sm text-[#3A4A57]">
+                  {HANGOUT_SAFETY_BADGE}. Plan to stay nearby for the whole hangout — that's part of what makes it work. Cameras optional, no pressure to speak.
+                </p>
+              </div>
+            )}
 
             <div className="p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF] mb-4">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#3A4A57]">Group session fee</span>
+                <span className="text-[#3A4A57]">{isFamilyHangout(bookingSession) ? 'Hangout fee' : 'Group session fee'}</span>
                 <span className="font-semibold text-[#132F43]">${bookingSession.price_per_family_cents / 100}</span>
               </div>
               <div className="flex items-center justify-between text-sm text-slate-400 mt-1">
@@ -401,6 +557,99 @@ function GroupSessionListCard({
               onClick={onBook}
             >
               {isFull ? 'Full' : 'Book — $' + (session.price_per_family_cents / 100)}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+/**
+ * Family Hangout card — kid-interest framing, and the safety line on every
+ * card: "Facilitated · Parents present · Small group". No child names are
+ * ever shown; booking stays the parent's action.
+ */
+function FamilyHangoutCard({
+  session,
+  onBook,
+  spotsLeft,
+}: {
+  session: GroupSession;
+  onBook: () => void;
+  spotsLeft: number;
+}) {
+  const sessionDate = new Date(session.session_date);
+  const isFull = spotsLeft === 0;
+  const { interestId, body } = decodeHangoutDescription(session.description);
+  const interest = getHangoutInterest(interestId);
+  const InterestIcon = (interestId && HANGOUT_INTEREST_ICONS[interestId]) || HeartHandshake;
+
+  return (
+    <Card className="p-4 hover:shadow-md transition-all">
+      <div className="flex items-start gap-3">
+        <div
+          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+          style={{ background: 'rgba(42, 125, 153, 0.10)' }}
+        >
+          <InterestIcon className="w-6 h-6 text-[#2A7D99]" aria-hidden="true" />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
+              {interest && (
+                <p className="text-xs font-semibold text-[#2A7D99]">
+                  For kids who love {interest.kidPhrase}
+                </p>
+              )}
+              <p className="font-semibold text-[#132F43] leading-tight mt-0.5">{session.topic}</p>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">
+                Hosted by {session.provider_name || 'an Aminy facilitator'}
+              </p>
+            </div>
+            <div className="text-right shrink-0">
+              <p className="font-bold text-[#132F43]">${session.price_per_family_cents / 100}</p>
+              <p className="text-sm text-[#5A6B7A]">per family</p>
+            </div>
+          </div>
+
+          {body && <p className="text-sm text-[#3A4A57] mt-2 line-clamp-2">{body}</p>}
+
+          {/* Safety line — on every hangout card, verbatim */}
+          <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#3A4A57] bg-[#F6FBFB] border border-[#E8E4DF] rounded-full px-2.5 py-1">
+            <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#2A7D99]" aria-hidden="true" />
+            {HANGOUT_SAFETY_BADGE}
+          </p>
+
+          <div className="flex items-center justify-between mt-3 gap-2">
+            <div className="flex items-center gap-3 text-sm text-[#5A6B7A] min-w-0 flex-wrap">
+              <span className="flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+                {sessionDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                {sessionDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
+                {' '}· {session.duration_minutes} min
+              </span>
+              <span className={`flex items-center gap-1 font-medium ${isFull ? 'text-slate-400' : 'text-emerald-600'}`}>
+                <Users className="w-3.5 h-3.5" aria-hidden="true" />
+                {isFull ? 'Full' : `${spotsLeft} of ${session.max_families} family spots open`}
+              </span>
+            </div>
+
+            <Button
+              size="sm"
+              className={isFull
+                ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                : 'bg-[#6B9080] hover:bg-[#216982] text-white'
+              }
+              disabled={isFull}
+              onClick={onBook}
+              aria-label={isFull ? 'Hangout is full' : `Save your family's spot — $${session.price_per_family_cents / 100}`}
+            >
+              {isFull ? 'Full' : 'Save your spot'}
             </Button>
           </div>
         </div>

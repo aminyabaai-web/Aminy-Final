@@ -220,6 +220,38 @@ export async function deleteConversation(
 }
 
 // ============================================
+// Rename Conversation
+// ============================================
+
+/**
+ * Rename a conversation (title only) in Supabase + the localStorage cache.
+ * Used by the chat-history drawer's per-row rename and by AI title generation.
+ */
+export async function renameConversation(
+  conversationId: string,
+  userId: string,
+  title: string
+): Promise<boolean> {
+  // Update local cache first (offline-first)
+  const local = loadConversationLocally(conversationId);
+  if (local) {
+    saveConversationLocally(conversationId, { ...local, title } as unknown as Record<string, unknown>);
+  }
+
+  try {
+    const { error } = await supabase
+      .from('conversations')
+      .update({ title, updated_at: new Date().toISOString() })
+      .eq('id', conversationId)
+      .eq('user_id', userId);
+
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+// ============================================
 // Sync localStorage → Supabase
 // ============================================
 
@@ -316,6 +348,7 @@ export default {
   load: loadConversation,
   loadAll: loadConversations,
   loadSummaries: loadConversationSummaries,
+  rename: renameConversation,
   delete: deleteConversation,
   syncLocal: syncLocalToSupabase,
 };

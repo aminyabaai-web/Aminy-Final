@@ -56,7 +56,8 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
 import { TierType } from '../lib/tier-utils';
-import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost, getComments as getSupabaseComments, addComment as addSupabaseComment, type CommunityComment } from '../lib/community-service';
+import { getPosts as getSupabasePosts, createPost as createSupabasePost, likePost as likeSupabasePost, unlikePost as unlikeSupabasePost, bookmarkPost as bookmarkSupabasePost, unbookmarkPost as unbookmarkSupabasePost, getComments as getSupabaseComments, addComment as addSupabaseComment, getBlockedUserIds, blockUser as blockUserService, unblockUser as unblockUserService, getEvents as getSupabaseEvents, createEvent as createSupabaseEvent, cancelEvent as cancelSupabaseEvent, rsvpToEvent, cancelRsvp, getMyRsvpEventIds, type CommunityComment, type CommunityEvent, type EventLocationType } from '../lib/community-service';
+import { flagContent, type FlagCategory } from '../lib/moderation-service';
 import { checkAndAwardBadges } from '../lib/badge-service';
 import { supabase } from '../utils/supabase/client';
 import { isDemoMode } from '../lib/demo-seed';
@@ -99,12 +100,67 @@ interface Event {
   id: string;
   title: string;
   description: string;
+  /** General area / venue description — hosts are asked not to post exact addresses. */
   location: string;
   date: Date;
   attendeeCount: number;
   isVirtual: boolean;
   isAttending: boolean;
+  // Parent-hosting fields (migration 20260723090000); optional so demo/mock
+  // events and pre-migration rows still render.
+  locationType?: EventLocationType;
+  city?: string | null;
+  state?: string | null;
+  capacity?: number | null;
+  hostName?: string | null;
+  createdBy?: string | null;
+  isSeed?: boolean;
 }
+
+/** Map a service-layer event row into the view model. */
+function toViewEvent(e: CommunityEvent, isAttending: boolean): Event {
+  return {
+    id: e.id,
+    title: e.title,
+    description: e.description,
+    location: e.location || (e.isVirtual ? 'Virtual' : ''),
+    date: new Date(e.date),
+    attendeeCount: e.attendeeCount,
+    isVirtual: e.isVirtual,
+    isAttending,
+    locationType: e.locationType,
+    city: e.city,
+    state: e.state,
+    capacity: e.capacity,
+    hostName: e.hostName,
+    createdBy: e.createdBy,
+    isSeed: e.isSeed,
+  };
+}
+
+/** Location-type choices for the meetup composer. */
+const EVENT_LOCATION_TYPES: { id: EventLocationType; label: string }[] = [
+  { id: 'park', label: 'Park' },
+  { id: 'library', label: 'Library' },
+  { id: 'virtual', label: 'Virtual' },
+  { id: 'other', label: 'Other' },
+];
+
+/** Shown on every event card — set honest safety expectations. */
+const EVENT_SAFETY_NOTE = "Meet in public places. Aminy doesn't vet attendees.";
+
+/** Blank meetup-composer draft (module-level so callbacks can reset to it). */
+const EMPTY_EVENT_DRAFT = {
+  title: '',
+  description: '',
+  date: '',
+  time: '',
+  locationType: 'park' as EventLocationType,
+  location: '',
+  city: '',
+  state: '',
+  capacity: '',
+};
 
 // Upcoming BCBA-led group session surfaced in the feed strip
 // (rows from the `group_sessions` table — see 20260608100000_group_sessions.sql).
@@ -121,6 +177,23 @@ interface LiveGroupSession {
 type PostCategory = 'wins' | 'questions' | 'tips' | 'support' | 'resources' | 'bcba-qa';
 type GroupCategory = 'diagnosis' | 'age-group' | 'topic' | 'local';
 type CommunityView = 'feed' | 'groups' | 'events' | 'bcba-qa';
+
+// Target of a report/block action — a post or a comment someone else wrote.
+interface ModerationTarget {
+  kind: 'post' | 'comment';
+  id: string;
+  authorId: string;
+  authorName: string;
+  content: string;
+}
+
+// User-facing report reasons, mapped to moderation_queue flag categories.
+const REPORT_REASONS: { id: string; label: string; description: string; category: FlagCategory }[] = [
+  { id: 'harmful', label: 'Harmful or unsafe', description: 'Bullying, dangerous advice, or upsetting content', category: 'inappropriate' },
+  { id: 'spam', label: 'Spam', description: 'Ads, scams, or repetitive self-promotion', category: 'spam' },
+  { id: 'private-info', label: 'Shares private information', description: 'Personal details about someone without consent', category: 'privacy' },
+  { id: 'other', label: 'Something else', description: 'Anything that does not feel right', category: 'other' },
+];
 
 interface CommunityHubProps {
   userId: string;
@@ -333,6 +406,30 @@ export function CommunityHub({
   const [othersTyping, setOthersTyping] = useState(false);
   // Upcoming BCBA group sessions for the "Live group sessions" strip.
   const [groupSessions, setGroupSessions] = useState<LiveGroupSession[]>([]);
+  // Events tab: parent meetup composer + event report sheet + cancel confirm.
+  const [showEventComposer, setShowEventComposer] = useState(false);
+  const [creatingEvent, setCreatingEvent] = useState(false);
+  const [newEvent, setNewEvent] = useState(EMPTY_EVENT_DRAFT);
+  const [reportEventTarget, setReportEventTarget] = useState<Event | null>(null);
+  const [eventReportNote, setEventReportNote] = useState('');
+  const [eventReportSending, setEventReportSending] = useState(false);
+  // Two-tap cancel confirm for the host's own event (no blocking dialogs).
+  const [confirmCancelEventId, setConfirmCancelEventId] = useState<string | null>(null);
+  // Report & block: overflow action sheet + report reason sheet + block list.
+  const [blockedIds, setBlockedIds] = useState<Set<string>>(new Set());
+  const [actionTarget, setActionTarget] = useState<ModerationTarget | null>(null);
+  const [reportTarget, setReportTarget] = useState<ModerationTarget | null>(null);
+  const [reportNote, setReportNote] = useState('');
+  const [reportSending, setReportSending] = useState(false);
+
+  // Hydrate the viewer's block list (localStorage + user_blocks table).
+  useEffect(() => {
+    let active = true;
+    getBlockedUserIds(userId).then(ids => {
+      if (active && ids.size > 0) setBlockedIds(ids);
+    }).catch(() => {});
+    return () => { active = false; };
+  }, [userId]);
 
   // Load posts from Supabase; seed MOCK_POSTS only in demo mode when empty
   useEffect(() => {
@@ -432,39 +529,19 @@ export function CommunityHub({
     loadGroups();
   }, [demo, userId]);
 
-  // Load events from Supabase; seed MOCK_EVENTS only in demo mode when empty
+  // Load events from Supabase (live column is `date`, NOT `event_date` — the
+  // old query silently never matched); seed MOCK_EVENTS only in demo mode.
   useEffect(() => {
     async function loadEvents() {
       try {
-        const { data, error } = await supabase
-          .from('community_events')
-          .select('*')
-          .gte('event_date', new Date().toISOString())
-          .order('event_date', { ascending: true })
-          .limit(20);
-
-        if (error) throw error;
-
-        if (data && data.length > 0) {
+        const dbEvents = await getSupabaseEvents();
+        if (dbEvents.length > 0) {
           // Hydrate which events this user has RSVP'd to (persisted attendance).
           let attendingIds = new Set<string>();
           if (userId) {
-            const { data: attendance } = await supabase
-              .from('event_attendees')
-              .select('event_id')
-              .eq('user_id', userId);
-            attendingIds = new Set((attendance || []).map((a: { event_id: string }) => a.event_id));
+            attendingIds = await getMyRsvpEventIds(userId);
           }
-          setEvents(data.map((e: { id: string; title: string; description?: string; location?: string; event_date: string; attendee_count?: number; is_virtual?: boolean }) => ({
-            id: e.id,
-            title: e.title,
-            description: e.description || '',
-            location: e.location || 'Virtual',
-            date: new Date(e.event_date),
-            attendeeCount: e.attendee_count || 0,
-            isVirtual: e.is_virtual ?? false,
-            isAttending: attendingIds.has(e.id),
-          })));
+          setEvents(dbEvents.map(e => toViewEvent(e, attendingIds.has(e.id))));
         } else if (demo) {
           setEvents(MOCK_EVENTS);
         }
@@ -582,6 +659,7 @@ export function CommunityHub({
   // Filter posts
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
+      if (blockedIds.has(post.authorId)) return false;
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         const matchesSearch =
@@ -599,7 +677,70 @@ export function CommunityHub({
       if (!a.isPinned && b.isPinned) return 1;
       return b.createdAt.getTime() - a.createdAt.getTime();
     });
-  }, [posts, searchQuery, selectedCategory]);
+  }, [posts, searchQuery, selectedCategory, blockedIds]);
+
+  // Comments from blocked users are hidden for this viewer too.
+  const visibleComments = useMemo(
+    () => threadComments.filter(c => !blockedIds.has(c.userId)),
+    [threadComments, blockedIds]
+  );
+
+  // Block a user: instant local hide + persisted via community-service, with undo.
+  const handleBlockUser = useCallback((target: ModerationTarget) => {
+    const { authorId, authorName } = target;
+    setBlockedIds(prev => new Set(prev).add(authorId));
+    setActionTarget(null);
+    setReportTarget(null);
+    blockUserService(userId, authorId).catch(() => {});
+    toast.success(`You won't see posts or comments from ${authorName} anymore`, {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          setBlockedIds(prev => {
+            const next = new Set(prev);
+            next.delete(authorId);
+            return next;
+          });
+          unblockUserService(userId, authorId).catch(() => {});
+        },
+      },
+    });
+  }, [userId]);
+
+  // Submit a report → moderation_queue row via moderation-service.
+  // Demo/sample content (non-UUID ids) has no Supabase rows: acknowledge
+  // without a network write so the flow still completes in walkthroughs.
+  const handleSubmitReport = useCallback(async (reason: typeof REPORT_REASONS[number]) => {
+    if (!reportTarget || reportSending) return;
+    setReportSending(true);
+    try {
+      const isPersisted = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(reportTarget.id);
+      if (isPersisted) {
+        const note = reportNote.trim();
+        const result = await flagContent(
+          reportTarget.kind,
+          reportTarget.id,
+          reportTarget.content,
+          reportTarget.authorId,
+          reportTarget.authorName,
+          {
+            category: reason.category,
+            reason: note ? `${reason.label} — ${note}` : reason.label,
+            flaggedBy: userId || undefined,
+          }
+        );
+        if (!result.success) {
+          toast.error("Couldn't send the report — please try again");
+          return;
+        }
+      }
+      toast.success('Thanks — our team will review');
+      setReportTarget(null);
+      setReportNote('');
+    } finally {
+      setReportSending(false);
+    }
+  }, [reportTarget, reportSending, reportNote, userId]);
 
   // Handle like
   const handleLike = useCallback((postId: string) => {
@@ -672,14 +813,20 @@ export function CommunityHub({
     }
   }, [groups, userId]);
 
-  // Handle attend event — optimistic local update + non-blocking Supabase persistence.
+  // Handle attend event — optimistic local update + non-blocking Supabase
+  // persistence via community-service (event_attendees; a DB trigger keeps
+  // attendee_count in sync server-side).
   const handleAttendEvent = useCallback((eventId: string) => {
     const event = events.find(e => e.id === eventId);
     const willAttend = !event?.isAttending;
+    if (willAttend && event?.capacity != null && event.attendeeCount >= event.capacity) {
+      toast.error('This meetup is full — check back in case a spot opens');
+      return;
+    }
     setEvents(prev =>
       prev.map(e =>
         e.id === eventId
-          ? { ...e, isAttending: !e.isAttending, attendeeCount: e.isAttending ? e.attendeeCount - 1 : e.attendeeCount + 1 }
+          ? { ...e, isAttending: !e.isAttending, attendeeCount: e.isAttending ? Math.max(0, e.attendeeCount - 1) : e.attendeeCount + 1 }
           : e
       )
     );
@@ -687,19 +834,134 @@ export function CommunityHub({
     const isPersistedEvent = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(eventId);
     if (userId && isPersistedEvent) {
       if (willAttend) {
-        Promise.resolve(
-          supabase.from('event_attendees').upsert(
-            { event_id: eventId, user_id: userId, rsvp_status: 'attending' },
-            { onConflict: 'event_id,user_id' }
-          )
-        ).then(() => {}).catch(() => {});
+        rsvpToEvent(userId, eventId).catch(() => {});
       } else {
-        Promise.resolve(
-          supabase.from('event_attendees').delete().eq('event_id', eventId).eq('user_id', userId)
-        ).then(() => {}).catch(() => {});
+        cancelRsvp(userId, eventId).catch(() => {});
       }
     }
   }, [events, userId]);
+
+  // Cancel the host's own event: first tap arms the confirm, second executes.
+  const handleCancelOwnEvent = useCallback((eventId: string) => {
+    if (confirmCancelEventId !== eventId) {
+      setConfirmCancelEventId(eventId);
+      return;
+    }
+    setConfirmCancelEventId(null);
+    setEvents(prev => prev.filter(e => e.id !== eventId));
+    toast.success('Meetup cancelled');
+    const isPersistedEvent = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(eventId);
+    if (userId && isPersistedEvent) {
+      cancelSupabaseEvent(userId, eventId).catch(() => {});
+    }
+  }, [confirmCancelEventId, userId]);
+
+  // Create a parent-hosted meetup from the composer sheet.
+  const handleSubmitEvent = useCallback(async () => {
+    const title = newEvent.title.trim();
+    const description = newEvent.description.trim();
+    if (!title || !description || !newEvent.date) {
+      toast.error('Add a title, a few details, and a date');
+      return;
+    }
+    const when = new Date(`${newEvent.date}T${newEvent.time || '10:00'}`);
+    if (Number.isNaN(when.getTime()) || when.getTime() <= Date.now()) {
+      toast.error('Pick a date and time in the future');
+      return;
+    }
+    const isVirtual = newEvent.locationType === 'virtual';
+    const location = newEvent.location.trim() || (isVirtual ? 'Video call — link shared with attendees' : '');
+    if (!location) {
+      toast.error('Describe the general meeting area (no exact address needed)');
+      return;
+    }
+    const parsedCapacity = parseInt(newEvent.capacity, 10);
+    const capacity = Number.isFinite(parsedCapacity) && parsedCapacity > 0 ? parsedCapacity : null;
+
+    setCreatingEvent(true);
+    try {
+      const canPersist = !demo && !!userId && /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(userId);
+      let created: Event | null = null;
+      if (canPersist) {
+        const saved = await createSupabaseEvent(userId, {
+          title,
+          description,
+          location,
+          date: when.toISOString(),
+          locationType: newEvent.locationType,
+          city: isVirtual ? undefined : newEvent.city.trim() || undefined,
+          state: isVirtual ? undefined : newEvent.state.trim() || undefined,
+          capacity,
+          hostName: userName || undefined,
+        });
+        if (!saved) {
+          toast.error("Couldn't post the meetup — please try again");
+          return;
+        }
+        created = toViewEvent(saved, false);
+      } else {
+        // Demo/dev walkthroughs: local-only event so the flow still completes.
+        created = {
+          id: `local-${Date.now()}`,
+          title,
+          description,
+          location,
+          date: when,
+          attendeeCount: 0,
+          isVirtual,
+          isAttending: false,
+          locationType: newEvent.locationType,
+          city: isVirtual ? null : newEvent.city.trim() || null,
+          state: isVirtual ? null : newEvent.state.trim() || null,
+          capacity,
+          hostName: userName || null,
+          createdBy: userId || null,
+        };
+      }
+      setEvents(prev =>
+        [...prev, created as Event].sort((a, b) => a.date.getTime() - b.date.getTime())
+      );
+      setNewEvent(EMPTY_EVENT_DRAFT);
+      setShowEventComposer(false);
+      toast.success('Meetup posted — nearby families can now RSVP');
+    } finally {
+      setCreatingEvent(false);
+    }
+  }, [newEvent, userId, userName, demo]);
+
+  // Submit an event report → moderation_queue (mirrors the post report flow;
+  // demo/sample events with non-UUID ids acknowledge without a network write).
+  const handleSubmitEventReport = useCallback(async (reason: typeof REPORT_REASONS[number]) => {
+    if (!reportEventTarget || eventReportSending) return;
+    setEventReportSending(true);
+    try {
+      const isPersisted = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(reportEventTarget.id);
+      if (isPersisted) {
+        const note = eventReportNote.trim();
+        const result = await flagContent(
+          'event',
+          reportEventTarget.id,
+          `${reportEventTarget.title}\n${reportEventTarget.description}`,
+          reportEventTarget.createdBy || '',
+          reportEventTarget.hostName || 'Event host',
+          {
+            category: reason.category,
+            reason: note ? `${reason.label} — ${note}` : reason.label,
+            flaggedBy: userId || undefined,
+          }
+        );
+        if (!result.success) {
+          toast.error("Couldn't send the report — please try again");
+          return;
+        }
+      }
+      toast.success('Thanks — our team will review');
+      setReportEventTarget(null);
+      setEventReportNote('');
+    } finally {
+      setEventReportSending(false);
+    }
+  }, [reportEventTarget, eventReportSending, eventReportNote, userId]);
 
   // Submit new post
   const handleSubmitPost = useCallback(() => {
@@ -939,6 +1201,7 @@ export function CommunityHub({
             className={`flex items-center gap-1.5 text-sm ${
               post.isLiked ? 'text-red-500' : 'text-[#5A6B7A] hover:text-red-500'
             }`}
+            aria-label={post.isLiked ? `Unlike post (${post.likes} likes)` : `Like post (${post.likes} likes)`}
           >
             <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
             {post.likes}
@@ -970,9 +1233,25 @@ export function CommunityHub({
             className={`p-1.5 rounded-full hover:bg-[#EDF4F7] ${
               post.isBookmarked ? 'text-[#6B9080]' : 'text-slate-400'
             }`}
+            aria-label={post.isBookmarked ? 'Remove bookmark' : 'Bookmark post'}
           >
             <Bookmark className={`w-4 h-4 ${post.isBookmarked ? 'fill-current' : ''}`} />
           </button>
+          {post.authorId !== userId && (
+            <button
+              onClick={() => setActionTarget({
+                kind: 'post',
+                id: post.id,
+                authorId: post.authorId,
+                authorName: post.authorName,
+                content: `${post.title}\n${post.content}`,
+              })}
+              className="p-1.5 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-700"
+              aria-label={`More options for post by ${post.authorName}`}
+            >
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
     </Card>
@@ -1174,6 +1453,29 @@ export function CommunityHub({
         {/* Groups View */}
         {view === 'groups' && (
           <div className="space-y-4">
+            {/* Family Connect entry — Wave 3 village: one-to-one family matching.
+                Parent-mediated by design; kids never contact each other directly. */}
+            <button
+              onClick={() => onNavigate?.('family-connect')}
+              className="w-full text-left p-4 rounded-xl bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 hover:shadow-md transition-shadow"
+              aria-label="Open Family Connect — meet families like yours"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 rounded-lg bg-[#2A7D99]/10 flex items-center justify-center shrink-0">
+                  <Heart className="w-6 h-6 text-[#2A7D99]" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">
+                    Families who get it
+                  </h3>
+                  <p className="text-sm text-[#5A6B7A] mt-1">
+                    Meet families like yours, nearby or online — first names and age
+                    bands only, and you choose what to share.
+                  </p>
+                </div>
+              </div>
+            </button>
+
             <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
               Your Groups
             </h2>
@@ -1225,55 +1527,131 @@ export function CommunityHub({
           </div>
         )}
 
-        {/* Events View */}
+        {/* Events View — parent-hosted meetups + partner-seeded starters */}
         {view === 'events' && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
-              Upcoming Events
-            </h2>
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <h2 className="text-lg font-semibold text-[#132F43] dark:text-white">
+                Upcoming Events
+              </h2>
+              <Button
+                size="sm"
+                onClick={() => setShowEventComposer(true)}
+                className="flex items-center gap-1.5 shrink-0"
+              >
+                <Plus className="w-4 h-4" />
+                Host a meetup
+              </Button>
+            </div>
+            {/* Honest note: early density comes from partner-hosted events */}
+            {events.some(e => e.isSeed) && (
+              <Card className="p-3 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 border-[#6B9080]/20">
+                <div className="flex items-start gap-2.5">
+                  <Sparkles className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
+                  <p className="text-sm text-[#3A4A57] dark:text-teal-100">
+                    Early meetups are hosted by Aminy and partner organizations while
+                    this community grows. You can host your own anytime.
+                  </p>
+                </div>
+              </Card>
+            )}
             {events.length === 0 ? (
               <Card className="p-12 text-center">
                 <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">No upcoming events</h3>
-                <p className="text-[#5A6B7A]">Local meetups and virtual support circles will show up here when they're scheduled.</p>
+                <p className="text-[#5A6B7A] mb-4">Local meetups and virtual support circles will show up here when they're scheduled — or start one yourself.</p>
+                <Button onClick={() => setShowEventComposer(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Host a meetup
+                </Button>
               </Card>
             ) : (
-              events.map((event) => (
-              <Card key={event.id} className="p-4">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-semibold text-[#132F43] dark:text-white">{event.title}</h3>
-                      {event.isVirtual && (
-                        <Badge className="bg-blue-100 text-blue-700 text-sm">Virtual</Badge>
-                      )}
+              events.map((event) => {
+                // "local-" ids are events created this session in demo/dev
+                // walkthroughs — always the viewer's own.
+                const isMine = (!!userId && event.createdBy === userId) || event.id.startsWith('local-');
+                const isFull = event.capacity != null && event.attendeeCount >= event.capacity;
+                return (
+                  <Card key={event.id} className="p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <h3 className="font-semibold text-[#132F43] dark:text-white">{event.title}</h3>
+                          {event.isVirtual && (
+                            <Badge className="bg-blue-100 text-blue-700 text-sm">Virtual</Badge>
+                          )}
+                          {event.isSeed && (
+                            <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-sm">Partner-hosted</Badge>
+                          )}
+                          {isMine && (
+                            <Badge className="bg-amber-100 text-amber-700 text-sm">Your meetup</Badge>
+                          )}
+                        </div>
+                        {event.hostName && (
+                          <p className="text-sm text-[#5A6B7A] mb-1">Hosted by {event.hostName}</p>
+                        )}
+                        <p className="text-sm text-[#5A6B7A] mb-3">{event.description}</p>
+                        <div className="flex items-center gap-x-4 gap-y-1 flex-wrap text-sm text-[#5A6B7A]">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {event.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                            {' · '}
+                            {event.date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                          </span>
+                          <span className="flex items-center gap-1 min-w-0">
+                            <MapPin className="w-4 h-4 shrink-0" />
+                            <span className="truncate">
+                              {event.location}
+                              {event.city ? ` — ${event.city}${event.state ? `, ${event.state}` : ''}` : ''}
+                            </span>
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Users className="w-4 h-4" />
+                            {event.capacity != null
+                              ? `${event.attendeeCount} of ${event.capacity} going`
+                              : `${event.attendeeCount} attending`}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2 shrink-0">
+                        {isMine ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleCancelOwnEvent(event.id)}
+                            className={confirmCancelEventId === event.id ? 'border-red-300 text-red-600 hover:bg-red-50' : ''}
+                          >
+                            {confirmCancelEventId === event.id ? 'Tap again to cancel' : 'Cancel event'}
+                          </Button>
+                        ) : (
+                          <Button
+                            variant={event.isAttending ? 'outline' : 'default'}
+                            size="sm"
+                            disabled={!event.isAttending && isFull}
+                            onClick={() => handleAttendEvent(event.id)}
+                          >
+                            {event.isAttending ? 'Going' : isFull ? 'Full' : 'RSVP'}
+                          </Button>
+                        )}
+                        {!isMine && (
+                          <button
+                            onClick={() => { setReportEventTarget(event); setEventReportNote(''); }}
+                            className="p-1.5 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-700"
+                            aria-label={`Report event: ${event.title}`}
+                          >
+                            <Flag className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-sm text-[#5A6B7A] mb-3">{event.description}</p>
-                    <div className="flex items-center gap-4 text-sm text-[#5A6B7A]">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {event.date.toLocaleDateString()}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {event.location}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {event.attendeeCount} attending
-                      </span>
+                    {/* Safety expectations — on every event card */}
+                    <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
+                      <Shield className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <p className="text-sm text-slate-400">{EVENT_SAFETY_NOTE}</p>
                     </div>
-                  </div>
-                  <Button
-                    variant={event.isAttending ? 'outline' : 'default'}
-                    size="sm"
-                    onClick={() => handleAttendEvent(event.id)}
-                  >
-                    {event.isAttending ? 'Going' : 'RSVP'}
-                  </Button>
-                </div>
-              </Card>
-              ))
+                  </Card>
+                );
+              })
             )}
           </div>
         )}
@@ -1453,17 +1831,17 @@ export function CommunityHub({
                 )}
                 <div className="border-t border-[#E8E4DF] dark:border-slate-700 pt-4">
                   <h3 className="text-sm font-medium text-[#3A4A57] dark:text-slate-200 mb-3">
-                    Comments {threadComments.length > 0 && `(${threadComments.length})`}
+                    Comments {visibleComments.length > 0 && `(${visibleComments.length})`}
                   </h3>
                   {threadLoading ? (
                     <p className="text-sm text-slate-400 text-center py-6">Loading comments…</p>
-                  ) : threadComments.length === 0 ? (
+                  ) : visibleComments.length === 0 ? (
                     <p className="text-sm text-slate-400 text-center py-6">
                       No comments yet. Be the first to reply.
                     </p>
                   ) : (
                     <div className="space-y-3">
-                      {threadComments.map((c) => (
+                      {visibleComments.map((c) => (
                         <div key={c.id} className="flex items-start gap-2.5">
                           <div className="w-8 h-8 rounded-full bg-[#E8E4DF] dark:bg-slate-700 flex items-center justify-center shrink-0">
                             <span className="text-sm font-medium text-[#5A6B7A]">{c.displayName.charAt(0)}</span>
@@ -1475,6 +1853,21 @@ export function CommunityHub({
                             </div>
                             <p className="text-sm text-[#5A6B7A] dark:text-slate-300 break-words">{c.body}</p>
                           </div>
+                          {c.userId !== userId && (
+                            <button
+                              onClick={() => setActionTarget({
+                                kind: 'comment',
+                                id: c.id,
+                                authorId: c.userId,
+                                authorName: c.displayName,
+                                content: c.body,
+                              })}
+                              className="p-1.5 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-700 shrink-0"
+                              aria-label={`More options for comment by ${c.displayName}`}
+                            >
+                              <MoreHorizontal className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -1514,6 +1907,343 @@ export function CommunityHub({
                 >
                   <Send className="w-4 h-4" />
                 </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Post/comment overflow action sheet — Report + Block */}
+      <AnimatePresence>
+        {actionTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-[60] flex items-end justify-center"
+            onClick={() => setActionTarget(null)}
+          >
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
+              onClick={(e) => e.stopPropagation()}
+              aria-label={actionTarget.kind === 'post' ? 'Post options' : 'Comment options'}
+            >
+              <h2 className="text-base font-semibold text-[#132F43] dark:text-white">
+                {actionTarget.kind === 'post' ? 'Post options' : 'Comment options'}
+              </h2>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">
+                These actions are private — no one is notified.
+              </p>
+              <button
+                onClick={() => { setReportTarget(actionTarget); setReportNote(''); setActionTarget(null); }}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[#EDF4F7] dark:hover:bg-slate-700 text-left"
+              >
+                <Flag className="w-5 h-5 text-[#5A6B7A] shrink-0" />
+                <span>
+                  <span className="block text-sm font-medium text-[#132F43] dark:text-white">
+                    Report {actionTarget.kind}
+                  </span>
+                  <span className="block text-sm text-[#5A6B7A] dark:text-slate-400">
+                    Let our team take a look
+                  </span>
+                </span>
+              </button>
+              <button
+                onClick={() => handleBlockUser(actionTarget)}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-[#EDF4F7] dark:hover:bg-slate-700 text-left"
+              >
+                <Shield className="w-5 h-5 text-[#5A6B7A] shrink-0" />
+                <span>
+                  <span className="block text-sm font-medium text-[#132F43] dark:text-white">
+                    Block {actionTarget.authorName}
+                  </span>
+                  <span className="block text-sm text-[#5A6B7A] dark:text-slate-400">
+                    Hide their posts and comments from your feed
+                  </span>
+                </span>
+              </button>
+              <Button
+                variant="outline"
+                className="w-full mt-2"
+                onClick={() => setActionTarget(null)}
+              >
+                Cancel
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Report reason sheet — pick a reason to submit (optional note first) */}
+      <AnimatePresence>
+        {reportTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-[60] flex items-end justify-center"
+            onClick={() => { if (!reportSending) { setReportTarget(null); setReportNote(''); } }}
+          >
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
+              onClick={(e) => e.stopPropagation()}
+              aria-label={`Report this ${reportTarget.kind}`}
+            >
+              <div className="flex items-start justify-between gap-2 mb-1">
+                <h2 className="text-base font-semibold text-[#132F43] dark:text-white">
+                  Report this {reportTarget.kind}
+                </h2>
+                <button
+                  onClick={() => { setReportTarget(null); setReportNote(''); }}
+                  className="p-1 rounded-full text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700"
+                  aria-label="Close report"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">
+                Our team reviews every report. The author won't know it came from you.
+              </p>
+              <Input
+                placeholder="Anything we should know? (optional)"
+                value={reportNote}
+                onChange={(e) => setReportNote(e.target.value)}
+                className="mb-3"
+                aria-label="Optional note for the moderation team"
+              />
+              <div className="space-y-2">
+                {REPORT_REASONS.map((reason) => (
+                  <button
+                    key={reason.id}
+                    onClick={() => handleSubmitReport(reason)}
+                    disabled={reportSending}
+                    className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl border border-[#E8E4DF] dark:border-slate-700 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 text-left disabled:opacity-50"
+                  >
+                    <span>
+                      <span className="block text-sm font-medium text-[#132F43] dark:text-white">
+                        {reason.label}
+                      </span>
+                      <span className="block text-sm text-[#5A6B7A] dark:text-slate-400">
+                        {reason.description}
+                      </span>
+                    </span>
+                    <Flag className="w-4 h-4 text-slate-400 shrink-0" />
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Host-a-meetup composer sheet */}
+      <AnimatePresence>
+        {showEventComposer && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            onClick={() => { if (!creatingEvent) setShowEventComposer(false); }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white dark:bg-slate-800 rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between">
+                <h2 className="text-lg font-semibold">Host a meetup</h2>
+                <button onClick={() => setShowEventComposer(false)} aria-label="Close meetup composer">
+                  <X className="w-5 h-5 text-slate-400" />
+                </button>
+              </div>
+              <div className="p-4 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1" htmlFor="meetup-title">Title</label>
+                  <Input
+                    id="meetup-title"
+                    placeholder="e.g. Sensory-friendly park morning"
+                    value={newEvent.title}
+                    onChange={(e) => setNewEvent(prev => ({ ...prev, title: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1" htmlFor="meetup-description">Details</label>
+                  <Textarea
+                    id="meetup-description"
+                    placeholder="What to expect, who it's for, what to bring…"
+                    value={newEvent.description}
+                    onChange={(e) => setNewEvent(prev => ({ ...prev, description: e.target.value }))}
+                    rows={3}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1" htmlFor="meetup-date">Date</label>
+                    <Input
+                      id="meetup-date"
+                      type="date"
+                      value={newEvent.date}
+                      onChange={(e) => setNewEvent(prev => ({ ...prev, date: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1" htmlFor="meetup-time">Time</label>
+                    <Input
+                      id="meetup-time"
+                      type="time"
+                      value={newEvent.time}
+                      onChange={(e) => setNewEvent(prev => ({ ...prev, time: e.target.value }))}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Where</label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {EVENT_LOCATION_TYPES.map((lt) => (
+                      <Button
+                        key={lt.id}
+                        variant={newEvent.locationType === lt.id ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setNewEvent(prev => ({ ...prev, locationType: lt.id }))}
+                      >
+                        {lt.label}
+                      </Button>
+                    ))}
+                  </div>
+                  <Input
+                    placeholder={newEvent.locationType === 'virtual'
+                      ? 'e.g. Video call — link shared with attendees'
+                      : 'General area, e.g. "Encanto Park — playground by the lagoon"'}
+                    value={newEvent.location}
+                    onChange={(e) => setNewEvent(prev => ({ ...prev, location: e.target.value }))}
+                    aria-label="General meeting area"
+                  />
+                  <p className="text-sm text-[#5A6B7A] mt-1.5 flex items-start gap-1.5">
+                    <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0 text-slate-400" />
+                    Share exact meeting spots privately with attendees.
+                  </p>
+                </div>
+                {newEvent.locationType !== 'virtual' && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1" htmlFor="meetup-city">City</label>
+                      <Input
+                        id="meetup-city"
+                        placeholder="e.g. Phoenix"
+                        value={newEvent.city}
+                        onChange={(e) => setNewEvent(prev => ({ ...prev, city: e.target.value }))}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1" htmlFor="meetup-state">State</label>
+                      <Input
+                        id="meetup-state"
+                        placeholder="e.g. AZ"
+                        maxLength={20}
+                        value={newEvent.state}
+                        onChange={(e) => setNewEvent(prev => ({ ...prev, state: e.target.value }))}
+                      />
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <label className="block text-sm font-medium mb-1" htmlFor="meetup-capacity">
+                    Max families <span className="font-normal text-[#5A6B7A]">(optional)</span>
+                  </label>
+                  <Input
+                    id="meetup-capacity"
+                    type="number"
+                    min={1}
+                    placeholder="Leave blank for no limit"
+                    value={newEvent.capacity}
+                    onChange={(e) => setNewEvent(prev => ({ ...prev, capacity: e.target.value }))}
+                  />
+                </div>
+                <p className="text-sm text-slate-400">{EVENT_SAFETY_NOTE}</p>
+              </div>
+              <div className="p-4 border-t border-[#E8E4DF] dark:border-slate-700 flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setShowEventComposer(false)} disabled={creatingEvent}>
+                  Cancel
+                </Button>
+                <Button onClick={handleSubmitEvent} disabled={creatingEvent}>
+                  <Send className="w-4 h-4 mr-2" />
+                  {creatingEvent ? 'Posting…' : 'Post meetup'}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Event report sheet — minimal variant of the post report sheet
+          (kept separate so the post/comment moderation flow stays untouched) */}
+      <AnimatePresence>
+        {reportEventTarget && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-[60] flex items-end justify-center"
+            onClick={() => { if (!eventReportSending) { setReportEventTarget(null); setEventReportNote(''); } }}
+          >
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 40, opacity: 0 }}
+              className="bg-white dark:bg-slate-800 rounded-t-2xl w-full max-w-lg p-4 pb-6"
+              onClick={(e) => e.stopPropagation()}
+              aria-label="Report this event"
+            >
+              <div className="flex items-start justify-between gap-2 mb-1">
+                <h2 className="text-base font-semibold text-[#132F43] dark:text-white">
+                  Report this event
+                </h2>
+                <button
+                  onClick={() => { setReportEventTarget(null); setEventReportNote(''); }}
+                  className="p-1 rounded-full text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700"
+                  aria-label="Close event report"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">
+                Our team reviews every report. The host won't know it came from you.
+              </p>
+              <Input
+                placeholder="Anything we should know? (optional)"
+                value={eventReportNote}
+                onChange={(e) => setEventReportNote(e.target.value)}
+                className="mb-3"
+                aria-label="Optional note for the moderation team"
+              />
+              <div className="space-y-2">
+                {REPORT_REASONS.map((reason) => (
+                  <button
+                    key={reason.id}
+                    onClick={() => handleSubmitEventReport(reason)}
+                    disabled={eventReportSending}
+                    className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-xl border border-[#E8E4DF] dark:border-slate-700 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 text-left disabled:opacity-50"
+                  >
+                    <span>
+                      <span className="block text-sm font-medium text-[#132F43] dark:text-white">
+                        {reason.label}
+                      </span>
+                      <span className="block text-sm text-[#5A6B7A] dark:text-slate-400">
+                        {reason.description}
+                      </span>
+                    </span>
+                    <Flag className="w-4 h-4 text-slate-400 shrink-0" />
+                  </button>
+                ))}
               </div>
             </motion.div>
           </motion.div>

@@ -206,8 +206,11 @@ function demoTrendData(): { points: CheckInPoint[]; baseline: BaselineSummary } 
  * The parent-facing outcomes trend: last 8 weekly check-ins per metric, warm
  * plain-language framing, honest empty/sparse states. Real Supabase data for
  * signed-in users; sample data only in demo mode.
+ *
+ * Exported so ProgressHome can compose the same honest trend view — one
+ * pipeline, one presentation, no forked chart logic.
  */
-const WeeklyOutcomeTrend: React.FC<{ childName: string }> = ({ childName }) => {
+export const WeeklyOutcomeTrend: React.FC<{ childName: string }> = ({ childName }) => {
   const [points, setPoints] = useState<CheckInPoint[]>([]);
   const [baseline, setBaseline] = useState<BaselineSummary | null>(null);
   const [loading, setLoading] = useState(true);

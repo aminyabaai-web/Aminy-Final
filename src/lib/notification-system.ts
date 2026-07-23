@@ -9,6 +9,7 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 export interface NotificationPayload {
   id: string;
@@ -96,17 +97,24 @@ export async function subscribeToPush(
       });
     }
 
-    // Send subscription to server
+    // Send subscription to server — requires the user's session JWT (the
+    // server derives the user from it; the anon key gets a 401).
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) {
+      console.warn('subscribeToPush: no session — skipping server subscription');
+      return false;
+    }
+
     const response = await fetch(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/notifications/subscribe`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId,
           subscription: subscription.toJSON(),
         }),
       }
@@ -282,15 +290,20 @@ export async function generateWeeklyDigest(userId: string): Promise<{
   cuesUsed: string[];
   topProgress: string;
 }> {
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) {
+    throw new Error('Sign in required to generate weekly digest');
+  }
+
   const response = await fetch(
     `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/notifications/weekly-digest`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${publicAnonKey}`,
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ userId }),
     }
   );
 

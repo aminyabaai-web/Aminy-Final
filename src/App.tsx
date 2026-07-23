@@ -247,6 +247,16 @@ const WinsJournal = lazy(() =>
     default: m.WinsJournal,
   })),
 );
+const SpecialTime = lazy(() =>
+  import("./components/SpecialTime").then((m) => ({
+    default: m.SpecialTime,
+  })),
+);
+const ProgressHome = lazy(() =>
+  import("./components/ProgressHome").then((m) => ({
+    default: m.ProgressHome,
+  })),
+);
 const ImpactMetricsDashboard = lazy(() =>
   import("./components/ImpactMetricsDashboard").then((m) => ({
     default: m.ImpactMetricsDashboard,
@@ -611,6 +621,11 @@ const CommunityHub = lazy(() =>
     default: m.CommunityHub,
   })),
 );
+const FamilyConnect = lazy(() =>
+  import("./components/FamilyConnect").then((m) => ({
+    default: m.FamilyConnect,
+  })),
+);
 const B2BPartnerPortal = lazy(() =>
   import("./components/B2BPartnerPortal").then((m) => ({
     default: m.B2BPartnerPortal,
@@ -960,7 +975,10 @@ const LOADING_MESSAGES: Record<string, string> = {
   'analytics-charts': 'Crunching your data...',
   'outcomes-story': 'Writing your story...',
   'wins-journal': 'Gathering your wins...',
+  'special-time': 'Finding ten minutes of their world...',
+  progress: 'Gathering how far you’ve come...',
   'impact-metrics': 'Compiling impact metrics...',
+  'family-connect': 'Finding families like yours...',
   onboarding: 'Getting things ready for you...',
 };
 
@@ -1077,6 +1095,7 @@ type AppScreen =
   | "impact-metrics" // Admin/investor impact metrics dashboard
   | "store" // Resource store/marketplace
   | "community-hub" // Parent community hub
+  | "family-connect" // Parent-mediated family matching — "families who get it"
   | "provider-analytics" // Provider analytics dashboard
   | "evv-dashboard" // EVV (Electronic Visit Verification) for Medicaid compliance
   | "claims-dashboard" // Costs & Coverage for parents
@@ -1137,7 +1156,9 @@ type AppScreen =
   | "resource-library" // BCBA-authored resource library — beats Answers Now's content
   | "aact-partner-setup" // Partner-org admin onboarding microsite (Cori at AACT)
   | "care-coordination" // Unified view across ABA/PT/OT/ST/MH + auth + site of care
-  | "just-diagnosed"; // Post-diagnosis onboarding flow — state-aware First 30 Days plan
+  | "just-diagnosed" // Post-diagnosis onboarding flow — state-aware First 30 Days plan
+  | "special-time" // Daily 10-minute child-led play prompt — connection, not therapy
+  | "progress"; // Progress home — wins first, then streak, trend, goals-as-journeys (Wave 2)
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -2872,6 +2893,7 @@ export default function App() {
                 userData={{
                   parentName: userData.parentName,
                   childName: userData.childName,
+                  childAge: userData.childAge,
                 }}
                 userTier={effectiveUserTier}
                 userRole={userData.role || 'parent'}
@@ -2910,8 +2932,8 @@ export default function App() {
                     "settings", "calm-tools", "incident-log", "care-plan", "resources",
                     "community", "profile", "benefits", "junior", "my-appointments",
                     "conversational-booking", "messages", "access-requests", "store",
-                    "community-hub", "provider-analytics", "weekly-insights", "analytics-charts",
-                    "wins-journal", "impact-metrics",
+                    "community-hub", "family-connect", "provider-analytics", "weekly-insights", "analytics-charts",
+                    "wins-journal", "impact-metrics", "special-time", "progress",
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
                     "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
@@ -3649,6 +3671,32 @@ export default function App() {
             </Suspense>
           );
 
+        case "progress":
+          // Wave 2 Progress home — wins first, streak, honest trend, goals as
+          // journeys. Composes existing sources; deeper views stay reachable.
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ProgressHome
+                userId={userData.id ?? ''}
+                childName={userData.childName || undefined}
+                onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+              />
+            </Suspense>
+          );
+
+        case "special-time":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <SpecialTime
+                onBack={() => navigateToScreen("dashboard")}
+                childName={userData.childName || undefined}
+                childAge={userData.childAge || undefined}
+                userId={userData.id || undefined}
+              />
+            </Suspense>
+          );
+
         case "impact-metrics":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
@@ -3694,6 +3742,20 @@ export default function App() {
                 userName={userData.parentName || 'Parent'}
                 userId={userData.userId || ''}
                 onUpgrade={() => navigateToScreen("paywall")}
+                onNavigate={(s) => navigateToScreen(s as AppScreen)}
+              />
+            </Suspense>
+          );
+
+        case "family-connect":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <FamilyConnect
+                userId={userData.userId || userData.id || ''}
+                userName={userData.parentName || undefined}
+                userState={userData.state || undefined}
+                childAge={userData.childAge || undefined}
+                onBack={() => navigateToScreen("community-hub")}
                 onNavigate={(s) => navigateToScreen(s as AppScreen)}
               />
             </Suspense>

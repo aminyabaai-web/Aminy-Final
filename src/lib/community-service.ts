@@ -3,7 +3,14 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-// Community service — Supabase CRUD for posts, likes, comments, bookmarks
+// Community service — Supabase CRUD for posts, likes, comments, bookmarks, events
+//
+// SCHEMA NOTE (verified against the LIVE database 2026-07-23): community_posts
+// uses `user_display_name`, `title`, `body` — NOT `display_name`, `content`,
+// `is_anonymous`, or `is_pinned` (those columns never existed remotely, so the
+// old select/insert silently failed and posts never persisted). Everything
+// below is written against the live column names. Anonymity is encoded by
+// storing the display name "Anonymous Parent"; pinning is not a live column.
 import { supabase } from '../utils/supabase/client';
 
 export interface CommunityPost {
@@ -42,10 +49,9 @@ export async function getPosts(
     let query = supabase
       .from('community_posts')
       .select(`
-        id, user_id, display_name, is_anonymous, content, category,
-        is_pinned, like_count, comment_count, created_at
+        id, user_id, user_display_name, title, body, category,
+        like_count, comment_count, created_at
       `)
-      .order('is_pinned', { ascending: false })
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -80,20 +86,17 @@ export async function getPosts(
     const bookmarkedPostIds = new Set((bookmarksRes.data || []).map((b: { post_id: string }) => b.post_id));
 
     return posts.map(p => {
-      // Title is first line of content, body is the rest
-      const lines = (p.content || '').split('\n');
-      const title = lines[0] || 'Untitled';
-      const body = lines.slice(1).join('\n').trim();
-
+      const displayName = p.user_display_name || 'Parent';
+      const isAnonymous = /^anonymous/i.test(displayName);
       return {
         id: p.id,
         userId: p.user_id,
-        displayName: p.is_anonymous ? 'Anonymous Parent' : (p.display_name || 'Parent'),
-        isAnonymous: p.is_anonymous || false,
-        title,
-        body,
+        displayName: isAnonymous ? 'Anonymous Parent' : displayName,
+        isAnonymous,
+        title: p.title || 'Untitled',
+        body: p.body || '',
         category: p.category || 'general',
-        isPinned: p.is_pinned || false,
+        isPinned: false, // not a live column — reserved for future moderation tooling
         likeCount: p.like_count || 0,
         commentCount: p.comment_count || 0,
         isLikedByUser: likedPostIds.has(p.id),
@@ -116,20 +119,16 @@ export async function createPost(
   displayName: string
 ): Promise<CommunityPost | null> {
   try {
-    // Store title as first line of content
-    const content = `${title}\n${body}`;
-
     const { data, error } = await supabase
       .from('community_posts')
       .insert({
         user_id: userId,
-        content,
+        user_display_name: isAnonymous ? 'Anonymous Parent' : displayName,
+        title,
+        body,
         category,
-        is_anonymous: isAnonymous,
-        display_name: isAnonymous ? 'Anonymous' : displayName,
         like_count: 0,
         comment_count: 0,
-        is_pinned: false,
       })
       .select()
       .single();
@@ -221,9 +220,10 @@ export async function unlikePost(userId: string, postId: string): Promise<boolea
 
 export async function getComments(postId: string): Promise<CommunityComment[]> {
   try {
+    // Live schema: community_comments uses user_display_name + body.
     const { data, error } = await supabase
       .from('community_comments')
-      .select('id, post_id, user_id, display_name, content, created_at')
+      .select('id, post_id, user_id, user_display_name, body, created_at')
       .eq('post_id', postId)
       .order('created_at', { ascending: true });
 
@@ -233,8 +233,8 @@ export async function getComments(postId: string): Promise<CommunityComment[]> {
       id: c.id,
       postId: c.post_id,
       userId: c.user_id,
-      displayName: c.display_name || 'Parent',
-      body: c.content || '',
+      displayName: c.user_display_name || 'Parent',
+      body: c.body || '',
       createdAt: c.created_at,
     }));
   } catch (error) {
@@ -255,8 +255,8 @@ export async function addComment(
       .insert({
         post_id: postId,
         user_id: userId,
-        content: body,
-        display_name: displayName,
+        body,
+        user_display_name: displayName,
       })
       .select()
       .single();
@@ -282,12 +282,78 @@ export async function addComment(
       postId: data.post_id,
       userId: data.user_id,
       displayName,
-      body: data.content || body,
+      body: data.body || body,
       createdAt: data.created_at,
     };
   } catch (error) {
     console.warn('[Community] Failed to add comment:', error);
     return null;
+  }
+}
+
+// ── Blocks ───────────────────────────────────────────────────────────
+// Viewer-side block list. localStorage is the source of truth for instant,
+// offline-safe filtering; the `user_blocks` table (migration
+// 20260719000000_user_blocks.sql) syncs it across devices best-effort.
+
+const BLOCKED_USERS_KEY = 'aminy-blocked-users';
+const isUuid = (id: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(id);
+
+function readLocalBlocks(): string[] {
+  try {
+    const raw = localStorage.getItem(BLOCKED_USERS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalBlocks(ids: string[]) {
+  try {
+    localStorage.setItem(BLOCKED_USERS_KEY, JSON.stringify([...new Set(ids)]));
+  } catch { /* storage full or blocked — in-session state still applies */ }
+}
+
+export async function getBlockedUserIds(userId: string): Promise<Set<string>> {
+  const blocked = new Set(readLocalBlocks());
+  if (userId && isUuid(userId)) {
+    try {
+      const { data } = await supabase
+        .from('user_blocks')
+        .select('blocked_id')
+        .eq('blocker_id', userId);
+      for (const row of data || []) blocked.add(row.blocked_id);
+      writeLocalBlocks([...blocked]);
+    } catch {
+      // Table not deployed yet or offline — localStorage list still applies.
+    }
+  }
+  return blocked;
+}
+
+export async function blockUser(blockerId: string, blockedId: string): Promise<void> {
+  writeLocalBlocks([...readLocalBlocks(), blockedId]);
+  if (blockerId && isUuid(blockerId) && isUuid(blockedId)) {
+    try {
+      await supabase.from('user_blocks').upsert(
+        { blocker_id: blockerId, blocked_id: blockedId },
+        { onConflict: 'blocker_id,blocked_id' }
+      );
+    } catch { /* best-effort sync — local block already in effect */ }
+  }
+}
+
+export async function unblockUser(blockerId: string, blockedId: string): Promise<void> {
+  writeLocalBlocks(readLocalBlocks().filter(id => id !== blockedId));
+  if (blockerId && isUuid(blockerId) && isUuid(blockedId)) {
+    try {
+      await supabase
+        .from('user_blocks')
+        .delete()
+        .eq('blocker_id', blockerId)
+        .eq('blocked_id', blockedId);
+    } catch { /* best-effort */ }
   }
 }
 
@@ -313,5 +379,206 @@ export async function unbookmarkPost(userId: string, postId: string): Promise<bo
   } catch (error) {
     console.warn('[Community] Failed to unbookmark post:', error);
     return false;
+  }
+}
+
+// ── Events ───────────────────────────────────────────────────────────
+// LIVE SCHEMA (verified 2026-07-23): community_events uses column `date`
+// (NOT `event_date` — the old queries against event_date never returned rows).
+// Creator/host/geo/capacity/status columns arrive with migration
+// 20260723090000_community_events_parent_hosting.sql; reads below use
+// SELECT * + defensive fallbacks so they work before AND after it applies.
+
+export type EventLocationType = 'park' | 'library' | 'virtual' | 'other';
+
+export interface CommunityEvent {
+  id: string;
+  title: string;
+  description: string;
+  /** General area / venue description — never an exact address. */
+  location: string;
+  date: string; // ISO timestamp
+  attendeeCount: number;
+  isVirtual: boolean;
+  locationType: EventLocationType;
+  city: string | null;
+  state: string | null;
+  capacity: number | null;
+  hostName: string | null;
+  createdBy: string | null;
+  isSeed: boolean;
+  status: 'active' | 'cancelled';
+}
+
+interface CommunityEventRow {
+  id: string;
+  title: string;
+  description?: string | null;
+  location?: string | null;
+  date: string;
+  attendee_count?: number | null;
+  is_virtual?: boolean | null;
+  location_type?: string | null;
+  city?: string | null;
+  state?: string | null;
+  capacity?: number | null;
+  host_name?: string | null;
+  created_by?: string | null;
+  is_seed?: boolean | null;
+  status?: string | null;
+}
+
+function mapEventRow(e: CommunityEventRow): CommunityEvent {
+  const locationType: EventLocationType =
+    e.location_type === 'park' || e.location_type === 'library' || e.location_type === 'virtual'
+      ? e.location_type
+      : e.is_virtual ? 'virtual' : 'other';
+  return {
+    id: e.id,
+    title: e.title,
+    description: e.description || '',
+    location: e.location || (e.is_virtual ? 'Virtual' : ''),
+    date: e.date,
+    attendeeCount: e.attendee_count || 0,
+    isVirtual: e.is_virtual ?? locationType === 'virtual',
+    locationType,
+    city: e.city ?? null,
+    state: e.state ?? null,
+    capacity: e.capacity ?? null,
+    hostName: e.host_name ?? null,
+    createdBy: e.created_by ?? null,
+    isSeed: e.is_seed ?? false,
+    status: e.status === 'cancelled' ? 'cancelled' : 'active',
+  };
+}
+
+/** Upcoming, non-cancelled events, soonest first. */
+export async function getEvents(limit: number = 30): Promise<CommunityEvent[]> {
+  try {
+    const { data, error } = await supabase
+      .from('community_events')
+      .select('*')
+      .gte('date', new Date().toISOString())
+      .order('date', { ascending: true })
+      .limit(limit);
+    if (error || !data) return [];
+    // status is filtered client-side so the query also works before the
+    // hosting migration adds the column.
+    return (data as CommunityEventRow[]).map(mapEventRow).filter(e => e.status !== 'cancelled');
+  } catch (err) {
+    console.warn('[Community] Failed to load events:', err);
+    return [];
+  }
+}
+
+export interface CreateEventInput {
+  title: string;
+  description: string;
+  /** General area or venue description — UI asks hosts NOT to post exact addresses. */
+  location: string;
+  date: string; // ISO timestamp
+  locationType: EventLocationType;
+  city?: string;
+  state?: string;
+  capacity?: number | null;
+  hostName?: string;
+  isSeed?: boolean;
+}
+
+/**
+ * Create a parent- (or partner-) hosted event. Requires the signed-in user's
+ * UUID (RLS: auth.uid() = created_by) and the 20260723090000 migration.
+ */
+export async function createEvent(
+  userId: string,
+  input: CreateEventInput
+): Promise<CommunityEvent | null> {
+  try {
+    const { data, error } = await supabase
+      .from('community_events')
+      .insert({
+        title: input.title,
+        description: input.description,
+        location: input.location,
+        date: input.date,
+        is_virtual: input.locationType === 'virtual',
+        location_type: input.locationType,
+        city: input.city || null,
+        state: input.state || null,
+        capacity: input.capacity ?? null,
+        host_name: input.hostName || null,
+        created_by: userId,
+        is_seed: input.isSeed ?? false,
+        status: 'active',
+        attendee_count: 0,
+      })
+      .select()
+      .single();
+    if (error || !data) {
+      if (error) console.warn('[Community] Failed to create event:', error.message);
+      return null;
+    }
+    return mapEventRow(data as CommunityEventRow);
+  } catch (err) {
+    console.warn('[Community] Failed to create event:', err);
+    return null;
+  }
+}
+
+/** Soft-cancel an event the user created (RLS enforces ownership). */
+export async function cancelEvent(userId: string, eventId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('community_events')
+      .update({ status: 'cancelled' })
+      .eq('id', eventId)
+      .eq('created_by', userId);
+    return !error;
+  } catch (err) {
+    console.warn('[Community] Failed to cancel event:', err);
+    return false;
+  }
+}
+
+/** RSVP to an event (idempotent upsert into event_attendees). */
+export async function rsvpToEvent(userId: string, eventId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase.from('event_attendees').upsert(
+      { event_id: eventId, user_id: userId, rsvp_status: 'attending' },
+      { onConflict: 'event_id,user_id' }
+    );
+    return !error;
+  } catch (err) {
+    console.warn('[Community] Failed to RSVP:', err);
+    return false;
+  }
+}
+
+/** Remove an RSVP. */
+export async function cancelRsvp(userId: string, eventId: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('event_attendees')
+      .delete()
+      .eq('event_id', eventId)
+      .eq('user_id', userId);
+    return !error;
+  } catch (err) {
+    console.warn('[Community] Failed to cancel RSVP:', err);
+    return false;
+  }
+}
+
+/** Event ids the user has RSVP'd to (for hydrating "Going" state). */
+export async function getMyRsvpEventIds(userId: string): Promise<Set<string>> {
+  try {
+    const { data } = await supabase
+      .from('event_attendees')
+      .select('event_id')
+      .eq('user_id', userId)
+      .eq('rsvp_status', 'attending');
+    return new Set((data || []).map((a: { event_id: string }) => a.event_id));
+  } catch {
+    return new Set();
   }
 }

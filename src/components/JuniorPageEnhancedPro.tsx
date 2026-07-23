@@ -91,6 +91,7 @@ import { JrCalmCorner } from './JrCalmCorner';
 import { TokenRewardsBoard } from './TokenRewardsBoard';
 import { AACBoard } from './junior/AACBoard';
 import { VisualSchedule } from './junior/VisualSchedule';
+import { EaseParentView, logEaseSession } from './junior/EaseParentView';
 import { playTap, playSuccess, haptic } from './junior/activities/sounds';
 import {
   recordJuniorProgress,
@@ -490,6 +491,10 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
     } catch { /* corrupt storage — fall back to defaults */ }
     return defaults;
   });
+
+  // Ease insights panel (EaseParentView) inside Grown-up settings — open by
+  // default so parents land straight on the connection view.
+  const [showEaseInsights, setShowEaseInsights] = useState(true);
 
   // Persist parent controls so settings survive reloads
   const updateParentControls = (patch: Partial<ParentControls>) => {
@@ -2409,6 +2414,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   durationSeconds: data.durationSeconds,
                   outcome: 'successful_self_regulation'
                 });
+                // Feed the parent-facing Ease insights log (minutes today + weekly report)
+                logEaseSession(data.activity || 'calm corner', '🌊', Math.max(1, Math.round((data.durationSeconds || 60) / 60)));
                 setActiveView('home');
               }}
               buddyName={buddyVoices.find(b => b.id === selectedBuddy)?.name || 'Sunny'}
@@ -2732,6 +2739,16 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     </div>
                   </div>
                 </Card>
+
+                {/* Ease insights — what they love, minutes today, "I noticed…" log,
+                    weekly report. Parent-only surface behind the grown-up gate. */}
+                <div className="mt-5">
+                  <EaseParentView
+                    childName={childName}
+                    isParentView={showEaseInsights}
+                    onToggleParentView={() => setShowEaseInsights(v => !v)}
+                  />
+                </div>
 
                 <p className="mt-4 text-center text-sm text-[#8A9BA8] dark:text-slate-500">
                   Focus areas and rewards live in the parent app under Ease.

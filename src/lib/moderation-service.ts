@@ -16,7 +16,7 @@ import { supabase } from '../utils/supabase/client';
 // Types
 // ============================================================================
 
-export type ContentType = 'post' | 'comment' | 'message' | 'profile' | 'document';
+export type ContentType = 'post' | 'comment' | 'event' | 'message' | 'profile' | 'document';
 export type FlagCategory = 'spam' | 'harassment' | 'misinformation' | 'inappropriate' | 'self_harm' | 'privacy' | 'copyright' | 'other';
 export type ModerationStatus = 'pending' | 'approved' | 'rejected' | 'escalated';
 
@@ -143,7 +143,16 @@ export function analyzeContent(content: string): {
 // ============================================================================
 
 /**
- * Flag content for moderation
+ * Flag content for moderation.
+ *
+ * LIVE-SCHEMA NOTE (verified 2026-07-23): the remote moderation_queue table
+ * has columns `content_type, content_id (uuid), reported_by (uuid), reason,
+ * details, ai_flagged, ai_confidence, ai_categories, status` — NOT the
+ * `content_text`/`content_author_*`/`flag_category` columns this function used to
+ * insert, so every user report silently failed. The insert below matches the
+ * live columns; author name + excerpt are folded into `details` so moderators
+ * still see context. `content_id` and `reported_by` must be UUIDs — callers
+ * already gate on UUID ids for persisted content.
  */
 export async function flagContent(
   contentType: ContentType,
@@ -160,19 +169,30 @@ export async function flagContent(
   }
 ): Promise<{ success: boolean; itemId?: string; error?: string }> {
   try {
+    // Fold author + excerpt + any AI explanation into `details` — the live
+    // table has no dedicated author/excerpt columns.
+    const excerpt = (content || '').slice(0, 500);
+    const detailParts = [
+      options.reason && options.reason !== options.category ? options.reason : null,
+      authorName ? `Author: ${authorName} (${authorId})` : `Author id: ${authorId}`,
+      excerpt ? `Content: ${excerpt}` : null,
+      options.aiExplanation ? `AI: ${options.aiExplanation}` : null,
+    ].filter(Boolean);
+
+    // reported_by is a uuid column; non-UUID caller ids (demo/dev) are stored
+    // as null (treated as system/AI-originated).
+    const isUuid = (v?: string | null) => !!v && /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(v);
+
     const { data, error } = await supabase
       .from('moderation_queue')
       .insert({
         content_type: contentType,
         content_id: contentId,
-        content_text: content,
-        content_author_id: authorId,
-        content_author_name: authorName,
-        flag_category: options.category,
-        flag_reason: options.reason,
-        flagged_by: options.flaggedBy,
+        reason: options.category,
+        details: detailParts.join('\n'),
+        reported_by: isUuid(options.flaggedBy) ? options.flaggedBy : null,
+        ai_flagged: !options.flaggedBy,
         ai_confidence: options.aiConfidence,
-        ai_explanation: options.aiExplanation,
         status: 'pending',
       })
       .select('id')
