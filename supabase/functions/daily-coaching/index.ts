@@ -164,6 +164,145 @@ async function detectBehaviorPatterns(userId: string): Promise<BehaviorPattern |
   return null;
 }
 
+// ──────────────────────────────────────────────────────────────────────────────
+// Connection tips (Wave 1.5 relationship intelligence)
+// ──────────────────────────────────────────────────────────────────────────────
+
+// On alternate days the daily nudge is a CONNECTION moment (a gift, not a
+// task) instead of a behavior tip. Date parity in UTC matches the 12:00 UTC
+// cron; month boundaries can produce two same-kind days in a row — harmless.
+function isConnectionDay(): boolean {
+  return new Date().getUTCDate() % 2 === 0;
+}
+
+interface ConnectionDyad {
+  interests: string[];
+  specialTimeMoments: string[]; // recent wins tagged "special time"
+}
+
+// Special Time wins live in the make-server KV table (wins:moments:<userId>).
+// This function runs with the service role, so we read the kv table directly.
+async function fetchConnectionDyad(userId: string): Promise<ConnectionDyad> {
+  const dyad: ConnectionDyad = { interests: [], specialTimeMoments: [] };
+
+  try {
+    const { data } = await supabase
+      .from('kv_store_8a022548')
+      .select('value')
+      .eq('key', `wins:moments:${userId}`)
+      .maybeSingle();
+    const moments = Array.isArray(data?.value) ? data!.value : [];
+    dyad.specialTimeMoments = moments
+      .filter((m: { tags?: string[]; content?: string }) =>
+        Array.isArray(m?.tags) && m.tags.includes('special time') && typeof m?.content === 'string')
+      .slice(0, 2)
+      .map((m: { content: string }) => m.content.trim().slice(0, 140));
+  } catch {
+    // best-effort — no wins is fine
+  }
+
+  try {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('onboarding_data, children')
+      .eq('id', userId)
+      .maybeSingle();
+    const onboarding = (profile?.onboarding_data ?? {}) as Record<string, unknown>;
+    const primaryChild = (Array.isArray(profile?.children) ? profile!.children[0] : {}) as Record<string, unknown>;
+    const raw = (onboarding.interests ?? primaryChild?.interests ?? []) as unknown;
+    if (Array.isArray(raw)) {
+      dyad.interests = raw
+        .filter((s): s is string => typeof s === 'string' && s.trim().length > 0)
+        .slice(0, 4)
+        .map((s) => s.trim().slice(0, 40));
+    }
+  } catch {
+    // best-effort — no interests is fine
+  }
+
+  return dyad;
+}
+
+async function generateConnectionTip(
+  user: UserRow,
+  dyad: ConnectionDyad,
+  parentCheckIn: string | null
+): Promise<string | null> {
+  if (!ANTHROPIC_KEY) return null;
+
+  const childName = user.child_name || 'your child';
+  const childDesc = [
+    user.child_name ? `${user.child_name}` : 'their neurodivergent child',
+    user.child_age ? `age ${user.child_age}` : null,
+  ].filter(Boolean).join(', ');
+
+  const interestLine = dyad.interests.length
+    ? `What lights ${childName} up: ${dyad.interests.join(', ')}.`
+    : '';
+  const momentsLine = dyad.specialTimeMoments.length
+    ? `Recent shared moments the parent recorded: ${dyad.specialTimeMoments.map((m) => `"${m}"`).join(' | ')}. Build gently on what already worked.`
+    : '';
+  const checkInLine = parentCheckIn
+    ? `The parent's own state: ${parentCheckIn}. If they're stretched thin or running on empty, make the moment tiny and effortless — minutes, not projects.`
+    : '';
+
+  const prompt = `You are Aminy. Today's note is a CONNECTION moment for a parent and ${childDesc} — not advice, not a task.
+${getDayContext()}
+${interestLine} ${momentsLine} ${checkInLine}
+
+Write ONE warm invitation to a 10-minute child-led moment today. Requirements:
+- 1-2 sentences max. No greeting, no sign-off.
+- Frame it as a gift, not a task — e.g. "Tonight, ten quiet minutes of water play at the sink — ${childName} leads, you follow."
+- Child-led: the child directs, the parent follows. No teaching, no fixing, no goals.
+- NO therapy or clinical language (no "skills", "regulation", "practice", "reinforce", "progress").
+- Household materials or nothing. Specific to what lights this child up when known.
+- Never use the word "should".
+
+Return only the invitation text, nothing else.`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': ANTHROPIC_KEY,
+        'anthropic-version': '2023-06-01',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 120,
+        temperature: 0.9,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    if (!resp.ok) {
+      console.error('Anthropic error (connection tip):', await resp.text());
+      return null;
+    }
+
+    const data = await resp.json();
+    return data.content?.[0]?.text?.trim() || null;
+  } catch (err) {
+    console.error('generateConnectionTip error:', err);
+    return null;
+  }
+}
+
+// Connection fallbacks when Claude is unavailable — same gift-not-task voice.
+const CONNECTION_FALLBACK_TIPS = [
+  "Tonight, ten unhurried minutes of whatever your child is already into — they lead, you follow, and laughter counts double.",
+  "Try a two-person parade down the hallway today: they pick the route, the pace, and what everyone carries. You just march.",
+  "Ten minutes on the floor with their favorite thing today — no questions, no directions, just company. That's the whole plan.",
+  "Let them DJ for ten minutes tonight — their songs, your full attention. If they say dance, you dance.",
+  "A tiny moment for you two today: they pick the game, they make the rules, and the rules can change mid-game. Say yes to all of it.",
+];
+
+function getConnectionFallbackTip(userId: string): string {
+  const idx = userId.charCodeAt(0) % CONNECTION_FALLBACK_TIPS.length;
+  return CONNECTION_FALLBACK_TIPS[idx];
+}
+
 // Latest "how are YOU holding up?" parent check-in (stress_logs, last 48h).
 // Service-role client bypasses RLS, so the table is server-readable here.
 async function fetchParentCheckIn(userId: string): Promise<string | null> {
@@ -279,6 +418,42 @@ function getFallbackTip(userId: string): string {
   return FALLBACK_TIPS[idx];
 }
 
+// Build the day's nudge for one user: behavior tip on odd UTC dates,
+// connection tip on even ones. Shared by both query paths so opt-outs and
+// dedupe (which live in the callers) are untouched.
+async function buildDailyNudge(user: UserRow): Promise<{
+  tip: string;
+  title: string;
+  priority: 'high' | 'normal';
+  patternDetected: boolean;
+  tipKind: 'behavior' | 'connection';
+}> {
+  const parentName = user.parent_name?.split(' ')[0] || 'there';
+  const parentCheckIn = await fetchParentCheckIn(user.user_id);
+
+  if (isConnectionDay()) {
+    const dyad = await fetchConnectionDyad(user.user_id);
+    const tip = (await generateConnectionTip(user, dyad, parentCheckIn)) ?? getConnectionFallbackTip(user.user_id);
+    return {
+      tip,
+      title: 'A little moment for you two 💛',
+      priority: 'normal',
+      patternDetected: false,
+      tipKind: 'connection',
+    };
+  }
+
+  const pattern = await detectBehaviorPatterns(user.user_id).catch(() => null);
+  const tip = (await generateTip(user, pattern, parentCheckIn)) ?? getFallbackTip(user.user_id);
+  return {
+    tip,
+    title: pattern?.notificationTitle ?? `Good morning, ${parentName} 👋`,
+    priority: pattern?.priority ?? 'normal',
+    patternDetected: !!pattern,
+    tipKind: 'behavior',
+  };
+}
+
 // ──────────────────────────────────────────────────────────────────────────────
 // Main
 // ──────────────────────────────────────────────────────────────────────────────
@@ -306,29 +481,24 @@ async function runDailyCoaching(): Promise<{ sent: number; skipped: number; erro
     const batch = users.slice(i, i + BATCH);
     await Promise.all(batch.map(async (user: UserRow) => {
       try {
-        const [pattern, parentCheckIn] = await Promise.all([
-          detectBehaviorPatterns(user.user_id).catch(() => null),
-          fetchParentCheckIn(user.user_id),
-        ]);
-        const tip = (await generateTip(user, pattern, parentCheckIn)) ?? getFallbackTip(user.user_id);
-        const parentName = user.parent_name?.split(' ')[0] || 'there';
-        const title = pattern?.notificationTitle ?? `Good morning, ${parentName} 👋`;
+        const nudge = await buildDailyNudge(user);
 
         const { error: insertErr } = await supabase
           .from('scheduled_notifications')
           .insert({
             user_id: user.user_id,
-            title,
-            body: tip,
+            title: nudge.title,
+            body: nudge.tip,
             tag: 'daily-coaching',
             notification_type: 'daily_checkin',
             scheduled_for: new Date().toISOString(),
-            priority: pattern?.priority ?? 'normal',
+            priority: nudge.priority,
             data: {
               type: 'daily_coaching',
               screen: 'dashboard',
               ai_generated: !!ANTHROPIC_KEY,
-              pattern_detected: !!pattern,
+              pattern_detected: nudge.patternDetected,
+              tip_kind: nudge.tipKind,
             },
           });
 
@@ -413,29 +583,24 @@ async function runDirectQuery(stats: { sent: number; skipped: number; errors: nu
           recent_behavior: null,
         };
 
-        const [pattern, parentCheckIn] = await Promise.all([
-          detectBehaviorPatterns(user.user_id).catch(() => null),
-          fetchParentCheckIn(user.user_id),
-        ]);
-        const tip = (await generateTip(user, pattern, parentCheckIn)) ?? getFallbackTip(user.user_id);
-        const parentName = (user.parent_name?.split(' ')[0]) || 'there';
-        const title = pattern?.notificationTitle ?? `Good morning, ${parentName} 👋`;
+        const nudge = await buildDailyNudge(user);
 
         const { error: insertErr } = await supabase
           .from('scheduled_notifications')
           .insert({
             user_id: user.user_id,
-            title,
-            body: tip,
+            title: nudge.title,
+            body: nudge.tip,
             tag: 'daily-coaching',
             notification_type: 'daily_checkin',
             scheduled_for: new Date().toISOString(),
-            priority: pattern?.priority ?? 'normal',
+            priority: nudge.priority,
             data: {
               type: 'daily_coaching',
               screen: 'dashboard',
               ai_generated: !!ANTHROPIC_KEY,
-              pattern_detected: !!pattern,
+              pattern_detected: nudge.patternDetected,
+              tip_kind: nudge.tipKind,
             },
           });
 

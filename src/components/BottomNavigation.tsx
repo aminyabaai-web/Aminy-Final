@@ -191,6 +191,12 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       description: '10 minutes of their world — child-led play'
     },
     {
+      id: 'progress',
+      label: 'Progress',
+      icon: TrendingUp,
+      description: 'Wins, trends and goals in one place'
+    },
+    {
       id: 'document-vault',
       label: 'Records',
       icon: FolderOpen,

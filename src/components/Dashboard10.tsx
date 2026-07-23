@@ -1706,6 +1706,33 @@ export function Dashboard10({
         )}
 
         {/* ========================================
+            PROGRESS HOME LINK — compact entry to the one
+            "look how far you've come" view (wins first, streak,
+            trend, goals as journeys). Quiet white card, neutral
+            steel accent — the trend chart above owns this
+            region's teal.
+            ======================================== */}
+        <section>
+          <button
+            onClick={() => onNavigate?.('progress')}
+            data-testid="progress-home-card"
+            className="w-full flex items-center gap-3 rounded-xl border border-[#E8E4DF] bg-white p-4 text-left shadow-sm transition-all hover:border-[#2A7D99]/20 hover:bg-[#F6FBFB] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700/70"
+            aria-label={`Progress — ${childPossessive} wins, streak, trends and goals in one place`}
+          >
+            <div className="w-10 h-10 rounded-lg bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center flex-shrink-0">
+              <TrendingUp className="w-5 h-5 text-[#577590] dark:text-slate-300" strokeWidth={1.5} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-[#132F43] dark:text-slate-100">Progress</h3>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                Wins, trends and goals — look how far you&rsquo;ve come
+              </p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
+          </button>
+        </section>
+
+        {/* ========================================
             3. OUTCOMES DASHBOARD - Measurable Progress
             Shows real value that makes subscription essential
             ======================================== */}

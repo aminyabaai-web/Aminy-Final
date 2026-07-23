@@ -10,15 +10,20 @@
  * trials, no goals, no data pressure. The child leads, the parent follows,
  * laughter counts, and "not today" is a fully honored answer.
  *
- * - Today's idea is picked deterministically (date + age band + interest),
- *   with no repeats inside ~2 weeks (see src/content/special-time-ideas.ts).
+ * AI-FIRST (Wave 1.5, owner decision): the idea shown is Aminy's pick for
+ * this specific parent-child pair, generated server-side from the dyad
+ * signals (age band, stored interest, recent feedback, parent energy). The
+ * static library is invisible plumbing — the instant fallback when the AI
+ * request takes >1.5s or fails. ONE idea is committed per request; we never
+ * swap after render, and the UI never exposes which path served it.
+ *
  * - The 10-minute timer is optional and gentle — no alarm, no shame.
  * - The optional after-moment saves locally AND into the Wins Journal via the
  *   same make-server /wins/save path WinsJournal.tsx uses, so these memories
  *   appear among the parent's wins.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
   Check,
@@ -32,17 +37,17 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { projectId } from '../utils/supabase/info';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { supabase } from '../utils/supabase/client';
 import { trackEvent } from '../lib/analytics-tracker';
 import {
   INTEREST_LABELS,
   SPECIAL_TIME_HISTORY_KEY,
+  SPECIAL_TIME_IDEAS,
   SPECIAL_TIME_INTEREST_KEY,
   ageBandForAge,
   dateKey,
   pickDailyIdea,
-  peekTodaysIdea,
   readSpecialTimeHistory,
   readSpecialTimeInterest,
   recentSpecialTimeIdeaIds,
@@ -56,17 +61,33 @@ import {
 // ---------------------------------------------------------------------------
 
 const MOMENTS_KEY = 'aminy-special-time-moments';
+/** Today's AI-generated idea (so same-day reopens show the same idea instantly). */
+const AI_IDEA_KEY = 'aminy-special-time-ai-idea';
 
 type Feeling = 'laughed' | 'calm' | 'not-today';
 
 interface MomentRecord {
   date: string;
   ideaId: string;
+  /** Title at save time — AI ideas aren't in the static library. */
+  ideaTitle?: string;
+  /** Which path served the idea. Never shown to the parent. */
+  source?: 'ai' | 'library';
   feeling: Feeling;
   note: string;
   savedAt: string;
   /** True once this day's moment has been posted to the Wins Journal. */
   winSynced: boolean;
+}
+
+/** The idea as rendered — identical shape whether AI-generated or library. */
+interface DisplayIdea {
+  id: string;
+  title: string;
+  oneLiner: string;
+  whyItConnects: string;
+  materials: 'none' | 'household';
+  source: 'ai' | 'library';
 }
 
 function readJson<T>(key: string, fallback: T): T {
@@ -91,19 +112,188 @@ function loadMoments(): MomentRecord[] {
   return Array.isArray(m) ? m : [];
 }
 
+function toDisplayIdea(idea: SpecialTimeIdea): DisplayIdea {
+  return {
+    id: idea.id,
+    title: idea.title,
+    oneLiner: idea.oneLiner,
+    whyItConnects: idea.whyItConnects,
+    materials: idea.materials,
+    source: 'library',
+  };
+}
+
+function readTodaysAIIdea(): DisplayIdea | null {
+  const stored = readJson<{ date?: string; idea?: DisplayIdea } | null>(AI_IDEA_KEY, null);
+  if (!stored || stored.date !== dateKey() || !stored.idea) return null;
+  const { id, title, oneLiner, whyItConnects } = stored.idea;
+  if (typeof id !== 'string' || !title || !oneLiner || !whyItConnects) return null;
+  return { ...stored.idea, materials: stored.idea.materials === 'none' ? 'none' : 'household', source: 'ai' };
+}
+
 /**
- * Resolve today's idea (peekTodaysIdea semantics) and RECORD it, so the pick
- * is stable across visits and feeds the 2-week no-repeat window. Pure
- * localStorage — no network.
+ * If today already has a committed idea, return it (same idea all day —
+ * reopening never re-rolls). Returns null on the first open of the day, which
+ * triggers the AI request + 1.5s fallback race.
  */
-function resolveTodaysIdea(ageBand: AgeBand): SpecialTimeIdea {
+function resolveCommittedIdea(): DisplayIdea | null {
   const today = dateKey();
   const history = readSpecialTimeHistory();
-  const idea = peekTodaysIdea(ageBand);
+  const todays = history.filter((e) => e.date === today);
+  if (todays.length === 0) return null;
+  const lastId = todays[todays.length - 1].ideaId;
+  if (lastId.startsWith('ai-')) {
+    const stored = readTodaysAIIdea();
+    if (stored && stored.id === lastId) return stored;
+  }
+  const lib = SPECIAL_TIME_IDEAS.find((i) => i.id === lastId);
+  return lib ? toDisplayIdea(lib) : null;
+}
+
+/** Record a committed idea in the shared history (feeds the no-repeat window). */
+function recordIdea(idea: DisplayIdea): void {
+  const today = dateKey();
+  const history = readSpecialTimeHistory();
   if (!history.some((e) => e.date === today && e.ideaId === idea.id)) {
     writeJson(SPECIAL_TIME_HISTORY_KEY, [...history, { date: today, ideaId: idea.id }].slice(-60));
   }
-  return idea;
+  if (idea.source === 'ai') {
+    writeJson(AI_IDEA_KEY, { date: today, idea });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Dyad inputs for the AI request (all best-effort localStorage reads)
+// ---------------------------------------------------------------------------
+
+/** Parent's own latest check-in, mirrored locally by StressCheckIn. */
+function readParentState(): string | undefined {
+  try {
+    const raw = localStorage.getItem('aminy_parent_checkin_latest');
+    if (!raw) return undefined;
+    const local = JSON.parse(raw) as { level?: number; at?: string };
+    if (typeof local.level !== 'number' || !local.at) return undefined;
+    const days = (Date.now() - new Date(local.at).getTime()) / (24 * 60 * 60 * 1000);
+    if (!Number.isFinite(days) || days < 0 || days > 2) return undefined;
+    if (local.level <= 5) return undefined; // doing okay — no adjustment needed
+    return local.level <= 7 ? 'stretched thin' : 'running on empty';
+  } catch {
+    return undefined;
+  }
+}
+
+/** Ease tools the child keeps returning to (extra interest signal). */
+function readLovedEaseTools(): string[] {
+  try {
+    const raw = localStorage.getItem('aminy-ease-parent-sessions');
+    const sessions = raw ? (JSON.parse(raw) as Array<{ tool?: string; rating?: string | null }>) : [];
+    if (!Array.isArray(sessions)) return [];
+    const counts = new Map<string, { count: number; great: boolean }>();
+    for (const s of sessions.slice(0, 40)) {
+      if (!s?.tool) continue;
+      const entry = counts.get(s.tool) ?? { count: 0, great: false };
+      entry.count += 1;
+      if (s.rating === 'great') entry.great = true;
+      counts.set(s.tool, entry);
+    }
+    return [...counts.entries()]
+      .filter(([, v]) => v.great || v.count >= 2)
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 3)
+      .map(([tool]) => tool);
+  } catch {
+    return [];
+  }
+}
+
+/** Last 5 after-moments as feedback for the generator. */
+function readRecentFeedback(): Array<{ ideaTitle: string; feeling: Feeling; note?: string }> {
+  return loadMoments()
+    .slice(-5)
+    .reverse()
+    .map((m) => ({
+      ideaTitle: m.ideaTitle || SPECIAL_TIME_IDEAS.find((i) => i.id === m.ideaId)?.title || '',
+      feeling: m.feeling,
+      note: m.note?.trim() ? m.note.trim().slice(0, 100) : undefined,
+    }))
+    .filter((f) => f.ideaTitle.length > 0);
+}
+
+/** Titles of recently shown ideas (library + AI) so the AI avoids repeats. */
+function collectAvoidTitles(): string[] {
+  const history = readSpecialTimeHistory();
+  const recentIds = new Set([
+    ...recentSpecialTimeIdeaIds(history, dateKey()),
+    ...history.filter((e) => e.date === dateKey()).map((e) => e.ideaId),
+  ]);
+  const titles = new Set<string>();
+  for (const id of recentIds) {
+    const lib = SPECIAL_TIME_IDEAS.find((i) => i.id === id);
+    if (lib) titles.add(lib.title);
+  }
+  const aiIdea = readTodaysAIIdea();
+  if (aiIdea) titles.add(aiIdea.title);
+  for (const m of loadMoments().slice(-10)) {
+    if (m.ideaTitle) titles.add(m.ideaTitle);
+  }
+  return [...titles].slice(0, 15);
+}
+
+/** How long we give the AI before the static fallback renders (no swap after). */
+const AI_WAIT_MS = 1500;
+
+/**
+ * Ask make-server for Aminy's personalized pick. Resolves null on any
+ * failure — the caller races this against the 1.5s fallback timer. The
+ * request carries the session JWT when signed in (anon key otherwise, which
+ * the route rejects → instant fallback for unauthenticated sessions).
+ */
+async function fetchAIIdea(input: {
+  childAge?: number;
+  interest: InterestTag | null;
+}): Promise<DisplayIdea | null> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token || publicAnonKey;
+    const interests = [
+      ...(input.interest ? [INTEREST_LABELS[input.interest]] : []),
+      ...readLovedEaseTools(),
+    ];
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/special-time`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          childAge: input.childAge,
+          interests,
+          recentFeedback: readRecentFeedback(),
+          parentState: readParentState(),
+          avoidIds: collectAvoidTitles(),
+        }),
+      }
+    );
+    if (!response.ok) return null;
+    const data = await response.json();
+    const idea = data?.idea;
+    if (!idea || typeof idea.title !== 'string' || typeof idea.oneLiner !== 'string' || typeof idea.whyItConnects !== 'string') {
+      return null;
+    }
+    if (!idea.title.trim() || !idea.oneLiner.trim() || !idea.whyItConnects.trim()) return null;
+    return {
+      id: `ai-${dateKey()}-${Date.now().toString(36)}`,
+      title: idea.title.trim().slice(0, 60),
+      oneLiner: idea.oneLiner.trim().slice(0, 400),
+      whyItConnects: idea.whyItConnects.trim().slice(0, 300),
+      materials: 'household',
+      source: 'ai',
+    };
+  } catch {
+    return null;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -132,7 +322,56 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
   const kidPossessive = hasRealName ? `${childName}'s` : "your child's";
 
   const [interest, setInterest] = useState<InterestTag | null>(() => readSpecialTimeInterest());
-  const [idea, setIdea] = useState<SpecialTimeIdea>(() => resolveTodaysIdea(ageBand));
+  // AI-first: null until today's idea is committed (same-day reopens resolve
+  // instantly from the committed pick — one idea per request, never swapped).
+  const [idea, setIdea] = useState<DisplayIdea | null>(() => resolveCommittedIdea());
+  const [ideaLoading, setIdeaLoading] = useState(idea === null);
+  const requestSeqRef = useRef(0);
+
+  /**
+   * Request Aminy's pick, racing the AI against a calm 1.5s shimmer. If the
+   * AI wins, its idea is committed; otherwise the static fallback renders and
+   * a late AI response is discarded (pick ONE — never swap after render).
+   */
+  async function requestIdea(nextInterest: InterestTag | null, staticOffset = 0) {
+    const seq = ++requestSeqRef.current;
+    setIdeaLoading(true);
+
+    const aiPromise = fetchAIIdea({ childAge, interest: nextInterest }).catch(() => null);
+    const winner = await Promise.race([
+      aiPromise,
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), AI_WAIT_MS)),
+    ]);
+    if (seq !== requestSeqRef.current) return; // superseded by a newer request
+
+    let next: DisplayIdea;
+    if (winner) {
+      next = winner;
+    } else {
+      // Instant fallback — the invisible static library
+      const history = readSpecialTimeHistory();
+      const todaysIds = history.filter((e) => e.date === today).map((e) => e.ideaId);
+      next = toDisplayIdea(
+        pickDailyIdea({
+          ageBand,
+          interest: nextInterest,
+          excludeIds: [...recentSpecialTimeIdeaIds(history, today), ...todaysIds],
+          offset: staticOffset || todaysIds.length,
+        })
+      );
+    }
+    recordIdea(next);
+    setIdea(next);
+    setIdeaLoading(false);
+  }
+
+  // First open of the day: fetch Aminy's pick (fallback renders within 1.5s).
+  useEffect(() => {
+    if (idea === null && requestSeqRef.current === 0) {
+      requestIdea(interest);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Gentle optional timer
   const [secondsLeft, setSecondsLeft] = useState(TEN_MINUTES);
@@ -166,24 +405,15 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
     if (next === interest) return;
     setInterest(next);
     writeJson(SPECIAL_TIME_INTEREST_KEY, next);
-    // Re-pick today's idea for the new filter (replaces today's history entries)
-    const history = readSpecialTimeHistory().filter((e) => e.date !== today);
-    const fresh = pickDailyIdea({ ageBand, interest: next, excludeIds: recentSpecialTimeIdeaIds(history, today) });
-    writeJson(SPECIAL_TIME_HISTORY_KEY, [...history, { date: today, ideaId: fresh.id }].slice(-60));
-    setIdea(fresh);
+    // New filter → a fresh Aminy pick (static fallback honors the filter too)
+    requestIdea(next);
   }
 
   function handleSomethingElse() {
-    const history = readSpecialTimeHistory();
-    const todaysIds = history.filter((e) => e.date === today).map((e) => e.ideaId);
-    const next = pickDailyIdea({
-      ageBand,
-      interest,
-      excludeIds: [...recentSpecialTimeIdeaIds(history, today), ...todaysIds],
-      offset: todaysIds.length,
-    });
-    writeJson(SPECIAL_TIME_HISTORY_KEY, [...history, { date: today, ideaId: next.id }].slice(-60));
-    setIdea(next);
+    if (ideaLoading) return;
+    // Reshuffle = regenerate, not next-in-list (static offset only on fallback)
+    const todaysCount = readSpecialTimeHistory().filter((e) => e.date === today).length;
+    requestIdea(interest, todaysCount);
   }
 
   /**
@@ -195,11 +425,12 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
     if (!userId) return false;
     const hour = new Date().getHours();
     const context = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : hour < 21 ? 'evening' : 'bedtime';
+    const ideaTitle = saved.ideaTitle || 'Special Time';
     const content = saved.note.trim().length > 0
       ? saved.note.trim()
       : saved.feeling === 'laughed'
-        ? `We laughed together during Special Time — ${idea.title}.`
-        : `Ten calm minutes in ${kidPossessive} world — ${idea.title}.`;
+        ? `We laughed together during Special Time — ${ideaTitle}.`
+        : `Ten calm minutes in ${kidPossessive} world — ${ideaTitle}.`;
     try {
       // /wins/save now requires the user's session JWT (server derives the
       // user from it). No session → skip the sync; winSynced stays false so a
@@ -235,13 +466,15 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
   }
 
   async function handleSaveMoment() {
-    if (!feeling) return;
+    if (!feeling || !idea) return;
     const trimmedNote = note.trim();
     const moments = loadMoments().filter((m) => m.date !== today);
     const alreadySynced = todaysMoment?.winSynced === true;
     const record: MomentRecord = {
       date: today,
       ideaId: idea.id,
+      ideaTitle: idea.title,
+      source: idea.source,
       feeling,
       note: trimmedNote,
       savedAt: new Date().toISOString(),
@@ -346,30 +579,50 @@ export function SpecialTime({ onBack, childName, childAge, userId }: SpecialTime
               <Sparkles className="w-4 h-4" aria-hidden="true" />
               Today's idea
             </span>
-            <span className="text-sm text-[#5A6B7A] dark:text-slate-400 bg-[#EDF4F7] dark:bg-slate-700 px-3 py-1 rounded-full">
-              {idea.materials === 'none' ? 'Nothing needed' : 'Grab what you have'}
-            </span>
+            {!ideaLoading && idea && (
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400 bg-[#EDF4F7] dark:bg-slate-700 px-3 py-1 rounded-full">
+                {idea.materials === 'none' ? 'Nothing needed' : 'Grab what you have'}
+              </span>
+            )}
           </div>
 
-          <h2
-            className="text-2xl text-[#132F43] dark:text-slate-100 mb-2"
-            style={{ fontFamily: "'Fredoka', 'Schibsted Grotesk', sans-serif", fontWeight: 600, lineHeight: 1.2 }}
-          >
-            {idea.title}
-          </h2>
-          <p className="text-[#3A4A57] dark:text-slate-300 leading-relaxed mb-4">{idea.oneLiner}</p>
+          {ideaLoading || !idea ? (
+            // Calm shimmer (≤1.5s) while Aminy picks — then one idea, committed.
+            <div data-testid="special-time-shimmer" aria-label="Finding today's idea" role="status">
+              <div className="h-7 w-2/3 rounded-lg bg-[#EDF4F7] dark:bg-slate-700 mb-3" />
+              <div className="h-4 w-full rounded bg-[#F1F5F7] dark:bg-slate-700/70 mb-2" />
+              <div className="h-4 w-5/6 rounded bg-[#F1F5F7] dark:bg-slate-700/70 mb-4" />
+              <div className="bg-[#F6FBFB] dark:bg-slate-700/50 rounded-xl p-3 border-l-4 border-[#D6E6EC] mb-4">
+                <div className="h-4 w-3/4 rounded bg-[#EDF4F7] dark:bg-slate-700" />
+              </div>
+              <p className="text-sm text-[#8A9BA8] dark:text-slate-500 text-center mb-1">
+                Finding ten minutes of {kidPossessive} world...
+              </p>
+            </div>
+          ) : (
+            <>
+              <h2
+                className="text-2xl text-[#132F43] dark:text-slate-100 mb-2"
+                style={{ fontFamily: "'Fredoka', 'Schibsted Grotesk', sans-serif", fontWeight: 600, lineHeight: 1.2 }}
+              >
+                {idea.title}
+              </h2>
+              <p className="text-[#3A4A57] dark:text-slate-300 leading-relaxed mb-4">{idea.oneLiner}</p>
 
-          <div className="bg-[#F6FBFB] dark:bg-slate-700/50 rounded-xl p-3 border-l-4 border-[#2A7D99] mb-4">
-            <p className="text-sm text-[#3A4A57] dark:text-slate-300 italic leading-relaxed">{idea.whyItConnects}</p>
-          </div>
+              <div className="bg-[#F6FBFB] dark:bg-slate-700/50 rounded-xl p-3 border-l-4 border-[#2A7D99] mb-4">
+                <p className="text-sm text-[#3A4A57] dark:text-slate-300 italic leading-relaxed">{idea.whyItConnects}</p>
+              </div>
 
-          <button
-            onClick={handleSomethingElse}
-            className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-[#5A6B7A] dark:text-slate-300 transition-all hover:bg-[#F6FBFB] dark:hover:bg-slate-700 active:scale-[0.98]"
-          >
-            <RefreshCw className="w-4 h-4" aria-hidden="true" />
-            Something else
-          </button>
+              <button
+                onClick={handleSomethingElse}
+                disabled={ideaLoading}
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-medium text-[#5A6B7A] dark:text-slate-300 transition-all hover:bg-[#F6FBFB] dark:hover:bg-slate-700 active:scale-[0.98]"
+              >
+                <RefreshCw className="w-4 h-4" aria-hidden="true" />
+                Something else
+              </button>
+            </>
+          )}
         </section>
 
         {/* Gentle timer */}

@@ -12,7 +12,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { supabase } from '../utils/supabase/client';
-import { Search, BookOpen, FileText, CheckSquare, Scroll, Lock, Sparkles, Users, ChevronRight, X, Clock, ArrowLeft, ExternalLink, Waves, Moon, School, RefreshCw, Utensils, MessageCircle, Target, Wrench, Heart, type LucideIcon } from 'lucide-react';
+import { Search, BookOpen, FileText, CheckSquare, Scroll, Lock, Sparkles, Users, ChevronRight, X, Clock, ArrowLeft, ExternalLink, Waves, Moon, School, RefreshCw, Utensils, MessageCircle, Target, Wrench, Heart, Home, type LucideIcon } from 'lucide-react';
 import { ScreenHeader } from './ui/ScreenHeader';
 import {
   RESOURCES,
@@ -41,6 +41,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   all: Sparkles,
   meltdowns: Waves,
   sleep: Moon,
+  connection: Heart,
   school: School,
   transitions: RefreshCw,
   feeding: Utensils,
@@ -49,7 +50,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   communication: MessageCircle,
   behavior: Target,
   tools: Wrench,
-  family: Heart,
+  family: Home,
 };
 
 const TYPE_ICONS: Record<Resource['type'], React.ReactNode> = {

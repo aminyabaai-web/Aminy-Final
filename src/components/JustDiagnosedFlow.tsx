@@ -454,6 +454,49 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               </div>
             ))}
 
+            {/* How you feel matters too — normalizes the grief/relief/fear mix.
+                Softer coral tint so it reads as care, not another feature card. */}
+            <div
+              style={{
+                background: 'rgba(224,122,95,0.07)',
+                border: '1px solid rgba(224,122,95,0.20)',
+                borderRadius: 16,
+                padding: '16px 18px',
+                marginBottom: 12,
+                display: 'flex',
+                gap: 14,
+                alignItems: 'flex-start',
+              }}
+            >
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 12,
+                  background: 'rgba(224,122,95,0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <Heart size={20} color="#E07A5F" />
+              </div>
+              <div>
+                <div style={{ fontSize: 15, fontWeight: 600, color: '#132F43', marginBottom: 4 }}>
+                  How you feel matters too
+                </div>
+                <div style={{ fontSize: 13, color: '#5A6B7A', lineHeight: 1.55 }}>
+                  Grief, relief, fear, hope — most parents feel all of them, sometimes in the
+                  same hour. None of it means you love your child any less. When you're ready,
+                  the guide <em>Loving the Child in Front of You</em> in our Resource Library
+                  was written for this. And if you're struggling to stay afloat, call or text{' '}
+                  <a href="tel:988" style={{ color: '#E07A5F', fontWeight: 600, textDecoration: 'none' }}>988</a>{' '}
+                  — any hour. Support for you is part of the plan.
+                </div>
+              </div>
+            </div>
+
             <div style={{ marginTop: 8, marginBottom: 8 }}>
               <p
                 style={{

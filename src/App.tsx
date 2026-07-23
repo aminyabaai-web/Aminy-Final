@@ -252,6 +252,11 @@ const SpecialTime = lazy(() =>
     default: m.SpecialTime,
   })),
 );
+const ProgressHome = lazy(() =>
+  import("./components/ProgressHome").then((m) => ({
+    default: m.ProgressHome,
+  })),
+);
 const ImpactMetricsDashboard = lazy(() =>
   import("./components/ImpactMetricsDashboard").then((m) => ({
     default: m.ImpactMetricsDashboard,
@@ -966,6 +971,7 @@ const LOADING_MESSAGES: Record<string, string> = {
   'outcomes-story': 'Writing your story...',
   'wins-journal': 'Gathering your wins...',
   'special-time': 'Finding ten minutes of their world...',
+  progress: 'Gathering how far you’ve come...',
   'impact-metrics': 'Compiling impact metrics...',
   onboarding: 'Getting things ready for you...',
 };
@@ -1144,7 +1150,8 @@ type AppScreen =
   | "aact-partner-setup" // Partner-org admin onboarding microsite (Cori at AACT)
   | "care-coordination" // Unified view across ABA/PT/OT/ST/MH + auth + site of care
   | "just-diagnosed" // Post-diagnosis onboarding flow — state-aware First 30 Days plan
-  | "special-time"; // Daily 10-minute child-led play prompt — connection, not therapy
+  | "special-time" // Daily 10-minute child-led play prompt — connection, not therapy
+  | "progress"; // Progress home — wins first, then streak, trend, goals-as-journeys (Wave 2)
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -2919,7 +2926,7 @@ export default function App() {
                     "community", "profile", "benefits", "junior", "my-appointments",
                     "conversational-booking", "messages", "access-requests", "store",
                     "community-hub", "provider-analytics", "weekly-insights", "analytics-charts",
-                    "wins-journal", "impact-metrics", "special-time",
+                    "wins-journal", "impact-metrics", "special-time", "progress",
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
                     "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
@@ -3654,6 +3661,20 @@ export default function App() {
                   <WinsJournal userId={userData.id ?? ''} />
                 </div>
               </div>
+            </Suspense>
+          );
+
+        case "progress":
+          // Wave 2 Progress home — wins first, streak, honest trend, goals as
+          // journeys. Composes existing sources; deeper views stay reachable.
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <ProgressHome
+                userId={userData.id ?? ''}
+                childName={userData.childName || undefined}
+                onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+              />
             </Suspense>
           );
 

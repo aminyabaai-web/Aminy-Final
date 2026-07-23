@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown, Heart, Trophy, Microscope, Handshake, Camera } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown, Heart, Trophy, Microscope, Handshake, Camera, Pencil, Pin, PinOff, Search, Square, SquarePen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -48,11 +48,14 @@ import { UsageMeter } from './UsageMeter';
 import { useRateLimitStore } from '../lib/rate-limit-store';
 import { ThinkingStepsDisplay, generateThinkingSteps, type ThinkingStep } from './ThinkingSteps';
 import { getUserMemoryFacts, deleteFact, type MemoryFact } from '../lib/ai-memory-engine';
-import { uploadVaultFile, processVaultDocument, markVaultDocumentProcessed } from '../lib/vault-storage';
-import { saveConversation, loadConversation, loadConversationSummaries } from '../lib/conversation-persistence';
+import { uploadVaultFile, processVaultDocument, markVaultDocumentProcessed, listVaultDocuments, type VaultDocument } from '../lib/vault-storage';
+import { saveConversation, loadConversation, loadConversationSummaries, deleteConversation, renameConversation } from '../lib/conversation-persistence';
 
 // Max size for any chat attachment (image or document) — ~10 MB.
 const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
+
+// Claude-app parity: up to 4 images can ride along with one message.
+const MAX_ATTACHED_IMAGES = 4;
 
 /** Generate a UUID for a roamable conversation id (falls back for old envs). */
 function newConversationId(): string {
@@ -184,7 +187,11 @@ interface Message {
   timestamp: Date;
   chips?: string[];
   imageUrl?: string;
+  /** Multi-attachment (up to 4 images per message) — imageUrl kept for legacy sessions */
+  imageUrls?: string[];
   isUpgradePrompt?: boolean;
+  /** True when the parent tapped Stop mid-stream — partial text kept, note shown */
+  stopped?: boolean;
 }
 
 interface ChatSession {
@@ -192,6 +199,10 @@ interface ChatSession {
   timestamp: string; // ISO string — safe to stringify
   preview: string;
   messages: Message[];
+  /** AI-generated or user-renamed title; falls back to `preview` when unset */
+  title?: string;
+  /** Pinned conversations float to the top of the history drawer */
+  pinned?: boolean;
 }
 
 const SESSIONS_KEY = 'aminy-chat-sessions';
@@ -235,6 +246,37 @@ function formatSessionTime(iso: string): string {
   if (diffDays === 1) return 'Yesterday';
   if (diffDays < 7) return d.toLocaleDateString([], { weekday: 'short' });
   return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+}
+
+/** Claude-app style history sections. Pinned sessions are grouped separately. */
+function sessionGroupLabel(iso: string): 'Today' | 'Yesterday' | 'Previous 7 days' | 'Earlier' {
+  const d = new Date(iso);
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (d >= startOfToday) return 'Today';
+  const startYesterday = new Date(startOfToday.getTime() - 86400000);
+  if (d >= startYesterday) return 'Yesterday';
+  const startWeek = new Date(startOfToday.getTime() - 7 * 86400000);
+  if (d >= startWeek) return 'Previous 7 days';
+  return 'Earlier';
+}
+
+function groupChatSessions(sessions: ChatSession[]): Array<{ label: string; sessions: ChatSession[] }> {
+  const sorted = [...sessions].sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
+  const groups: Array<{ label: string; sessions: ChatSession[] }> = [];
+  const push = (label: string, s: ChatSession) => {
+    const g = groups.find(x => x.label === label);
+    if (g) g.sessions.push(s);
+    else groups.push({ label, sessions: [s] });
+  };
+  for (const s of sorted) {
+    push(s.pinned ? 'Pinned' : sessionGroupLabel(s.timestamp), s);
+  }
+  // Keep a stable, chronological section order with Pinned first.
+  const order = ['Pinned', 'Today', 'Yesterday', 'Previous 7 days', 'Earlier'];
+  return groups.sort((a, b) => order.indexOf(a.label) - order.indexOf(b.label));
 }
 
 // ─── Custom instructions ─────────────────────────────────────────────────────
@@ -386,26 +428,32 @@ async function readBrainStream(
   let buffer = '';
   let isFirst = true;
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n');
-    buffer = lines.pop() ?? '';
-    for (const line of lines) {
-      if (!line.startsWith('data: ')) continue;
-      const raw = line.slice(6).trim();
-      if (!raw) continue;
-      try {
-        const payload = JSON.parse(raw);
-        if (payload.token) {
-          if (isFirst) onFirstToken();
-          accumulated += payload.token;
-          onToken(accumulated, isFirst);
-          isFirst = false;
-        }
-      } catch { /* ignore malformed lines */ }
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (!raw) continue;
+        try {
+          const payload = JSON.parse(raw);
+          if (payload.token) {
+            if (isFirst) onFirstToken();
+            accumulated += payload.token;
+            onToken(accumulated, isFirst);
+            isFirst = false;
+          }
+        } catch { /* ignore malformed lines */ }
+      }
     }
+  } catch (err) {
+    // Stop button aborts the fetch mid-stream — keep the partial text; the
+    // caller decides how to mark it. Any other stream error still throws.
+    if ((err as Error)?.name !== 'AbortError') throw err;
   }
   return accumulated;
 }
@@ -432,8 +480,25 @@ export function BevelChatOverlay({
   const [showHistory, setShowHistory] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
-  const [attachedImage, setAttachedImage] = useState<{ name: string; dataUrl: string } | null>(null);
+  const [attachedImages, setAttachedImages] = useState<Array<{ name: string; dataUrl: string }>>([]);
   const [docUploading, setDocUploading] = useState<{ name: string } | null>(null);
+  // PDF held as a pre-send chip (uploaded to the vault when the message sends)
+  const [pendingDoc, setPendingDoc] = useState<File | null>(null);
+  // Streaming lifecycle — true from send until the reply fully settles; the
+  // Send button becomes Stop while this is set. (isLoading flips false on the
+  // FIRST token so the typing indicator can yield to the streaming bubble.)
+  const [isStreaming, setIsStreaming] = useState(false);
+  // Edit-and-resend: id of the LAST user message being edited (send replaces
+  // the conversation tail from that message onward)
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  // History drawer upgrades
+  const [historySearch, setHistorySearch] = useState('');
+  const [renamingSessionId, setRenamingSessionId] = useState<string | null>(null);
+  const [renameDraft, setRenameDraft] = useState('');
+  // Vault picker sheet
+  const [showVaultPicker, setShowVaultPicker] = useState(false);
+  const [vaultDocs, setVaultDocs] = useState<VaultDocument[]>([]);
+  const [vaultLoading, setVaultLoading] = useState(false);
   // UUID so the conversation can roam to the Supabase `conversations` table
   // (its `id` column is uuid — a "session-…" string would be rejected).
   const [sessionId] = useState(() => newConversationId());
@@ -483,6 +548,13 @@ export function BevelChatOverlay({
   // memoryBlockRef: filled async in loadContextAndOpenChat, read synchronously
   // by buildSystemPrompt. Bounded ≤500 chars.
   const goalsBlockRef = useRef('');
+  // In-flight request controller — Stop button aborts it (partial text kept).
+  const abortRef = useRef<AbortController | null>(null);
+  // AI-generated / user-set titles per conversation id — roamPersist prefers
+  // these over the truncated-first-message fallback.
+  const convTitlesRef = useRef<Record<string, string>>({});
+  // Conversations we already attempted title generation for (one shot each).
+  const titleGenAttemptedRef = useRef<Set<string>>(new Set());
 
   // Cross-device history roaming — upsert the current conversation (message
   // bodies as a JSONB blob) to the Supabase `conversations` table. Gated on the
@@ -501,13 +573,13 @@ export function BevelChatOverlay({
       id: convId,
       userId,
       childId: userContext?.childId,
-      title: userMsgs[0].content.slice(0, 90),
+      title: convTitlesRef.current[convId] || userMsgs[0].content.slice(0, 90),
       messages: msgs.map(m => ({
         id: m.id,
         role: m.role,
         content: m.content,
         timestamp: (m.timestamp instanceof Date ? m.timestamp : new Date(m.timestamp)).toISOString(),
-        metadata: m.imageUrl ? { hasImage: true } : undefined,
+        metadata: (m.imageUrl || m.imageUrls?.length) ? { hasImage: true } : undefined,
       })),
       messageCount: msgs.length,
       lastMessageAt: nowIso,
@@ -519,8 +591,17 @@ export function BevelChatOverlay({
     if (roamSaveTimer.current) { clearTimeout(roamSaveTimer.current); roamSaveTimer.current = null; }
     const userMsgs = messages.filter(m => m.role === 'user');
     if (userMsgs.length > 0) {
+      const convId = activeConvIdRef.current;
       const preview = userMsgs[0].content.slice(0, 90);
-      persistChatSession({ id: activeConvIdRef.current, timestamp: new Date().toISOString(), preview, messages });
+      const existing = loadChatSessions().find(s => s.id === convId);
+      persistChatSession({
+        id: convId,
+        timestamp: new Date().toISOString(),
+        preview,
+        messages,
+        title: convTitlesRef.current[convId] || existing?.title,
+        pinned: existing?.pinned,
+      });
       setChatSessions(loadChatSessions());
       roamPersist(messages); // flush the roam upsert immediately on close
     }
@@ -541,8 +622,13 @@ export function BevelChatOverlay({
       hasGeneratedProactive.current = false;
     } else {
       setMessages([]);
-      setAttachedImage(null);
+      setAttachedImages([]);
+      setPendingDoc(null);
       setDocUploading(null);
+      setEditingMessageId(null);
+      setHistorySearch('');
+      setRenamingSessionId(null);
+      setShowVaultPicker(false);
       setShowHistory(false);
       setShowSettings(false);
       setCustomInstructions(loadCustomInstructions());
@@ -604,6 +690,61 @@ export function BevelChatOverlay({
     roamSaveTimer.current = setTimeout(() => roamPersist(messages), 1500);
     return () => { if (roamSaveTimer.current) clearTimeout(roamSaveTimer.current); };
   }, [messages, isLoading, isOpen, roamPersist]);
+
+  // AI-generated conversation titles — after the 2nd user turn, fire-and-forget
+  // a tiny non-stream /ai/brain call (≤6 words, no quotes). Stored on the
+  // session record + Supabase conversations row; fallback stays the truncated
+  // first message everywhere.
+  const generateConversationTitle = useCallback(async (convId: string, msgs: Message[]) => {
+    try {
+      const transcript = msgs
+        .filter(m => !m.isUpgradePrompt)
+        .slice(0, 6)
+        .map(m => `${m.role === 'user' ? 'Parent' : 'Aminy'}: ${m.content.slice(0, 300)}`)
+        .join('\n');
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+          body: JSON.stringify({
+            userMessage: `Conversation so far:\n${transcript}\n\nReply with ONLY the title.`,
+            conversationHistory: [],
+            systemPrompt: 'You title conversations for a chat history list. Reply with a concise title of AT MOST 6 words. No quotes, no punctuation at the end, no explanations — just the title.',
+            max_tokens: 30,
+          }),
+        }
+      );
+      if (!response.ok) return;
+      const data = await response.json();
+      let title = String(data.message || data.response || '')
+        .replace(/["'“”‘’]/g, '')
+        .replace(/\n[\s\S]*$/, '')
+        .trim();
+      if (!title) return;
+      title = title.split(/\s+/).slice(0, 6).join(' ').slice(0, 60);
+      convTitlesRef.current[convId] = title;
+      // Update the drawer list + local session record if it exists already.
+      setChatSessions(prev => prev.map(s => (s.id === convId ? { ...s, title } : s)));
+      const existing = loadChatSessions().find(s => s.id === convId);
+      if (existing) persistChatSession({ ...existing, title });
+      // Roam to the Supabase conversations row (uuid ids only — same rule as roamPersist).
+      if (userId && userId !== 'dev-preview-user' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(convId)) {
+        renameConversation(convId, userId, title).catch(() => {});
+      }
+    } catch { /* fallback title (truncated first message) stays */ }
+  }, [userId]);
+
+  useEffect(() => {
+    if (!isOpen || isLoading || isStreaming) return;
+    const convId = activeConvIdRef.current;
+    if (titleGenAttemptedRef.current.has(convId)) return;
+    if (convTitlesRef.current[convId]) return;
+    const userMsgs = messages.filter(m => m.role === 'user');
+    if (userMsgs.length < 2) return;
+    titleGenAttemptedRef.current.add(convId);
+    generateConversationTitle(convId, messages);
+  }, [messages, isLoading, isStreaming, isOpen, generateConversationTitle]);
 
   // S1 — build the "WHAT YOU REMEMBER" block: stored memory facts (bounded by
   // the tier's memory-inject depth) + child Ease/Junior activity from the
@@ -943,6 +1084,9 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
     // Append — replacing the array here used to wipe any prior history (S3)
     setMessages(prev => [...prev, userMsg]);
     setIsLoading(true);
+    setIsStreaming(true);
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     try {
       const systemPrompt = buildSystemPrompt(ctxUser, ctxCurrent);
@@ -958,7 +1102,8 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
             conversationHistory: history.map(m => ({ role: m.role, content: m.content })),
             systemPrompt,
             stream: true,
-          })
+          }),
+          signal: controller.signal,
         }
       );
       if (!response.ok) throw new Error('AI connection hiccup');
@@ -974,10 +1119,16 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
         },
         () => setIsLoading(false)
       );
-      const { cleanText: aiText, actions } = parseSmartActions(rawText);
+      const wasStopped = controller.signal.aborted;
+      const { cleanText: aiText, actions } = parseSmartActions(
+        wasStopped ? rawText.replace(/\[[A-Z_]*(:[^\]]*)?$/, '') : rawText
+      );
       setMessages(prev => prev.map(m =>
-        m.id === assistantId ? { ...m, content: aiText, chips: getFollowUpChips(ctxUser, currentPath, propChildName) } : m
+        m.id === assistantId
+          ? { ...m, content: aiText, stopped: wasStopped || undefined, chips: wasStopped ? undefined : getFollowUpChips(ctxUser, currentPath, propChildName) }
+          : m
       ));
+      if (wasStopped) return; // partial reply — skip actions + memory
 
       for (const action of actions) {
         try {
@@ -991,19 +1142,135 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
       if (aiText.length > 50) {
         storeMemory(userId, { timestamp: new Date(), category: 'insight', content: aiText, context: { userQuery: text, module: ctxCurrent?.module } }).catch(() => {});
       }
-    } catch {
-      toast.error('Connection hiccup — try again?');
+    } catch (err) {
+      if ((err as Error)?.name !== 'AbortError' && !controller.signal.aborted) {
+        toast.error('Connection hiccup — try again?');
+      }
     } finally {
       setIsLoading(false);
+      setIsStreaming(false);
+      if (abortRef.current === controller) abortRef.current = null;
     }
   };
 
-  const sendMessage = useCallback(async (text: string, imageData?: { name: string; dataUrl: string }) => {
-    if (!text.trim() || isLoading) return;
+  // Core assistant turn — fetch + stream + smart actions. Shared by sendMessage
+  // (new turn) and regenerateLast (re-run the same user turn). `excludeMsgId`
+  // is the user message whose text is being sent — it must not also appear in
+  // conversationHistory. `displayText` is what the parent typed; screen context
+  // is only injected into the payload, never into the visible bubble.
+  const runAssistantTurn = useCallback(async (
+    payloadText: string,
+    imgs: Array<{ name: string; dataUrl: string }>,
+    excludeMsgId: string,
+  ) => {
+    setIsLoading(true);
+    setIsStreaming(true);
+    if (showThinkingSteps) {
+      setActiveThinkingSteps(generateThinkingSteps(payloadText));
+    }
+    const controller = new AbortController();
+    abortRef.current = controller;
 
-    // Free tier daily limit gate
+    try {
+      const systemPrompt = buildSystemPrompt(userContext, currentContext, personality);
+
+      // If images are attached, build Anthropic-format content blocks so Claude
+      // actually sees them (vision). Otherwise just send the text.
+      let messagePayload: string | Array<{ type: string; text?: string; source?: { type: string; media_type: string; data: string } }>;
+      const imageBlocks = imgs
+        .map(img => {
+          const m = img.dataUrl.match(/^data:(image\/[a-z+]+);base64,(.+)$/i);
+          return m ? { type: 'image', source: { type: 'base64', media_type: m[1], data: m[2] } } : null;
+        })
+        .filter((b): b is { type: string; source: { type: string; media_type: string; data: string } } => !!b);
+      if (imageBlocks.length > 0) {
+        messagePayload = [
+          { type: 'text', text: payloadText || (imageBlocks.length > 1 ? 'Please look at these images and tell me what you see.' : 'Please look at this image and tell me what you see.') },
+          ...imageBlocks,
+        ];
+      } else {
+        messagePayload = payloadText;
+      }
+
+      const assistantId = (Date.now() + 1).toString();
+
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+          body: JSON.stringify({
+            userMessage: messagePayload,
+            // messagesRef (not the `messages` closure) — a stale memoized
+            // callback would otherwise send truncated history (S3)
+            conversationHistory: messagesRef.current
+              .filter(m => m.id !== excludeMsgId)
+              .map(m => ({ role: m.role, content: m.content })),
+            systemPrompt,
+            stream: imageBlocks.length === 0, // vision payloads fall back to synchronous path on the edge fn
+          }),
+          signal: controller.signal,
+        }
+      );
+      if (!response.ok) throw new Error('AI connection hiccup');
+
+      const rawText = await readBrainStream(
+        response,
+        (accumulated, isFirst) => {
+          if (isFirst) {
+            setMessages(prev => [...prev, { id: assistantId, role: 'assistant' as const, content: accumulated, timestamp: new Date() }]);
+          } else {
+            setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m));
+          }
+        },
+        () => { setIsLoading(false); setActiveThinkingSteps([]); }
+      );
+      const wasStopped = controller.signal.aborted;
+      // On stop, trim a dangling half-emitted [ACTION:… fragment before parsing.
+      const { cleanText: aiText, actions } = parseSmartActions(
+        wasStopped ? rawText.replace(/\[[A-Z_]*(:[^\]]*)?$/, '') : rawText
+      );
+      setMessages(prev => prev.map(m =>
+        m.id === assistantId
+          ? { ...m, content: aiText, stopped: wasStopped || undefined, chips: wasStopped ? undefined : getFollowUpChips(userContext, currentPath, propChildName) }
+          : m
+      ));
+      if (wasStopped) return; // partial reply — skip actions + memory
+
+      for (const action of actions) {
+        try {
+          const confirmation = await executeSmartAction(action, userId);
+          if (confirmation) {
+            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant' as const, content: confirmation, timestamp: new Date() }]);
+          }
+        } catch { toast.error('Could not save — try again?'); }
+      }
+
+      if (aiText.length > 50) {
+        storeMemory(userId, { timestamp: new Date(), category: 'insight', content: aiText, context: { userQuery: payloadText, module: currentContext?.module } }).catch(() => {});
+      }
+    } catch (err) {
+      if ((err as Error)?.name !== 'AbortError' && !controller.signal.aborted) {
+        toast.error('Connection hiccup — try again?');
+      }
+    } finally {
+      setIsLoading(false);
+      setIsStreaming(false);
+      setActiveThinkingSteps([]);
+      if (abortRef.current === controller) abortRef.current = null;
+    }
+  }, [userContext, currentContext, currentPath, userId, personality, showThinkingSteps, propChildName]);
+
+  const sendMessage = useCallback(async (text: string, imageData?: { name: string; dataUrl: string }) => {
+    if (isLoading || isStreaming) return;
+
+    const imgs = (imageData ? [...attachedImages, imageData] : attachedImages).slice(0, MAX_ATTACHED_IMAGES);
+    const doc = pendingDoc;
+    if (!text.trim() && imgs.length === 0 && !doc) return;
+
+    // Free tier daily limit gate — only for sends that trigger an AI turn.
     const isFree = !userTier || userTier === 'free';
-    if (isFree) {
+    if (isFree && (text.trim() || imgs.length > 0)) {
       const used = getFreeDailyCount(userId);
       if (used >= FREE_DAILY_LIMIT) {
         const limitMsg = {
@@ -1028,107 +1295,112 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
       }
     }
 
-    const img = imageData || attachedImage;
-    setAttachedImage(null);
+    setAttachedImages([]);
+    setPendingDoc(null);
+    setInput('');
+    setHasInteracted(true);
+
+    // Pre-send PDF chip — upload to the vault FIRST so the RAG reference and
+    // refreshed memory block exist before the AI turn sees the message.
+    if (doc) {
+      await uploadPendingDocument(doc);
+    }
+    if (!text.trim() && imgs.length === 0) return; // doc-only send — ack already in-chat
+
+    // Edit-and-resend: replace the conversation tail from the edited user
+    // message onward (the old reply and everything after it are discarded).
+    if (editingMessageId) {
+      const idx = messagesRef.current.findIndex(m => m.id === editingMessageId);
+      if (idx >= 0) {
+        const truncated = messagesRef.current.slice(0, idx);
+        messagesRef.current = truncated;
+        setMessages(truncated);
+      }
+      setEditingMessageId(null);
+    }
+
+    // Inject pending screen context into the payload only (not the bubble)
+    let payloadText = text;
+    if (pendingScreenContext) {
+      payloadText = `[Screen context: ${pendingScreenContext}]\n\n${text}`;
+      setPendingScreenContext(null);
+    }
 
     const userMsg: Message = {
       id: Date.now().toString(),
       role: 'user',
       content: text,
       timestamp: new Date(),
-      imageUrl: img?.dataUrl
+      imageUrls: imgs.length > 0 ? imgs.map(i => i.dataUrl) : undefined,
     };
-
+    // Sync the ref immediately — runAssistantTurn reads it before React re-renders.
+    messagesRef.current = [...messagesRef.current, userMsg];
     setMessages(prev => [...prev, userMsg]);
+
+    await runAssistantTurn(payloadText, imgs, userMsg.id);
+  }, [isLoading, isStreaming, userTier, userId, attachedImages, pendingDoc, editingMessageId, pendingScreenContext, runAssistantTurn]);
+
+  // Stop generation — aborts the in-flight request; readBrainStream keeps the
+  // partial text and runAssistantTurn marks the message as stopped.
+  const stopGeneration = useCallback(() => {
+    abortRef.current?.abort();
+  }, []);
+
+  // Regenerate — re-runs the LAST user turn; the old assistant reply (and any
+  // action confirmations after it) are replaced.
+  const regenerateLast = useCallback(async () => {
+    if (isLoading || isStreaming) return;
+    const msgs = messagesRef.current;
+    let lastUserIdx = -1;
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      if (msgs[i].role === 'user') { lastUserIdx = i; break; }
+    }
+    if (lastUserIdx < 0) return;
+    const userMsg = msgs[lastUserIdx];
+    const truncated = msgs.slice(0, lastUserIdx + 1);
+    messagesRef.current = truncated;
+    setMessages(truncated);
+    const imgs = (userMsg.imageUrls || (userMsg.imageUrl ? [userMsg.imageUrl] : []))
+      .map((dataUrl, i) => ({ name: `image-${i + 1}`, dataUrl }));
+    await runAssistantTurn(userMsg.content, imgs, userMsg.id);
+  }, [isLoading, isStreaming, runAssistantTurn]);
+
+  // Edit-and-resend entry point — prefills the input with the LAST user
+  // message; sending replaces the conversation tail from that point.
+  const startEditLastUser = useCallback((msg: Message) => {
+    if (isLoading || isStreaming) return;
+    setEditingMessageId(msg.id);
+    setInput(msg.content);
+    setTimeout(() => inputRef.current?.focus(), 50);
+  }, [isLoading, isStreaming]);
+
+  const cancelEdit = useCallback(() => {
+    setEditingMessageId(null);
     setInput('');
-    setHasInteracted(true);
-    setIsLoading(true);
-    if (showThinkingSteps) {
-      setActiveThinkingSteps(generateThinkingSteps(text));
-    }
+  }, []);
 
-    // Inject pending screen context into message text
-    if (pendingScreenContext) {
-      text = `[Screen context: ${pendingScreenContext}]\n\n${text}`;
-      setPendingScreenContext(null);
-    }
-
-    try {
-      const systemPrompt = buildSystemPrompt(userContext, currentContext, personality);
-
-      // If an image is attached, build Anthropic-format content blocks so Claude
-      // actually sees the image (vision). Otherwise just send the text.
-      let messagePayload: string | Array<{ type: string; text?: string; source?: { type: string; media_type: string; data: string } }>;
-      if (img) {
-        const m = img.dataUrl.match(/^data:(image\/[a-z+]+);base64,(.+)$/i);
-        if (m) {
-          messagePayload = [
-            { type: 'text', text: text || 'Please look at this image and tell me what you see.' },
-            { type: 'image', source: { type: 'base64', media_type: m[1], data: m[2] } },
-          ];
-        } else {
-          messagePayload = text;
-        }
-      } else {
-        messagePayload = text;
-      }
-
-      const assistantId = (Date.now() + 1).toString();
-
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
-          body: JSON.stringify({
-            userMessage: messagePayload,
-            // messagesRef (not the `messages` closure) — a stale memoized
-            // callback would otherwise send truncated history (S3)
-            conversationHistory: messagesRef.current
-              .filter(m => m.id !== userMsg.id)
-              .map(m => ({ role: m.role, content: m.content })),
-            systemPrompt,
-            stream: !img, // vision payloads fall back to synchronous path on the edge fn
-          })
-        }
-      );
-      if (!response.ok) throw new Error('AI connection hiccup');
-
-      const rawText = await readBrainStream(
-        response,
-        (accumulated, isFirst) => {
-          if (isFirst) {
-            setMessages(prev => [...prev, { id: assistantId, role: 'assistant' as const, content: accumulated, timestamp: new Date() }]);
-          } else {
-            setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m));
-          }
-        },
-        () => { setIsLoading(false); setActiveThinkingSteps([]); }
-      );
-      const { cleanText: aiText, actions } = parseSmartActions(rawText);
-      setMessages(prev => prev.map(m =>
-        m.id === assistantId ? { ...m, content: aiText, chips: getFollowUpChips(userContext, currentPath, propChildName) } : m
-      ));
-
-      for (const action of actions) {
+  // Thumbs feedback — optimistic UI + fire-and-forget POST to the make-server
+  // /ai/feedback route (session JWT when available, anon key otherwise).
+  const sendFeedback = useCallback((messageId: string, rating: 'up' | 'down') => {
+    setMessageRatings(prev => ({ ...prev, [messageId]: rating }));
+    (async () => {
+      try {
+        let token: string | undefined;
         try {
-          const confirmation = await executeSmartAction(action, userId);
-          if (confirmation) {
-            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant' as const, content: confirmation, timestamp: new Date() }]);
+          const { data } = await supabase.auth.getSession();
+          token = data?.session?.access_token;
+        } catch { /* anon fallback */ }
+        await fetch(
+          `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/feedback`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token || publicAnonKey}` },
+            body: JSON.stringify({ messageId, rating, conversationId: activeConvIdRef.current }),
           }
-        } catch { toast.error('Could not save — try again?'); }
-      }
-
-      if (aiText.length > 50) {
-        storeMemory(userId, { timestamp: new Date(), category: 'insight', content: aiText, context: { userQuery: text, module: currentContext?.module } }).catch(() => {});
-      }
-    } catch {
-      toast.error('Connection hiccup — try again?');
-    } finally {
-      setIsLoading(false);
-      setActiveThinkingSteps([]);
-    }
-  }, [input, isLoading, userContext, currentContext, currentPath, userId, personality, attachedImage, showThinkingSteps]);
+        );
+      } catch { /* silent — feedback must never break chat */ }
+    })();
+  }, []);
 
   // ─── Voice input ──────────────────────────────────────────────────────────
   // Tap mic → records audio → on stop, sends to /ai/transcribe → fills input.
@@ -1218,27 +1490,37 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
     }
   };
 
-  // Images (camera + photo library) → held as an attachment, sent to Claude
-  // vision on the next message. PDFs use handleDocumentSelect instead.
+  // Images (camera + photo library) → held as attachments (up to 4), sent to
+  // Claude vision on the next message. PDFs use handleDocumentSelect instead.
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > MAX_ATTACHMENT_BYTES) {
-      toast.error('That file is a bit big — please keep images under 10 MB.');
-      e.target.value = '';
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => setAttachedImage({ name: file.name, dataUrl: reader.result as string });
-    reader.readAsDataURL(file);
+    const files = Array.from(e.target.files || []);
     e.target.value = '';
+    if (files.length === 0) return;
+    for (const file of files) {
+      if (file.size > MAX_ATTACHMENT_BYTES) {
+        toast.error('That file is a bit big — please keep images under 10 MB.');
+        continue;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAttachedImages(prev => {
+          if (prev.length >= MAX_ATTACHED_IMAGES) {
+            toast.error(`Up to ${MAX_ATTACHED_IMAGES} images per message.`);
+            return prev;
+          }
+          return [...prev, { name: file.name, dataUrl: reader.result as string }];
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  // PDFs do NOT go to vision. Mirror the Records Vault flow: upload → store a
-  // memory fact (so Aminy knows it exists) → process-document (text → embeddings
-  // for RAG). Then acknowledge in-chat and refresh the injected memory block so
-  // the doc is referenceable immediately in this same conversation.
-  const handleDocumentSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // PDFs do NOT go to vision. They're held as a pre-send chip; on send they
+  // mirror the Records Vault flow: upload → store a memory fact (so Aminy knows
+  // it exists) → process-document (text → embeddings for RAG) → in-chat ack +
+  // refresh of the injected memory block so the doc is referenceable in the
+  // same conversation (and the same send, since upload is awaited first).
+  const handleDocumentSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
@@ -1249,6 +1531,14 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
     if (!userId || userId === 'dev-preview-user') {
       toast.error('Please sign in to attach documents.');
       return;
+    }
+    setPendingDoc(file);
+  };
+
+  const uploadPendingDocument = useCallback(async (file: File): Promise<boolean> => {
+    if (!userId || userId === 'dev-preview-user') {
+      toast.error('Please sign in to attach documents.');
+      return false;
     }
 
     setDocUploading({ name: file.name });
@@ -1263,7 +1553,7 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
 
       if (!result.success) {
         toast.error(result.error || 'Could not save that document — try again?');
-        return;
+        return false;
       }
 
       // Vault → AI link 1: a memory fact (injected into the system prompt's
@@ -1286,25 +1576,84 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
       // very next message in THIS conversation (not just future sessions).
       try { memoryBlockRef.current = await buildMemoryPromptBlock(userContext); } catch { /* keep prior block */ }
 
-      // In-chat acknowledgment.
-      setMessages(prev => [...prev, {
+      // In-chat acknowledgment (ref synced immediately — a same-send AI turn
+      // reads messagesRef before React re-renders).
+      const ackMsg: Message = {
         id: `${Date.now()}-doc`,
-        role: 'assistant' as const,
+        role: 'assistant',
         content: `Got it — I've read **${file.name}** and saved it to your vault. Ask me anything about it.`,
         timestamp: new Date(),
-      }]);
+      };
+      messagesRef.current = [...messagesRef.current, ackMsg];
+      setMessages(prev => [...prev, ackMsg]);
       setHasInteracted(true);
+      return true;
     } catch {
       toast.error('Could not save that document — try again?');
+      return false;
     } finally {
       setDocUploading(null);
     }
-  };
+  }, [userId, userContext, userTier]);
+
+  // Vault picker — attach an existing Records Vault document to the chat. This
+  // mirrors the fresh-upload reference path exactly (memory fact + RAG
+  // processing + refreshed memory block), minus the upload itself.
+  const openVaultPicker = useCallback(async () => {
+    setShowVaultPicker(true);
+    setVaultLoading(true);
+    try {
+      const { documents } = await listVaultDocuments(userId, { limit: 50 });
+      setVaultDocs(documents);
+    } catch {
+      setVaultDocs([]);
+    } finally {
+      setVaultLoading(false);
+    }
+  }, [userId]);
+
+  const attachVaultDoc = useCallback(async (doc: VaultDocument) => {
+    setShowVaultPicker(false);
+    const displayName = doc.metadata?.title || doc.fileName;
+
+    // Vault → AI link 1: memory fact so Aminy knows the doc is in play.
+    storeMemory(userId, {
+      timestamp: new Date(),
+      category: 'insight',
+      content: `Parent attached their vault document "${displayName}" to the chat on ${new Date().toLocaleDateString()}. Reference it when relevant.`,
+      context: { source: 'chat-vault-attach', documentId: doc.id },
+    }).catch(() => {});
+
+    // Vault → AI link 2: ensure text → embeddings (RAG) exists. Best-effort;
+    // already-processed docs are skipped via the ocrStatus flag.
+    if (doc.metadata?.ocrStatus !== 'complete') {
+      processVaultDocument(doc.id)
+        .then(p => { if (p.success) markVaultDocumentProcessed(doc.id).catch(() => {}); })
+        .catch(() => {});
+    }
+
+    // Refresh the injected memory block so the doc is in context immediately.
+    try { memoryBlockRef.current = await buildMemoryPromptBlock(userContext); } catch { /* keep prior block */ }
+
+    const ackMsg: Message = {
+      id: `${Date.now()}-vaultdoc`,
+      role: 'assistant',
+      content: `Attached **${displayName}** from your vault. Ask me anything about it.`,
+      timestamp: new Date(),
+    };
+    messagesRef.current = [...messagesRef.current, ackMsg];
+    setMessages(prev => [...prev, ackMsg]);
+    setHasInteracted(true);
+  }, [userId, userContext]);
 
   const loadHistorySession = async (session: ChatSession) => {
     activeConvIdRef.current = session.id;
     setShowHistory(false);
     hasGeneratedProactive.current = true;
+    setEditingMessageId(null);
+    // Resumed sessions keep their existing title — don't regenerate.
+    titleGenAttemptedRef.current.add(session.id);
+    if (session.title) convTitlesRef.current[session.id] = session.title;
 
     // Bodies already present (local cache) — show immediately.
     if (session.messages && session.messages.length > 0) {
@@ -1332,11 +1681,45 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
     e.stopPropagation();
     deleteChatSession(id);
     setChatSessions(prev => prev.filter(s => s.id !== id));
+    // BUG FIX: also delete the Supabase `conversations` row — localStorage-only
+    // deletion let roamed conversations resurrect cross-device on next open.
+    if (userId && userId !== 'dev-preview-user') {
+      deleteConversation(id, userId).catch(() => { /* offline — local copy is gone */ });
+    }
+  };
+
+  const handleTogglePin = (session: ChatSession, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const next = { ...session, pinned: !session.pinned };
+    persistChatSession(next);
+    setChatSessions(prev => prev.map(s => (s.id === session.id ? next : s)));
+  };
+
+  const startRenameSession = (session: ChatSession, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRenamingSessionId(session.id);
+    setRenameDraft(session.title || session.preview);
+  };
+
+  const commitRename = (session: ChatSession) => {
+    const title = renameDraft.trim();
+    setRenamingSessionId(null);
+    if (!title || title === (session.title || session.preview)) return;
+    const next = { ...session, title };
+    persistChatSession(next);
+    setChatSessions(prev => prev.map(s => (s.id === session.id ? next : s)));
+    convTitlesRef.current[session.id] = title;
+    if (userId && userId !== 'dev-preview-user' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(session.id)) {
+      renameConversation(session.id, userId, title).catch(() => {});
+    }
   };
 
   const startNewChat = () => {
     setMessages([]);
     setShowHistory(false);
+    setEditingMessageId(null);
+    setAttachedImages([]);
+    setPendingDoc(null);
     hasGeneratedProactive.current = false;
     // Fresh conversation id so the new chat is its own history entry.
     activeConvIdRef.current = newConversationId();
@@ -1416,6 +1799,15 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                 </div>
               </div>
 
+              {/* New chat — always visible (Claude-app parity) */}
+              <button
+                onClick={() => { setShowSettings(false); startNewChat(); }}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors shrink-0"
+                aria-label="New chat"
+              >
+                <SquarePen className="w-4 h-4" />
+              </button>
+
               {/* Settings */}
               <button
                 onClick={() => { setShowSettings(v => !v); setShowHistory(false); }}
@@ -1478,45 +1870,128 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                       ))}
                     </div>
 
-                    {/* Sessions list */}
+                    {/* Search */}
+                    <div className="px-4 py-2 border-b border-[#E8E4DF] dark:border-slate-700 shrink-0">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-[#F6FBFB] dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl">
+                        <Search className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+                        <input
+                          value={historySearch}
+                          onChange={e => setHistorySearch(e.target.value)}
+                          placeholder="Search conversations"
+                          aria-label="Search conversations"
+                          className="flex-1 min-w-0 bg-transparent text-sm text-[#132F43] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
+                        />
+                        {historySearch && (
+                          <button
+                            onClick={() => setHistorySearch('')}
+                            className="shrink-0 text-slate-400 hover:text-slate-600"
+                            aria-label="Clear search"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Sessions list — grouped Today / Yesterday / Previous 7 days / Earlier */}
                     <div className="flex-1 overflow-y-auto">
-                      {chatSessions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full text-center px-8 gap-3">
-                          <div className="w-12 h-12 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center">
-                            <MessageSquare className="w-5 h-5 text-slate-400 dark:text-slate-300" />
+                      {(() => {
+                        const q = historySearch.trim().toLowerCase();
+                        const filtered = q
+                          ? chatSessions.filter(s =>
+                              (s.title || s.preview).toLowerCase().includes(q) ||
+                              (s.messages || []).some(m => (m.content || '').toLowerCase().includes(q)))
+                          : chatSessions;
+
+                        if (chatSessions.length === 0) {
+                          return (
+                            <div className="flex flex-col items-center justify-center h-full text-center px-8 gap-3">
+                              <div className="w-12 h-12 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center">
+                                <MessageSquare className="w-5 h-5 text-slate-400 dark:text-slate-300" />
+                              </div>
+                              <p className="text-sm text-[#5A6B7A] dark:text-slate-300">No previous chats yet.</p>
+                              <p className="text-sm text-slate-400 dark:text-slate-400">Your conversations will appear here after you close the chat.</p>
+                            </div>
+                          );
+                        }
+                        if (filtered.length === 0) {
+                          return (
+                            <div className="flex flex-col items-center justify-center h-full text-center px-8 gap-2">
+                              <Search className="w-5 h-5 text-slate-300" aria-hidden="true" />
+                              <p className="text-sm text-[#5A6B7A] dark:text-slate-300">No conversations match &ldquo;{historySearch}&rdquo;</p>
+                            </div>
+                          );
+                        }
+
+                        return groupChatSessions(filtered).map(group => (
+                          <div key={group.label}>
+                            <p className="px-4 pt-3 pb-1 text-xs font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide">
+                              {group.label}
+                            </p>
+                            <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                              {group.sessions.map(session => (
+                                <div
+                                  key={session.id}
+                                  className="flex items-center gap-0.5 pr-2 hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
+                                >
+                                  {renamingSessionId === session.id ? (
+                                    <div className="flex-1 min-w-0 pl-4 pr-1 py-2.5">
+                                      <input
+                                        autoFocus
+                                        value={renameDraft}
+                                        onChange={e => setRenameDraft(e.target.value)}
+                                        onKeyDown={e => {
+                                          if (e.key === 'Enter') commitRename(session);
+                                          if (e.key === 'Escape') setRenamingSessionId(null);
+                                        }}
+                                        onBlur={() => commitRename(session)}
+                                        aria-label="Conversation title"
+                                        className="w-full text-sm text-[#132F43] dark:text-slate-100 bg-white dark:bg-slate-800 border border-[#2A7D99] rounded-lg px-2.5 py-1.5 focus:outline-none"
+                                      />
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={() => loadHistorySession(session)}
+                                      className="flex-1 min-w-0 flex items-start pl-4 pr-1 py-3 text-left"
+                                    >
+                                      <div className="flex-1 min-w-0">
+                                        <p className="text-sm text-[#132F43] dark:text-slate-200 leading-snug line-clamp-2">
+                                          {session.title || session.preview}
+                                        </p>
+                                        <p className="text-sm text-slate-400 dark:text-slate-400 mt-0.5 flex items-center gap-1">
+                                          {session.pinned && <Pin className="w-3 h-3 text-[#2A7D99] shrink-0" aria-hidden="true" />}
+                                          {formatSessionTime(session.timestamp)}
+                                        </p>
+                                      </div>
+                                    </button>
+                                  )}
+                                  <button
+                                    onClick={(e) => handleTogglePin(session, e)}
+                                    className="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-[#2A7D99] hover:bg-[#EDF4F7] transition-colors shrink-0"
+                                    aria-label={session.pinned ? 'Unpin conversation' : 'Pin conversation'}
+                                  >
+                                    {session.pinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
+                                  </button>
+                                  <button
+                                    onClick={(e) => startRenameSession(session, e)}
+                                    className="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-[#2A7D99] hover:bg-[#EDF4F7] transition-colors shrink-0"
+                                    aria-label="Rename conversation"
+                                  >
+                                    <Pencil className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={(e) => handleDeleteSession(session.id, e)}
+                                    className="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors shrink-0"
+                                    aria-label="Delete conversation"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                          <p className="text-sm text-[#5A6B7A] dark:text-slate-300">No previous chats yet.</p>
-                          <p className="text-sm text-slate-400 dark:text-slate-400">Your conversations will appear here after you close the chat.</p>
-                        </div>
-                      ) : (
-                        <div className="divide-y divide-slate-100">
-                          {chatSessions.map(session => (
-                            <button
-                              key={session.id}
-                              onClick={() => loadHistorySession(session)}
-                              className="w-full flex items-start gap-3 px-4 py-3.5 hover:bg-[#F6FBFB] transition-colors text-left"
-                            >
-                              <div
-                                className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold mt-0.5"
-                                style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
-                              >
-                                ✦
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm text-[#132F43] dark:text-slate-200 leading-snug line-clamp-2">{session.preview}</p>
-                                <p className="text-sm text-slate-400 dark:text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
-                              </div>
-                              <button
-                                onClick={(e) => handleDeleteSession(session.id, e)}
-                                className="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors shrink-0 mt-0.5"
-                                aria-label="Delete conversation"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </button>
-                          ))}
-                        </div>
-                      )}
+                        ));
+                      })()}
                     </div>
                   </motion.div>
                 )}
@@ -1895,9 +2370,22 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                   </div>
                 )}
 
-                {messages.map((msg) => (
+                {(() => {
+                  const lastAssistantId = [...messages].reverse().find(m => m.role === 'assistant' && !m.isUpgradePrompt)?.id;
+                  const lastUserId = [...messages].reverse().find(m => m.role === 'user')?.id;
+                  return messages.map((msg) => (
                   <div key={msg.id}>
-                    <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} ${msg.role === 'user' ? 'items-end gap-1.5' : ''}`}>
+                      {/* Edit-and-resend — pencil on the LAST user message only */}
+                      {msg.role === 'user' && msg.id === lastUserId && !isLoading && !isStreaming && (
+                        <button
+                          onClick={() => startEditLastUser(msg)}
+                          className="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-[#2A7D99] hover:bg-[#EDF4F7] transition-colors shrink-0 mb-1"
+                          aria-label="Edit and resend message"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                       {msg.role === 'assistant' && (
                         <div
                           className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center text-white text-xs font-bold"
@@ -1913,10 +2401,23 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                             : 'bg-[#F6FBFB] dark:bg-slate-800 text-[#132F43] dark:text-slate-100 rounded-bl-md border border-[#E8E4DF] dark:border-slate-700'
                         }`}
                       >
-                        {/* Attached image */}
-                        {msg.imageUrl && (
+                        {/* Attached image(s) — imageUrls is the multi-attachment path,
+                            imageUrl kept for legacy sessions */}
+                        {msg.imageUrls && msg.imageUrls.length > 1 ? (
+                          <div className="flex flex-wrap gap-1 p-1">
+                            {msg.imageUrls.map((url, ii) => (
+                              <img
+                                key={ii}
+                                src={url}
+                                alt={`Attached ${ii + 1} of ${msg.imageUrls!.length}`}
+                                className="rounded-lg object-cover"
+                                style={{ width: 'calc(50% - 2px)', maxHeight: '120px' }}
+                              />
+                            ))}
+                          </div>
+                        ) : (msg.imageUrls?.[0] || msg.imageUrl) && (
                           <img
-                            src={msg.imageUrl}
+                            src={msg.imageUrls?.[0] || msg.imageUrl}
                             alt="Attached"
                             className="w-full max-h-48 object-cover"
                           />
@@ -1974,6 +2475,11 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                                   Start 7-day free trial →
                                 </button>
                               )}
+                              {msg.stopped && (
+                                <p style={{ marginTop: '6px', fontSize: '12px', fontStyle: 'italic', color: '#94a3b8' }}>
+                                  Stopped generating
+                                </p>
+                              )}
                             </>
                           ) : (
                             <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -1999,16 +2505,7 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                           <span>Copy</span>
                         </button>
                         <button
-                          onClick={() => {
-                            setMessageRatings(prev => ({ ...prev, [msg.id]: 'up' }));
-                            try {
-                              fetch('/ai/feedback', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ messageId: msg.id, rating: 'up' }),
-                              }).catch(() => {});
-                            } catch { /* ignore */ }
-                          }}
+                          onClick={() => sendFeedback(msg.id, 'up')}
                           className="inline-flex items-center justify-center w-6 h-6 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           aria-label="Rate this response as helpful"
                         >
@@ -2018,16 +2515,7 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                           />
                         </button>
                         <button
-                          onClick={() => {
-                            setMessageRatings(prev => ({ ...prev, [msg.id]: 'down' }));
-                            try {
-                              fetch('/ai/feedback', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ messageId: msg.id, rating: 'down' }),
-                              }).catch(() => {});
-                            } catch { /* ignore */ }
-                          }}
+                          onClick={() => sendFeedback(msg.id, 'down')}
                           className="inline-flex items-center justify-center w-6 h-6 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           aria-label="Rate this response as unhelpful"
                         >
@@ -2036,6 +2524,17 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                             style={messageRatings[msg.id] === 'down' ? { fill: '#E07A5F', color: '#E07A5F' } : undefined}
                           />
                         </button>
+                        {/* Regenerate — LAST assistant message only */}
+                        {msg.id === lastAssistantId && !isStreaming && (
+                          <button
+                            onClick={() => regenerateLast()}
+                            className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            aria-label="Regenerate response"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>Retry</span>
+                          </button>
+                        )}
                       </div>
                     )}
 
@@ -2055,7 +2554,8 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                       </div>
                     )}
                   </div>
-                ))}
+                  ));
+                })()}
 
                 {isLoading && (
                   <div className="flex items-start gap-2">
@@ -2095,24 +2595,58 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
               className="shrink-0 px-4 pt-3 pb-4 bg-white dark:bg-slate-900 border-t border-[#E8E4DF] dark:border-slate-700"
               style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
             >
-              {/* Image preview strip */}
-              {attachedImage && (
-                <div className="mb-2 flex items-center gap-2 px-1">
-                  <div className="relative">
-                    <img
-                      src={attachedImage.dataUrl}
-                      alt="Attachment preview"
-                      className="w-14 h-14 rounded-xl object-cover border border-[#E8E4DF]"
-                    />
-                    <button
-                      onClick={() => setAttachedImage(null)}
-                      className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-slate-800 text-white flex items-center justify-center"
-                      aria-label="Remove attachment"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                  <p className="text-sm text-[#5A6B7A] truncate">{attachedImage.name}</p>
+              {/* Image preview strip — up to 4 images, per-item remove */}
+              {attachedImages.length > 0 && (
+                <div className="mb-2 flex items-center gap-2 px-1 overflow-x-auto scrollbar-hide">
+                  {attachedImages.map((img, idx) => (
+                    <div key={`${img.name}-${idx}`} className="relative shrink-0">
+                      <img
+                        src={img.dataUrl}
+                        alt={`Attachment preview: ${img.name}`}
+                        className="w-14 h-14 rounded-xl object-cover border border-[#E8E4DF]"
+                      />
+                      <button
+                        onClick={() => setAttachedImages(prev => prev.filter((_, i) => i !== idx))}
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-slate-800 text-white flex items-center justify-center"
+                        aria-label={`Remove attachment ${img.name}`}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                  {attachedImages.length > 1 && (
+                    <p className="text-sm text-[#5A6B7A] shrink-0">{attachedImages.length}/{MAX_ATTACHED_IMAGES}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Pending PDF chip — uploads to the vault when the message sends */}
+              {pendingDoc && !docUploading && (
+                <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl">
+                  <FileText className="w-3.5 h-3.5 text-[#6B9080] shrink-0" />
+                  <span className="text-sm text-[#3A4A57] dark:text-slate-200 truncate flex-1">{pendingDoc.name}</span>
+                  <button
+                    onClick={() => setPendingDoc(null)}
+                    className="shrink-0 text-[#6B9080]/60 hover:text-[#6B9080]"
+                    aria-label="Remove document"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
+              {/* Edit-and-resend chip */}
+              {editingMessageId && (
+                <div className="mb-2 flex items-center gap-2 px-3 py-1.5 bg-[#EDF4F7] border border-[#2A7D99]/25 rounded-xl">
+                  <Pencil className="w-3.5 h-3.5 text-[#2A7D99] shrink-0" />
+                  <span className="text-sm text-[#2A7D99] font-medium flex-1">Editing message — sending replaces the reply</span>
+                  <button
+                    onClick={cancelEdit}
+                    className="shrink-0 text-[#2A7D99]/60 hover:text-[#2A7D99]"
+                    aria-label="Cancel editing"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               )}
 
@@ -2212,11 +2746,12 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                 >
                   <Plus className="w-5 h-5" />
                 </button>
-                {/* Photo library */}
+                {/* Photo library — multiple (up to 4 images per message) */}
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  multiple
                   className="hidden"
                   onChange={handleFileSelect}
                 />
@@ -2267,20 +2802,32 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                         <Mic className={`w-4 h-4 ${isRecording ? 'animate-pulse' : ''}`} />
                       )}
                     </button>
-                    <button
-                      onClick={() => { HAPTICS.medium(); sendMessage(input); }}
-                      disabled={(!input.trim() && !attachedImage) || isLoading}
-                      aria-label="Send message"
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-                      style={{
-                        background: (input.trim() || attachedImage)
-                          ? 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)'
-                          : '#e2e8f0',
-                        boxShadow: (input.trim() || attachedImage) ? '0 2px 8px rgba(42,125,153,0.4)' : 'none'
-                      }}
-                    >
-                      <ArrowUp className="w-4 h-4 text-white" />
-                    </button>
+                    {isStreaming ? (
+                      /* Stop generation — replaces Send while a reply streams */
+                      <button
+                        onClick={() => { HAPTICS.light(); stopGeneration(); }}
+                        aria-label="Stop generating"
+                        className="w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-95"
+                        style={{ background: '#132F43', boxShadow: '0 2px 8px rgba(19,47,67,0.35)' }}
+                      >
+                        <Square className="w-3 h-3 text-white" style={{ fill: 'white' }} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => { HAPTICS.medium(); sendMessage(input); }}
+                        disabled={(!input.trim() && attachedImages.length === 0 && !pendingDoc) || isLoading}
+                        aria-label="Send message"
+                        className="w-8 h-8 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+                        style={{
+                          background: (input.trim() || attachedImages.length > 0 || pendingDoc)
+                            ? 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)'
+                            : '#e2e8f0',
+                          boxShadow: (input.trim() || attachedImages.length > 0 || pendingDoc) ? '0 2px 8px rgba(42,125,153,0.4)' : 'none'
+                        }}
+                      >
+                        <ArrowUp className="w-4 h-4 text-white" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -2330,6 +2877,12 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                         label: 'Upload document',
                         desc: 'Share a PDF — I\'ll read and save it',
                         action: () => { docInputRef.current?.click(); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Folder,
+                        label: 'Attach from Vault',
+                        desc: 'Reference a document already in your records',
+                        action: () => { setShowActionSheet(false); openVaultPicker(); },
                       },
                       {
                         icon: Monitor,
@@ -2401,6 +2954,75 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                         </div>
                       </button>
                     ))}
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+
+          {/* ── Vault Picker Sheet ── */}
+          <AnimatePresence>
+            {showVaultPicker && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[9998] bg-black/40"
+                  onClick={() => setShowVaultPicker(false)}
+                />
+                <motion.div
+                  initial={{ y: '100%' }}
+                  animate={{ y: 0 }}
+                  exit={{ y: '100%' }}
+                  transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 z-[9999] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl pb-safe"
+                  style={{ maxHeight: '70vh', display: 'flex', flexDirection: 'column' }}
+                >
+                  <div className="flex items-center justify-between px-4 pt-4 pb-2 shrink-0">
+                    <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Attach from Vault</p>
+                    <button
+                      onClick={() => setShowVaultPicker(false)}
+                      className="w-7 h-7 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center"
+                      aria-label="Close vault picker"
+                    >
+                      <X className="w-4 h-4 text-[#5A6B7A]" />
+                    </button>
+                  </div>
+                  <div className="px-2 pb-6 overflow-y-auto">
+                    {vaultLoading ? (
+                      <div className="flex items-center justify-center gap-2 py-8 text-sm text-[#5A6B7A]">
+                        <Loader2 className="w-4 h-4 animate-spin text-[#6B9080]" />
+                        Loading your vault…
+                      </div>
+                    ) : vaultDocs.length === 0 ? (
+                      <div className="flex flex-col items-center gap-2 py-8 px-6 text-center">
+                        <Folder className="w-6 h-6 text-slate-300" aria-hidden="true" />
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-300">No documents in your vault yet.</p>
+                        <p className="text-sm text-slate-400">Upload a PDF here in chat, or add records in your Records Vault.</p>
+                      </div>
+                    ) : (
+                      vaultDocs.map(doc => (
+                        <button
+                          key={doc.id}
+                          onClick={() => attachVaultDoc(doc)}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors text-left"
+                        >
+                          <div className="w-9 h-9 rounded-xl bg-[#6B9080]/10 flex items-center justify-center shrink-0">
+                            <FileText className="w-4 h-4 text-[#6B9080]" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium text-[#132F43] dark:text-slate-100 leading-tight truncate">
+                              {doc.metadata?.title || doc.fileName}
+                            </p>
+                            <p className="text-sm text-[#5A6B7A] leading-tight mt-0.5 capitalize">
+                              {doc.recordType.replace(/-/g, ' ')} · {new Date(doc.uploadedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </p>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                        </button>
+                      ))
+                    )}
                   </div>
                 </motion.div>
               </>

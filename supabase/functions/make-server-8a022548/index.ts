@@ -561,7 +561,9 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
-          max_tokens: 500,
+          // 1024 — parity with the non-stream path's effective cap for chat
+          // replies (the old 500 truncated longer streamed answers mid-table).
+          max_tokens: 1024,
           temperature: 0.8,
           system: systemPrompt || DEFAULT_BRAIN_SYSTEM_PROMPT,
           messages: filteredMsgs,
@@ -682,6 +684,36 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
     // SECURITY: Scrub PII from error messages before returning to client
     const safeError = scrubPIIFromError(error);
     return c.json({ error: safeError, code: 'AI_PROCESSING_ERROR' }, 500);
+  }
+});
+
+// AI message feedback (thumbs up/down from BevelChatOverlay). Minimal inline
+// route: auth mirrors /ai/brain (verified user when a session JWT is present,
+// anonymous otherwise), payload stored to KV for later quality analysis.
+app.post("/make-server-8a022548/ai/feedback", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { messageId, rating } = body;
+    if (!messageId || (rating !== 'up' && rating !== 'down')) {
+      return c.json({ error: 'messageId and rating ("up" | "down") are required' }, 400);
+    }
+
+    const authResult = await verifyAuth(c.req.header('Authorization'));
+    const userId = authResult.authenticated && authResult.user
+      ? authResult.user.userId
+      : 'anonymous';
+
+    await kv.set(`ai_feedback:${userId}:${String(messageId).slice(0, 64)}`, {
+      messageId: String(messageId).slice(0, 64),
+      rating,
+      conversationId: typeof body.conversationId === 'string' ? body.conversationId.slice(0, 64) : null,
+      userId,
+      createdAt: new Date().toISOString(),
+    });
+
+    return c.json({ ok: true });
+  } catch {
+    return c.json({ error: 'Could not record feedback' }, 500);
   }
 });
 
@@ -4464,6 +4496,163 @@ Return as JSON with: name (routine name), description (brief description), diffi
     }
   } catch (error) {
     return c.json({ error: 'Failed to generate routine' }, 500);
+  }
+});
+
+// ============================================================================
+// AI SPECIAL TIME — personalized 10-minute child-led connection idea
+// ============================================================================
+// Generates ONE "Special Time" idea from the parent-child dyad signals the
+// client sends (age, interests, what landed recently, parent energy, recent
+// idea titles to avoid). The static idea library on the client is the instant
+// fallback — this route never blocks the UI (client races it at 1.5s; the
+// route itself hard-caps the model call at ~6s).
+
+// Compact seed examples from src/content/special-time-ideas.ts (server can't
+// import client modules — keep this list in the same voice as that file).
+const SPECIAL_TIME_SEEDS = [
+  { t: 'Flashlight Cave', o: 'Drape a blanket over two chairs, hand them the flashlight, and crawl in. They decide what lives in the cave — you just live there too.', w: 'In a small dark space with the light in their hands, they run the world and you get to be a guest in it.' },
+  { t: 'Dance & Freeze', o: 'Put on the song they love — yes, that one, again — and dance until they hit pause. They control the music; you control nothing.', w: 'Handing over the pause button is a small way of saying: you set the rhythm, I\'ll follow it.' },
+  { t: 'You Build, They Boss', o: 'Dump out the building bricks and take orders: they design, you assemble. Your only line is "like this?"', w: 'Building their blueprint with your hands says their ideas are good enough to be someone\'s whole job.' },
+  { t: 'Sink Harbor', o: 'Fill the sink and let them launch cups, lids, and spoons as a fleet. They\'re the harbor master; you\'re just the tugboat.', w: 'Splashes and sunk ships are all part of a harbor they command — no outcomes, just water.' },
+  { t: 'They Pick the Way', o: 'A walk where every turn is their call, including the turn back into the driveway. Stop wherever they stop, for as long as they stop.', w: 'Standing beside them while they study a crack in the sidewalk says their attention is worth your time.' },
+  { t: 'Cloud Naming', o: 'Lie on the grass or hang out a window and let them tell you what the clouds are. Agree with every single one.', w: 'Seeing the dragon because they said it\'s a dragon is what being in their world actually means.' },
+  { t: 'They Teach, You Learn', o: 'They teach you their favorite game and you get to be the beginner. Ask real questions; lose gracefully.', w: 'Being the student flips the whole day\'s power balance — suddenly they\'re the patient one explaining things to you.' },
+];
+
+app.post("/make-server-8a022548/ai/special-time", async (c) => {
+  try {
+    // Session-auth'd like other inline AI routes — verifyAuth derives the real
+    // user + tier from the JWT; unauthenticated callers get the client-side
+    // static fallback instead (never this route).
+    const authHeader = c.req.header('Authorization');
+    const authResult = await verifyAuth(authHeader);
+    if (!authResult.authenticated || !authResult.user) {
+      return c.json({ error: 'Authentication required' }, 401);
+    }
+    const { userId, tier } = authResult.user;
+
+    // Per-minute sliding window on its own bucket — deliberately NOT the daily
+    // AI-message quota (opening Special Time must never consume chat messages).
+    const rateLimitCheck = await checkAllRateLimits(userId, tier, 'special-time');
+    if (!rateLimitCheck.allowed) {
+      return c.json({ error: rateLimitCheck.reason }, { status: 429, headers: getRateLimitHeaders(rateLimitCheck.result) });
+    }
+
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    if (!anthropicApiKey) {
+      return c.json({ error: 'AI not configured' }, 503);
+    }
+
+    const body = await c.req.json().catch(() => ({}));
+    const childAge = Number(body?.childAge);
+    const ageLine = Number.isFinite(childAge) && childAge > 0 && childAge < 22
+      ? `around ${Math.round(childAge)} years old`
+      : 'elementary-school age';
+    const interests: string[] = (Array.isArray(body?.interests) ? body.interests : [])
+      .filter((s: unknown): s is string => typeof s === 'string' && s.trim().length > 0)
+      .slice(0, 8)
+      .map((s: string) => sanitizeForAI(s).slice(0, 40));
+    const avoidIds: string[] = (Array.isArray(body?.avoidIds) ? body.avoidIds : [])
+      .filter((s: unknown): s is string => typeof s === 'string' && s.trim().length > 0)
+      .slice(0, 20)
+      .map((s: string) => sanitizeForAI(s).slice(0, 60));
+    const parentState = typeof body?.parentState === 'string'
+      ? sanitizeForAI(body.parentState).slice(0, 80)
+      : '';
+    const recentFeedback: Array<{ ideaTitle: string; feeling: string; note?: string }> =
+      (Array.isArray(body?.recentFeedback) ? body.recentFeedback : [])
+        .slice(0, 5)
+        .map((f: Record<string, unknown>) => ({
+          ideaTitle: sanitizeForAI(String(f?.ideaTitle ?? '')).slice(0, 60),
+          feeling: ['laughed', 'calm', 'not-today'].includes(String(f?.feeling)) ? String(f.feeling) : 'calm',
+          note: typeof f?.note === 'string' ? sanitizeForAI(f.note).slice(0, 100) : undefined,
+        }))
+        .filter((f: { ideaTitle: string }) => f.ideaTitle.length > 0);
+
+    const feedbackLines = recentFeedback.map((f) => {
+      const felt = f.feeling === 'laughed' ? 'they laughed together' : f.feeling === 'calm' ? 'it felt calm' : 'parent skipped that day';
+      return `- "${f.ideaTitle}" → ${felt}${f.note ? ` (parent note: "${f.note}")` : ''}`;
+    });
+
+    const seedLines = SPECIAL_TIME_SEEDS.map(
+      (s) => `- "${s.t}": ${s.o} / Why it connects: ${s.w}`
+    );
+
+    const prompt = `You are Aminy, writing today's "Special Time" idea — ONE 10-minute child-led play moment for a parent and their neurodivergent child.
+
+THE CHILD: ${ageLine}.${interests.length > 0 ? ` What lights them up lately: ${interests.join(', ')}.` : ''}
+${feedbackLines.length > 0 ? `WHAT LANDED RECENTLY (lean toward more of what worked):\n${feedbackLines.join('\n')}\n` : ''}${parentState ? `THE PARENT TODAY: ${parentState}. Keep the idea extra small, low-effort, and low-prep.\n` : ''}${avoidIds.length > 0 ? `DO NOT repeat or closely resemble these recent ideas: ${avoidIds.join('; ')}.\n` : ''}
+HARD RULES:
+- CHILD-LED: the child directs, the parent follows. No teaching, no fixing, no goals, no scoring.
+- Absolutely NO therapy or clinical language (no "skills", "regulation", "practice", "trials", "progress", "reinforce").
+- Fits in 10 minutes. Household materials or nothing at all — never anything to buy.
+- Original to you — never reference shows, characters, or branded games.
+- Warm, plain, parent-to-parent voice. Title of 5 words or fewer. "oneLiner" is the setup in at most 2 sentences. "whyItConnects" is ONE sentence about following the child's lead — never a therapeutic outcome.
+
+STYLE EXAMPLES (match this voice — do not copy any of them):
+${seedLines.join('\n')}
+
+Return ONLY valid JSON, nothing else: {"title": "...", "oneLiner": "...", "whyItConnects": "..."}`;
+
+    // Strict ~6s cap — the client renders its static fallback at 1.5s, so a
+    // slow model call must never hold a connection open.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+    let data: { content?: Array<{ text?: string }> };
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': anthropicApiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 300,
+          temperature: 1,
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
+      if (!response.ok) {
+        console.error('special-time Anthropic error:', response.status);
+        return c.json({ error: 'Failed to generate idea' }, 502);
+      }
+      data = await response.json();
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    const rawText = (data.content?.[0]?.text || '').trim();
+    const jsonText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
+    let idea: { title?: unknown; oneLiner?: unknown; whyItConnects?: unknown };
+    try {
+      idea = JSON.parse(jsonText);
+    } catch {
+      // Model wrapped the JSON in prose — try to extract the object
+      const match = jsonText.match(/\{[\s\S]*\}/);
+      if (!match) return c.json({ error: 'Failed to parse idea' }, 502);
+      try {
+        idea = JSON.parse(match[0]);
+      } catch {
+        return c.json({ error: 'Failed to parse idea' }, 502);
+      }
+    }
+
+    const title = typeof idea.title === 'string' ? idea.title.trim().slice(0, 60) : '';
+    const oneLiner = typeof idea.oneLiner === 'string' ? idea.oneLiner.trim().slice(0, 400) : '';
+    const whyItConnects = typeof idea.whyItConnects === 'string' ? idea.whyItConnects.trim().slice(0, 300) : '';
+    if (!title || !oneLiner || !whyItConnects) {
+      return c.json({ error: 'Incomplete idea' }, 502);
+    }
+
+    return c.json({ idea: { title, oneLiner, whyItConnects } });
+  } catch (error) {
+    const aborted = error instanceof DOMException && error.name === 'AbortError';
+    if (!aborted) console.error('special-time route error:', error);
+    return c.json({ error: aborted ? 'Idea generation timed out' : 'Failed to generate idea' }, aborted ? 504 : 500);
   }
 });
 

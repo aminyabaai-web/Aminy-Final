@@ -17,6 +17,7 @@ import {
   type CheckInPoint,
   type BaselineSummary,
 } from '../lib/outcome-trends';
+import { INTEREST_LABELS, SPECIAL_TIME_IDEAS, type InterestTag } from '../content/special-time-ideas';
 
 export interface UserContext {
   // Child Profile
@@ -90,6 +91,39 @@ export interface UserContext {
   // user across devices; localStorage remains the offline cache/fallback)
   customInstructions?: { aboutMe?: string; responseStyle?: string };
   aiSettings?: Record<string, unknown>;
+
+  // Relationship intelligence — the parent-child dyad model (Wave 1.5).
+  // Assembled by fetchDyadModel(); rendered as the RELATIONSHIP block in
+  // buildAIContextString so the AI can strengthen the relationship itself,
+  // not just outcomes.
+  dyad?: DyadModel;
+}
+
+/**
+ * The parent-child dyad model: real signals about what lights this child up,
+ * which connection moments landed, what the parent has noticed, and when
+ * friction tends to cluster. All lines are omitted when there is no data —
+ * nothing here is ever fabricated.
+ */
+export interface DyadModel {
+  /** What lights the child up — Special Time interest + favorite Ease tools. */
+  interests: string[];
+  /** Recent Special Time after-moments (newest first, ≤5). */
+  recentFeedback: Array<{
+    date: string; // YYYY-MM-DD
+    ideaTitle: string;
+    feeling: 'laughed' | 'calm' | 'not-today';
+    note?: string;
+    source?: 'ai' | 'library';
+  }>;
+  /** Ease "I noticed…" parent observations (≤3, most recent first). */
+  parentObservations: string[];
+  /** Ease activities the child keeps returning to or the parent rated great (≤4). */
+  lovedActivities: string[];
+  /** Shared-moment wins tagged "special time" synced to the Wins Journal (≤2). */
+  sharedWins: string[];
+  /** Behavior-friction window from the last 7 days of logs, e.g. "5pm–7pm (4 tough moments)". */
+  frictionWindow?: string;
 }
 
 export interface MemorySummary {
@@ -119,6 +153,181 @@ export interface CurrentContext {
   contextHint: string;
 }
 
+// ---------------------------------------------------------------------------
+// Dyad model (relationship intelligence)
+// ---------------------------------------------------------------------------
+
+const SPECIAL_TIME_MOMENTS_KEY = 'aminy-special-time-moments';
+const SPECIAL_TIME_INTEREST_KEY = 'aminy-special-time-interest';
+const EASE_SESSIONS_KEY = 'aminy-ease-parent-sessions';
+
+function readLocalJson<T>(key: string): T | null {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Special Time interest tag → warm label ("Sensory"), or null. */
+function readDyadInterest(): string | null {
+  const parsed = readLocalJson<string>(SPECIAL_TIME_INTEREST_KEY);
+  return typeof parsed === 'string' && parsed in INTEREST_LABELS
+    ? INTEREST_LABELS[parsed as InterestTag]
+    : null;
+}
+
+interface LocalMomentRecord {
+  date?: string;
+  ideaId?: string;
+  ideaTitle?: string;
+  feeling?: 'laughed' | 'calm' | 'not-today';
+  note?: string;
+  source?: 'ai' | 'library';
+}
+
+/** Last N Special Time after-moments, newest first, title resolved. */
+function readDyadFeedback(limit = 5): DyadModel['recentFeedback'] {
+  const raw = readLocalJson<LocalMomentRecord[]>(SPECIAL_TIME_MOMENTS_KEY);
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter((m) => m && typeof m.date === 'string' && m.feeling)
+    .slice(-limit)
+    .reverse()
+    .map((m) => ({
+      date: m.date as string,
+      ideaTitle:
+        m.ideaTitle ||
+        SPECIAL_TIME_IDEAS.find((i) => i.id === m.ideaId)?.title ||
+        'a Special Time idea',
+      feeling: m.feeling as 'laughed' | 'calm' | 'not-today',
+      note: typeof m.note === 'string' && m.note.trim() ? m.note.trim().slice(0, 120) : undefined,
+      source: m.source === 'ai' || m.source === 'library' ? m.source : undefined,
+    }));
+}
+
+interface LocalEaseSession {
+  timestamp?: string;
+  tool?: string;
+  rating?: 'great' | 'ok' | 'rough' | null;
+  parentNote?: string;
+}
+
+/** Ease parent view signals: "I noticed" notes + loved activities. */
+function readEaseSignals(): { observations: string[]; loved: string[] } {
+  const sessions = readLocalJson<LocalEaseSession[]>(EASE_SESSIONS_KEY);
+  if (!Array.isArray(sessions)) return { observations: [], loved: [] };
+
+  const observations = sessions
+    .filter((s) => typeof s.parentNote === 'string' && s.parentNote.trim().length > 0)
+    .slice(0, 3)
+    .map((s) => (s.parentNote as string).trim().slice(0, 140));
+
+  // "Loved" = rated great, or returned to 2+ times (sessions are newest-first)
+  const counts = new Map<string, { count: number; great: boolean }>();
+  for (const s of sessions.slice(0, 40)) {
+    if (!s.tool) continue;
+    const entry = counts.get(s.tool) ?? { count: 0, great: false };
+    entry.count += 1;
+    if (s.rating === 'great') entry.great = true;
+    counts.set(s.tool, entry);
+  }
+  const loved = [...counts.entries()]
+    .filter(([, v]) => v.great || v.count >= 2)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 4)
+    .map(([tool]) => tool);
+
+  return { observations, loved };
+}
+
+/** Peak 2-hour tough-moment window from the last 7 days of behavior_logs. */
+async function fetchFrictionWindow(userId: string): Promise<string | undefined> {
+  try {
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const { data } = await supabase
+      .from('behavior_logs')
+      .select('logged_at')
+      .eq('user_id', userId)
+      .eq('is_positive', false)
+      .gte('logged_at', weekAgo)
+      .order('logged_at', { ascending: false })
+      .limit(30);
+
+    const logs = data ?? [];
+    if (logs.length < 3) return undefined;
+
+    const hourBuckets: Record<number, number> = {};
+    for (const row of logs) {
+      const h = new Date(row.logged_at).getHours();
+      if (Number.isFinite(h)) hourBuckets[h] = (hourBuckets[h] || 0) + 1;
+    }
+    let peak = { start: 0, count: 0 };
+    for (let h = 0; h < 23; h++) {
+      const count = (hourBuckets[h] || 0) + (hourBuckets[h + 1] || 0);
+      if (count > peak.count) peak = { start: h, count };
+    }
+    if (peak.count < 3) return undefined;
+
+    const label = (h: number) => `${h % 12 || 12}${h < 12 ? 'am' : 'pm'}`;
+    return `${label(peak.start)}–${label(peak.start + 2)} (${peak.count} tough moments this week)`;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Wins Journal moments tagged "special time" (synced from other devices too). */
+async function fetchSharedWins(): Promise<string[]> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) return [];
+    const response = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/load`,
+      { method: 'GET', headers: { 'Authorization': `Bearer ${token}` } }
+    );
+    if (!response.ok) return [];
+    const data = await response.json();
+    const moments: Array<{ content?: string; tags?: string[] }> = Array.isArray(data?.moments)
+      ? data.moments
+      : [];
+    return moments
+      .filter((m) => Array.isArray(m.tags) && m.tags.includes('special time') && typeof m.content === 'string')
+      .slice(0, 2)
+      .map((m) => (m.content as string).trim().slice(0, 140));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Assemble the parent-child dyad model from real signals: child interests
+ * (Special Time interest + Ease activity picks), Special Time feedback
+ * history, Ease "I noticed" observations, synced shared-moment wins, and the
+ * last-7-days behavior-friction window. Cheap by design — two bounded network
+ * calls, everything else is localStorage. Never throws.
+ */
+export async function fetchDyadModel(userId: string): Promise<DyadModel> {
+  const interest = readDyadInterest();
+  const recentFeedback = readDyadFeedback();
+  const { observations, loved } = readEaseSignals();
+
+  const [frictionWindow, sharedWins] = await Promise.all([
+    userId ? fetchFrictionWindow(userId) : Promise.resolve(undefined),
+    fetchSharedWins(),
+  ]);
+
+  return {
+    interests: interest ? [interest] : [],
+    recentFeedback,
+    parentObservations: observations,
+    lovedActivities: loved,
+    sharedWins,
+    frictionWindow,
+  };
+}
+
 /**
  * Fetch comprehensive user context — Supabase first, KV for AI-generated extras
  */
@@ -126,7 +335,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
   try {
     // Run Supabase queries and KV fetch in parallel
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-    const [childResult, sessionResult, goalsResult, outcomesResult, baselineResult, parentCheckInResult, kvResult] = await Promise.allSettled([
+    const [childResult, sessionResult, goalsResult, outcomesResult, baselineResult, parentCheckInResult, kvResult, dyadResult] = await Promise.allSettled([
       // Primary child profile
       supabase
         .from('children')
@@ -196,6 +405,9 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
           },
         }
       ).then(r => r.ok ? r.json() : null).catch(() => null),
+
+      // Relationship dyad model (localStorage signals + friction window + wins)
+      fetchDyadModel(userId),
     ]);
 
     // Build context from Supabase results
@@ -207,6 +419,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
     const parentCheckInRow = parentCheckInResult.status === 'fulfilled' ? parentCheckInResult.value.data : null;
     const kvData = kvResult.status === 'fulfilled' ? kvResult.value : null;
     const kvContext = kvData?.context || {};
+    const dyad = dyadResult.status === 'fulfilled' ? dyadResult.value : undefined;
 
     const weeklyOutcomes = mapCheckInRows(outcomeRows || []).slice(-4);
     const outcomeBaseline = parseBaselineRow(baselineRow);
@@ -271,6 +484,9 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
       // localStorage stays the offline cache/fallback)
       customInstructions: kvContext.customInstructions,
       aiSettings: kvContext.aiSettings,
+
+      // Relationship dyad model
+      dyad,
     };
   } catch {
     return getDefaultContext();
@@ -440,6 +656,14 @@ export function buildAIContextString(context: UserContext): string {
     );
   }
 
+  // RELATIONSHIP — the parent-child dyad (Wave 1.5). What lights the child up,
+  // what worked recently, and what to avoid suggesting today. Max ~15 lines;
+  // every line is omitted when there is no data — never fabricate.
+  const relationshipBlock = buildRelationshipBlock(context);
+  if (relationshipBlock) {
+    parts.push(relationshipBlock);
+  }
+
   // WEEKLY OUTCOMES — compact (≤600 chars), most-recent-first, real numbers the
   // AI can cite when asked "how is my child trending?"
   const outcomesBlock = formatOutcomesForAI(context.weeklyOutcomes || [], context.outcomeBaseline || null);
@@ -448,6 +672,66 @@ export function buildAIContextString(context: UserContext): string {
   }
 
   return parts.join(' ');
+}
+
+/**
+ * Render the RELATIONSHIP block from the dyad model. Returns '' when there is
+ * nothing real to say. Lines with no data are omitted; the block is ≤15 lines.
+ */
+function buildRelationshipBlock(context: UserContext): string {
+  const d = context.dyad;
+  if (!d) return '';
+
+  const lines: string[] = [];
+  const name = context.childName || 'the child';
+
+  // What lights the child up
+  const sparks = [...(d.interests || []), ...(d.lovedActivities || [])].slice(0, 5);
+  if (sparks.length > 0) {
+    lines.push(`- What lights ${name} up: ${sparks.join(', ')}.`);
+  }
+
+  // What worked recently (Special Time feedback, newest first)
+  const landed = (d.recentFeedback || []).filter((f) => f.feeling !== 'not-today').slice(0, 3);
+  if (landed.length > 0) {
+    const items = landed.map((f) => {
+      const felt = f.feeling === 'laughed' ? 'they laughed together' : 'it felt calm';
+      return `"${f.ideaTitle}" (${felt}${f.note ? ` — "${f.note}"` : ''})`;
+    });
+    lines.push(`- Special Time moments that landed: ${items.join('; ')}.`);
+  }
+  const skipped = (d.recentFeedback || []).filter((f) => f.feeling === 'not-today').length;
+  if (skipped > 0) {
+    lines.push(`- ${skipped} recent "not today" day${skipped !== 1 ? 's' : ''} — fully okay, never guilt them about it.`);
+  }
+
+  // What the parent has noticed
+  const observations = (d.parentObservations || []).slice(0, 2);
+  if (observations.length > 0) {
+    lines.push(`- Parent noticed: ${observations.map((o) => `"${o}"`).join(' | ')}`);
+  }
+
+  // Shared-moment wins
+  const wins = (d.sharedWins || []).slice(0, 2);
+  if (wins.length > 0) {
+    lines.push(`- Shared moments in their Wins Journal: ${wins.map((w) => `"${w}"`).join(' | ')}`);
+  }
+
+  // What to avoid suggesting today
+  if (d.frictionWindow) {
+    lines.push(`- Friction window: tough moments cluster around ${d.frictionWindow} — avoid suggesting big or demanding activities in that window.`);
+  }
+  if (context.parentCheckIn && (context.parentCheckIn.feeling === 'stretched thin' || context.parentCheckIn.feeling === 'running on empty')) {
+    lines.push(`- Parent is ${context.parentCheckIn.feeling} right now — keep connection ideas extra small and low-effort today (minutes, not projects).`);
+  }
+
+  if (lines.length === 0) return '';
+
+  return [
+    `RELATIONSHIP (the parent-${name} dyad — use this to strengthen their connection; frame ideas as gifts, never as tasks or therapy):`,
+    ...lines.slice(0, 13),
+    '- Suggest child-led, no-agenda moments that fit these signals. Never score or clinicalize them.',
+  ].join('\n');
 }
 
 /**
