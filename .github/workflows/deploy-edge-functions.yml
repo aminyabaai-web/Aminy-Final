@@ -7,6 +7,14 @@ on:
         description: 'Function to deploy (leave blank for all)'
         required: false
         default: 'all'
+  # Auto-deploy make-server when its source changes on main. The MCP inline
+  # deploy path cannot carry the 383KB bundle; this workflow (CLI + repo
+  # secret) is the reliable transport. Scoped to make-server only so pushes
+  # never redeploy functions whose repo copies might lag live hotfixes.
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/make-server-8a022548/**'
 
 jobs:
   deploy:
@@ -23,6 +31,9 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: |
           FUNCTION="${{ github.event.inputs.function }}"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            FUNCTION="make-server-8a022548"
+          fi
           PROJECT_REF="qpzsvafwcwyrkdolrjbu"
 
           if [ "$FUNCTION" = "all" ] || [ -z "$FUNCTION" ]; then

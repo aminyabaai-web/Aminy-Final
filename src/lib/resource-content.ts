@@ -373,11 +373,11 @@ That should feel like good news. The most powerful tool available doesn't have a
 
 **What it looks like at home**
 
-*Routines that carry the load.* An ADHD brain spends enormous effort deciding what happens next. A predictable routine — same steps, same order, posted where the child can see it — takes that decision off the brain entirely. Mornings and bedtime first; they're where most families bleed the most.
+**Routines that carry the load.** An ADHD brain spends enormous effort deciding what happens next. A predictable routine — same steps, same order, posted where the child can see it — takes that decision off the brain entirely. Mornings and bedtime first; they're where most families bleed the most.
 
-*One instruction at a time.* "Go upstairs, brush your teeth, and put on pajamas" is three instructions, and an ADHD brain often loses two of them in transit — not defiance, traffic. Give one step, wait for it to happen, then give the next. Eye contact or a gentle touch on the shoulder before you speak, so the instruction has somewhere to land.
+**One instruction at a time.** "Go upstairs, brush your teeth, and put on pajamas" is three instructions, and an ADHD brain often loses two of them in transit — not defiance, traffic. Give one step, wait for it to happen, then give the next. Eye contact or a gentle touch on the shoulder before you speak, so the instruction has somewhere to land.
 
-*Praise what you want more of.* Attention is the strongest current in the house, and behavior flows toward it. If the loudest attention arrives when things go wrong, that's the behavior being fed. Flip it: catch the moment they started homework without being asked, sat through half of dinner, came the first time you called — and name it specifically. "You started your reading all by yourself — that's a big deal." Aim for several of these for every correction.
+**Praise what you want more of.** Attention is the strongest current in the house, and behavior flows toward it. If the loudest attention arrives when things go wrong, that's the behavior being fed. Flip it: catch the moment they started homework without being asked, sat through half of dinner, came the first time you called — and name it specifically. "You started your reading all by yourself — that's a big deal." Aim for several of these for every correction.
 
 **Where Aminy fits**
 The Routines builder is made for exactly this — visual steps a child can follow without you narrating every one. And daily Special Time (ten child-led minutes, no instructions, no corrections) is the connection base that makes all of the above work; a child who gets guaranteed positive attention every day has far less reason to chase the negative kind.
