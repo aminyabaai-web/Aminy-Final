@@ -352,6 +352,41 @@ High-probability behaviors reinforce low-probability behaviors. "First homework,
 It develops after extrinsic reinforcement builds fluency. You don't teach a child to ride a bike by withholding training wheels and hoping intrinsic motivation kicks in. You scaffold, then fade.`,
     relatedGroupTopics: ['meltdowns', 'school'],
   },
+  {
+    id: 'adhd-behavior-first',
+    title: 'ADHD: Behavior Support Comes First',
+    subtitle: 'The evidence-based first step for young kids isn\'t what most families expect',
+    category: 'behavior',
+    tags: ['adhd', 'attention', 'routines', 'parent training', 'praise', 'behavior'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    ageRange: '3-8 years',
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `When a young child gets an ADHD diagnosis — or when the screening points that way — most families assume the conversation starts with medication. For young children, it doesn't.
+
+**What the evidence actually says**
+For young children with ADHD, the recommended first-line treatment is behavioral parent training — a parent learning a small set of skills and using them consistently at home. Not because anyone is against other options, but because at these ages, changing the environment and the interactions around the child is what has the strongest evidence behind it. The "treatment" is delivered by you, in your kitchen, at 7:40 on a Tuesday morning.
+
+That should feel like good news. The most powerful tool available doesn't have a waitlist.
+
+**What it looks like at home**
+
+**Routines that carry the load.** An ADHD brain spends enormous effort deciding what happens next. A predictable routine — same steps, same order, posted where the child can see it — takes that decision off the brain entirely. Mornings and bedtime first; they're where most families bleed the most.
+
+**One instruction at a time.** "Go upstairs, brush your teeth, and put on pajamas" is three instructions, and an ADHD brain often loses two of them in transit — not defiance, traffic. Give one step, wait for it to happen, then give the next. Eye contact or a gentle touch on the shoulder before you speak, so the instruction has somewhere to land.
+
+**Praise what you want more of.** Attention is the strongest current in the house, and behavior flows toward it. If the loudest attention arrives when things go wrong, that's the behavior being fed. Flip it: catch the moment they started homework without being asked, sat through half of dinner, came the first time you called — and name it specifically. "You started your reading all by yourself — that's a big deal." Aim for several of these for every correction.
+
+**Where Aminy fits**
+The Routines builder is made for exactly this — visual steps a child can follow without you narrating every one. And daily Special Time (ten child-led minutes, no instructions, no corrections) is the connection base that makes all of the above work; a child who gets guaranteed positive attention every day has far less reason to chase the negative kind.
+
+**When to talk to a doctor**
+Bring your pediatrician in early — to confirm what's going on, rule out look-alikes (sleep problems and anxiety both imitate ADHD), and help you weigh every option as your child grows. Questions about medication belong in that room, with a doctor who knows your child. Aminy's role is the behavioral side — and the behavioral side comes first either way, because no option on the table works as well without it.`,
+    relatedQuestions: ['My 5-year-old was just diagnosed with ADHD — where do we start?', 'How do I get my ADHD kid through the morning routine without yelling?'],
+    relatedGroupTopics: ['routines', 'school'],
+  },
 
   // ── SENSORY ───────────────────────────────────────────────────────────────
   {
@@ -1474,6 +1509,37 @@ Rupture and repair, hundreds of times over a childhood, is how a child learns th
     relatedQuestions: ['I screamed at my son during a meltdown and feel horrible', 'How do I reconnect with my daughter after a hard day?'],
     relatedGroupTopics: ['meltdowns', 'support', 'self-care'],
   },
+  {
+    id: 'parenting-the-adhd-brain',
+    title: 'Parenting the ADHD Brain You Love',
+    subtitle: 'Interest-led attention, big feelings about small corrections, and finding your way back after friction',
+    category: 'connection',
+    tags: ['adhd', 'connection', 'rejection sensitivity', 'repair', 'joy', 'interests'],
+    type: 'guide',
+    readTimeMinutes: 4,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Somewhere between the third forgotten backpack and the fourth reminder that went nowhere, it's easy to start seeing your child as a collection of things that need fixing. This guide is about seeing the rest of them.
+
+**The attention isn't broken — it's interest-led**
+Here's the puzzle every ADHD parent knows: the child who can't sit through two minutes of homework just spent ninety locked onto Legos, dinosaurs, or the exact hierarchy of every Pokémon. That's not a contradiction. ADHD attention isn't weak — it's steered by interest instead of importance. Which means the deep dives are real, and they're a door.
+
+Walk through it. Ask the question you don't know the answer to. Let them be the expert in the room for a while — for a kid who spends the school day being redirected, being the one who *knows things* is oxygen. The fastest route to an ADHD child's heart runs straight through whatever they currently love, even if you cannot personally survive one more fact about the Titanic. (You can. There's always one more.)
+
+**The feelings about correction are bigger than the correction**
+Many ADHD kids feel criticism at a volume that seems wildly out of scale — a small "not like that" lands like a verdict, and the reaction (tears, fury, "everyone hates me") looks dramatic from the outside. From the inside it's arithmetic: they get corrected more times in a day than most kids do in a week, and somewhere along the way each new correction started landing on the whole pile.
+
+So be gentle with the delivery. Correct the behavior in as few words as possible, privately when you can, and let your face say the relationship is fine while your words fix the moment. And keep the other column full — specific, genuine noticing of what they did well — so one "not like that" lands on a pile of "you're great," not a pile of hurt.
+
+**Repair after friction — often, and lightly**
+There will be friction. More reminders, more limits, more of everything — that's the terrain, not a failure. What protects the relationship isn't avoiding the friction; it's coming back after it, quickly and lightly. "That got scratchy. We're okay. Come help me with the sauce." An ADHD household might need ten tiny repairs a day, and ten tiny repairs a day is a perfectly beautiful way to run a family.
+
+**Protect the joy on purpose**
+Ten minutes of Special Time daily — their pick, no corrections, no sneaky skill-building — is worth more here than almost anywhere, because it's the one slot where nothing about them needs managing. Keep a running list of what makes them wonderful: the jokes, the wild ideas, the way they defend a friend. Read it on the hard nights. The brain you're raising is quick, funny, intense, and original — and it will remember, for the rest of its life, whether home was the place that enjoyed it.`,
+    relatedQuestions: ['My ADHD son falls apart at the smallest criticism — what do I do?', 'How do I stay connected when every day is a battle of reminders?'],
+    relatedGroupTopics: ['family', 'support'],
+  },
 ];
 
 export function getResourcesByCategory(category: string): Resource[] {
@@ -1502,7 +1568,7 @@ export function getRecommendedResources(
     relevant.add('meltdowns'); relevant.add('sensory'); relevant.add('communication');
   }
   if (childConditions.some(c => c.toLowerCase().includes('adhd'))) {
-    relevant.add('transitions'); relevant.add('school');
+    relevant.add('adhd'); relevant.add('transitions'); relevant.add('school');
   }
 
   const scored = RESOURCES.map(r => ({

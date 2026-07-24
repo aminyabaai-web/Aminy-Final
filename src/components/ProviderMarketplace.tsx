@@ -158,7 +158,7 @@ const ALL_SPECIALTIES = [
   'Transition Planning', 'Play-Based Learning', 'Daily Routines', 'Anxiety',
   'Emotional Regulation', 'Family Therapy', 'System Navigation', 'IEP Advocacy',
   'AAC', 'Social Communication', 'Feeding', 'Sensory Processing', 'Fine Motor',
-  'Self-Care Skills', 'Medication Management', 'Complex Diagnoses', 'Diagnostic Evaluations'
+  'Self-Care Skills', 'Complex Diagnoses', 'Diagnostic Evaluations'
 ];
 
 // Conditions

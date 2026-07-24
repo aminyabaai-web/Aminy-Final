@@ -1,5 +1,5 @@
 # Aminy — Revenue & Strategy (living doc)
-_Last updated 2026-06-05. Deep-dive audit by Claude Code. Companion to HANDOFF.md (engineering) and CLAUDE.md (architecture)._
+_Last updated 2026-07-24 (ADHD market pivot addendum; deep-dive audit 2026-06-05). Companion to HANDOFF.md (engineering) and CLAUDE.md (architecture)._
 
 ## ⚠️ Ground truth
 - **There is NO live Aminy/AACT integration or deal yet.** All AACT/practice-in-a-box infrastructure in code (`PARTNER_CONFIGS.aact`, `AACTPartnerSetup`, `?org=aact`) is **aspirational / demo-gated**. The app must NOT present a live AACT partnership as real to users until a deal exists.
@@ -152,6 +152,14 @@ Say: *"We have a working prototype partnership framework and active conversation
 
 ## Clinical / advisory arrangements
 - **Dr. Melmed (retired):** structured as a **management / program-development agreement with the owner — NOT a referral or per-patient fee arrangement.** He helps develop the clinical program (diagnosis pathway, protocols, screening + measurement-based-care design); he does **not** perform the appointments. This deliberately avoids Anti-Kickback Statute (AKS) exposure that a referral/revenue-per-patient split with a diagnosing physician would create, especially where downstream care is AHCCCS/Medicaid-billed. Compensation = flat management fee for program-development work (put in a written agreement; have counsel review before signing).
+
+## ADHD market pivot (July 2026) — tailwind + positioning
+- **The virtual-ADHD prescriber model collapsed; the sector is rebuilding around Aminy's shape.** Done Global fell to DOJ action (founder sentenced to 6 years for illegal distribution of controlled substances); Cerebral pulled back after 2022–23 scrutiny and re-entered ADHD by **acquiring Inflow (Mar 2026) — a non-medication, CBT-based self-guided ADHD app**. The pivot to coaching/therapy/behavioral services is a pivot to exactly where Aminy already stands: behavioral-first, no prescribing, clinician-supervised.
+- **Cerebral/Inflow is a live M&A comp** — strategic buyers are paying for behavioral-first ADHD assets. Use it directly in investor/acquirer conversations.
+- **Displaced-ADHD-family acquisition opportunity.** Families burned by prescriber-app collapses need a non-med home. The funnel already multi-selects ADHD/Attention and routes to a validated screener (Vanderbilt); ADHD-focused articles now live in the Behavior + Connection tracks (`adhd-behavior-first`, `parenting-the-adhd-brain`) and are surfaced by the ADHD recommender signal. Cheap channel: content/SEO on non-medication ADHD-support intent.
+- **Zero prescribing = zero DEA exposure — a diligence-grade regulatory moat.** DEA telehealth flexibilities run year-to-year (through 2026; states diverging — NJ reinstated in-person for Schedule II). Aminy has never touched prescribing, controlled substances, or med management: MedicationTracker is parent tracking of what the child's own doctor prescribed; telehealth is behavioral-only (consent explicitly excludes prescriptions); marketplace medical providers are independent and any medication decision stays with them. No Ryan Haight exposure, no flexibility-expiry risk. State this explicitly in diligence.
+- **ADHD coaching is booming but unregulated** ("few rules" — Medscape). Ask-a-Behaviorist's counter-position is now on-surface where it's pitched: credentialed clinicians (RBTs, BCBA-supervised) — never unregulated coaching.
+- **Employer-benefit (B2B2C) channel is emerging** (Lennar–Agave comp): neurodivergent-family support as an employer benefit. **Noted as a future rail only — NOT being built now.** Org seat-licensing is the nearest adjacency if a design-partner employer appears.
 
 ## Open decisions / tasks
 - (#11) Practice-in-a-box → reframed to demand/engagement/utilization layer; gated on a real AACT deal.

@@ -211,7 +211,7 @@ export function ResourceLibrary({
         </div>
         <div className="flex-1">
           <p className="text-sm font-semibold text-[#132F43]">Still have questions?</p>
-          <p className="text-sm text-[#5A6B7A]">Ask your behavior specialist team — instant AI draft, clinician-reviewed within 24h.</p>
+          <p className="text-sm text-[#5A6B7A]">Ask your behavior specialist team — credentialed clinicians (RBTs, BCBA-supervised), never unregulated coaching. Instant AI draft, reviewed within 24h.</p>
         </div>
         <button
           onClick={() => onNavigate?.('ask-bcba')}
