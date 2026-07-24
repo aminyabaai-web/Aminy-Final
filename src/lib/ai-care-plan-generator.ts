@@ -894,7 +894,7 @@ Return JSON with this shape:
     const topicDiscussions: Record<string, DiscussionTopic> = {
       medication: {
         topic: 'Medication review',
-        context: 'Medication was discussed in recent conversations.',
+        context: 'Medication was discussed in recent conversations. Bring these questions to your child\'s prescribing doctor.',
         priority: 'high',
         suggestedQuestions: [
           'Should we adjust the current dosage or timing?',

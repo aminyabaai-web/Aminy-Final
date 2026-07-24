@@ -293,7 +293,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             </div>
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-sm text-slate-400">Other services make you wait up to 24h for any answer. Aminy gives you an instant AI answer, then a clinician confirms it.</p>
+              <p className="text-sm text-slate-400">Other services hand you an unregulated coach or make you wait for any answer. Aminy gives you an instant AI answer, then a credentialed clinician confirms it.</p>
             </div>
           </div>
         </div>

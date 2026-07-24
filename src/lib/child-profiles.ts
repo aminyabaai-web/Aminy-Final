@@ -477,12 +477,12 @@ export const providerTypes: Record<ProviderType, ProviderTypeInfo> = {
     type: 'psychiatrist',
     title: 'Child Psychiatrist',
     fullTitle: 'Child & Adolescent Psychiatrist',
-    description: 'Medical doctor specializing in mental health, including medication management for symptoms.',
+    description: 'Independent medical doctor specializing in child mental health. Medication decisions always stay with them — Aminy never prescribes.',
     role: 'medical-expert',
     bestFor: ['Medication evaluation', 'Complex diagnoses', 'Medical management', 'Diagnostic clarity'],
     sessionTypes: [
       { id: 'psych-initial', name: 'Initial Evaluation', duration: 60, price: 275, description: 'Comprehensive psychiatric evaluation' },
-      { id: 'psych-followup', name: 'Medication Follow-up', duration: 25, price: 150, description: 'Medication check and adjustment' }
+      { id: 'psych-followup', name: 'Medication Follow-up', duration: 25, price: 150, description: 'Medication review with your child\'s doctor' }
     ],
     color: 'red',
     icon: 'Stethoscope'

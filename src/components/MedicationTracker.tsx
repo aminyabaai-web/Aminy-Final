@@ -444,7 +444,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
             Medication Tracker
           </h2>
           <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
-            Managing medications for {childName}
+            Track the medications {childName}'s doctor prescribed — doses, schedules, and refills in one place
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -564,7 +564,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                 No medications scheduled
               </h3>
               <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
-                Add medications to start tracking
+                Add the medications your child's doctor prescribed to start tracking
               </p>
               <Button onClick={() => setShowAddMedication(true)} className="bg-primary hover:bg-[#216982]">
                 <Plus className="w-4 h-4 mr-2" />
@@ -693,7 +693,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                 No medications added
               </h3>
               <p className="text-[#5A6B7A] dark:text-slate-400">
-                Add your child's medications to start tracking
+                Add what your child's doctor prescribed to keep doses and refills in one place
               </p>
             </Card>
           ) : (
